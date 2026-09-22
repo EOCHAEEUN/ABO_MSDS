@@ -1,0 +1,11 @@
+# [강덕우] 1차 학습
+model: Qwen/Qwen3-4B
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+target_modules: [q_proj, k_proj, v_proj, o_proj]
+learning_rate: 2.0e-4
+num_epochs: 2
+per_device_batch_size: 1
+grad_accum: 8
+max_length: 1536

@@ -1,0 +1,10 @@
+# [양세윤] 환경 점검 후 실제 설치된 버전으로 == 고정
+torch
+transformers
+peft
+bitsandbytes
+accelerate
+pdfplumber
+fastapi
+uvicorn
+pyyaml

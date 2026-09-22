@@ -1,0 +1,18 @@
+# 원본 PDF (저장소에 올리지 않음)
+data/raw/*
+!data/raw/.gitkeep
+*.pdf
+
+# 어댑터 가중치·체크포인트 (config.json·loss 로그만 커밋)
+runs/**/*.safetensors
+runs/**/*.bin
+runs/**/checkpoint-*/
+
+# 비밀키·환경
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+node_modules/
