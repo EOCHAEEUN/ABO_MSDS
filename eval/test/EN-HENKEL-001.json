@@ -1,0 +1,65 @@
+{
+  "product_name": {
+    "value": "LOCTITE 401",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "Adhesive",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "Henkel Ltd",
+    "address": "Wood Lane End HP2 4RQ Hemel Hempstead Great Britain",
+    "emergency_phone": "+44 (0)1442 278497"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Ethyl 2-cyanoacrylate",
+      "cas_number": "7085-85-0",
+      "ke_number": null,
+      "content": "50-100",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "Skin irritation",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "Serious eye irritation",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "Specific target organ toxicity - single exposure",
+      "category": "구분 3"
+    }
+  ],
+  "signal_word": {
+    "value": "경고",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H315",
+      "text": "Causes skin irritation"
+    },
+    {
+      "code": "H319",
+      "text": "Causes serious eye irritation"
+    },
+    {
+      "code": "H335",
+      "text": "May cause respiratory irritation"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

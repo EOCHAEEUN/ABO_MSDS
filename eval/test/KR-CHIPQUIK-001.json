@@ -1,0 +1,148 @@
+{
+  "product_name": {
+    "value": "Chip Quik 실리콘 접착 실란트: EGS, NCS, HPS",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "전기, 전자 및 일반 산업 접착, 밀봉, 절연, 캡슐화용 RTV 고무.",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "Chip Quik Inc.",
+    "address": "931-3909 Witmer Rd., Niagara Falls, NY 14305 (USA)",
+    "emergency_phone": "(800) 424-9300 (USA and Canada 24/7 CHEMTREC)"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "디메틸 실록산 및 실리콘",
+      "cas_number": "63148-62-9",
+      "ke_number": null,
+      "content": ">93",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "메틸옥심실란",
+      "cas_number": null,
+      "ke_number": null,
+      "content": "1-3",
+      "is_substitute_data": true
+    },
+    {
+      "chemical_name": "비닐옥심실란",
+      "cas_number": null,
+      "ke_number": null,
+      "content": "0-1",
+      "is_substitute_data": true
+    },
+    {
+      "chemical_name": "알콕시실란",
+      "cas_number": null,
+      "ke_number": null,
+      "content": "0-1",
+      "is_substitute_data": true
+    },
+    {
+      "chemical_name": "메틸에틸케톡심",
+      "cas_number": "96-29-7",
+      "ke_number": null,
+      "content": "0-1",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "옥타 메틸 사이클로 테트라 실록산",
+      "cas_number": "556-67-2",
+      "ke_number": null,
+      "content": "0-1",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "급성 독성(경구)",
+      "category": "구분 4"
+    },
+    {
+      "hazard_class": "급성 독성(경피)",
+      "category": "구분 4"
+    },
+    {
+      "hazard_class": "급성 독성(흡입)",
+      "category": "구분 4"
+    },
+    {
+      "hazard_class": "눈 자극제",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "피부 자극제",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "피부 감작",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "생식독성",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "발암성",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "특정 표적장기 독성, 반복 노출 (심혈관/혈액학적: 조혈)",
+      "category": "구분 2"
+    }
+  ],
+  "signal_word": {
+    "value": "위험",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H302",
+      "text": "삼키면 유해함"
+    },
+    {
+      "code": "H315",
+      "text": "피부에 자극을 일으킵니다"
+    },
+    {
+      "code": "H317",
+      "text": "알레르기성 피부 반응을 일으킬 수 있습니다"
+    },
+    {
+      "code": "H319",
+      "text": "눈에 심한 자극을 일으킴"
+    },
+    {
+      "code": "H332",
+      "text": "흡입하면 유해함"
+    },
+    {
+      "code": "H335",
+      "text": "호흡기계 자극을 일으킬 수 있음"
+    },
+    {
+      "code": "H351",
+      "text": "암을 일으킬 것으로 의심됨"
+    },
+    {
+      "code": "H360FD",
+      "text": "생식 능력에 손상을 줄 수 있습니다. 태아에게 손상을 줄 수 있습니다"
+    },
+    {
+      "code": "H373",
+      "text": "장기간 또는 반복 노출되면 장기(조혈계)에 손상을 일으킬 수 있습니다"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

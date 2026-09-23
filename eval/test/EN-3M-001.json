@@ -1,0 +1,151 @@
+{
+  "product_name": {
+    "value": "3M™ Heavy Duty 20 Spray Adhesive",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "Adhesive aerosol, Industrial Use",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "3M",
+    "address": "3M Center, St. Paul, MN 55144-1000, USA",
+    "emergency_phone": "1-800-364-3577 or (651) 737-6501 (24 hours)"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Methyl Acetate",
+      "cas_number": "79-20-9",
+      "ke_number": null,
+      "content": "25-35",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Non-hazardous Components (NJTS Reg. No. 4499600-6761)",
+      "cas_number": null,
+      "ke_number": null,
+      "content": "15-30",
+      "is_substitute_data": true
+    },
+    {
+      "chemical_name": "Dimethyl Ether",
+      "cas_number": "115-10-6",
+      "ke_number": null,
+      "content": "15-25",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Hexane",
+      "cas_number": "110-54-3",
+      "ke_number": null,
+      "content": "<17",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Isobutane",
+      "cas_number": "75-28-5",
+      "ke_number": null,
+      "content": "<10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Propane",
+      "cas_number": "74-98-6",
+      "ke_number": null,
+      "content": "<10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Toluene",
+      "cas_number": "108-88-3",
+      "ke_number": null,
+      "content": "<1",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "Flammable Aerosol",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "Gas Under Pressure",
+      "category": "액화가스"
+    },
+    {
+      "hazard_class": "Serious Eye Damage/Irritation",
+      "category": "구분 2B"
+    },
+    {
+      "hazard_class": "Reproductive Toxicity",
+      "category": "구분 1B"
+    },
+    {
+      "hazard_class": "Simple Asphyxiant",
+      "category": null
+    },
+    {
+      "hazard_class": "Specific Target Organ Toxicity (single exposure)",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "Specific Target Organ Toxicity (single exposure)",
+      "category": "구분 3"
+    },
+    {
+      "hazard_class": "Specific Target Organ Toxicity (repeated exposure)",
+      "category": "구분 1"
+    }
+  ],
+  "signal_word": {
+    "value": "위험",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": null,
+      "text": "Extremely flammable aerosol"
+    },
+    {
+      "code": null,
+      "text": "Contains gas under pressure; may explode if heated"
+    },
+    {
+      "code": null,
+      "text": "Causes eye irritation"
+    },
+    {
+      "code": null,
+      "text": "May cause respiratory irritation"
+    },
+    {
+      "code": null,
+      "text": "May cause drowsiness or dizziness"
+    },
+    {
+      "code": null,
+      "text": "May damage fertility or the unborn child"
+    },
+    {
+      "code": null,
+      "text": "May displace oxygen and cause rapid suffocation"
+    },
+    {
+      "code": null,
+      "text": "Causes damage to organs: cardiovascular system"
+    },
+    {
+      "code": null,
+      "text": "Causes damage to organs through prolonged or repeated exposure: nervous system"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

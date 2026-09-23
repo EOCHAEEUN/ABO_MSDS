@@ -1,0 +1,57 @@
+{
+  "product_name": {
+    "value": "Ethanol 99,9%",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "cleaning agent",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "AprintaPro GmbH",
+    "address": "Gutheil Schoder Gasse 17 1230 Wien Austria",
+    "emergency_phone": "+44 20 3885 0382"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Ethanol 99,9%",
+      "cas_number": "64-17-5",
+      "ke_number": null,
+      "content": "≥90",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "flammable liquid",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "serious eye damage/eye irritation",
+      "category": "구분 2"
+    }
+  ],
+  "signal_word": {
+    "value": "위험",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H225",
+      "text": "Highly flammable liquid and vapour"
+    },
+    {
+      "code": "H319",
+      "text": "Causes serious eye irritation"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

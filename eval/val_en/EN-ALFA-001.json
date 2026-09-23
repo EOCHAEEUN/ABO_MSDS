@@ -1,0 +1,65 @@
+{
+  "product_name": {
+    "value": "Acetone",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "SU24 Scientific research and development",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "Alfa Aesar Thermo Fisher Scientific Chemicals, Inc.",
+    "address": "30 Bond Street Ward Hill, MA 01835-8099",
+    "emergency_phone": "(866) 928-0789"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Acetone",
+      "cas_number": "67-64-1",
+      "ke_number": null,
+      "content": null,
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "Flam. Liq.",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "Eye Irrit.",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "STOT SE",
+      "category": "구분 3"
+    }
+  ],
+  "signal_word": {
+    "value": "위험",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H225",
+      "text": "Highly flammable liquid and vapor"
+    },
+    {
+      "code": "H319",
+      "text": "Causes serious eye irritation"
+    },
+    {
+      "code": "H336",
+      "text": "May cause drowsiness or dizziness"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

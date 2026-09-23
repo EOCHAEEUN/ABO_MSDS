@@ -1,0 +1,178 @@
+{
+  "product_name": {
+    "value": "프라톱 2000 VDS(BTX/F) / ZLA608",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "A/P(자동차 내장제용), 유성 페인트",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": "권고 용도 외에는 사용하지 마시오.",
+    "source_status": "기재"
+  },
+  "supplier": {
+    "company_name": "조광페인트(주)",
+    "address": "46909) 부산광역시 사상구 삼덕로 5번길 148(삼락동)",
+    "emergency_phone": "051)304-7701/9"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "ALUMINIUM",
+      "cas_number": "7429-90-5",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Carbon black",
+      "cas_number": "1333-86-4",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Nitrocellulose",
+      "cas_number": "9004-70-0",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Kerosine (petroleum), hydrodesulfurized",
+      "cas_number": "64742-81-0",
+      "ke_number": null,
+      "content": "0.1~3",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Naphtha (petroleum), hydrodesulfurized heavy",
+      "cas_number": "64742-82-1",
+      "ke_number": null,
+      "content": "0.1~3",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Butyl acetate",
+      "cas_number": "123-86-4",
+      "ke_number": null,
+      "content": "10~20",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "2-Butoxyethanol",
+      "cas_number": "111-76-2",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Ethyl acetate",
+      "cas_number": "141-78-6",
+      "ke_number": null,
+      "content": "20~30",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Methyl ethyl ketone",
+      "cas_number": "78-93-3",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Solvent naphtha (petroleum), light arom.",
+      "cas_number": "64742-95-6",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Methylisobutyl ketone",
+      "cas_number": "108-10-1",
+      "ke_number": null,
+      "content": "10~20",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Isobutyl acetate",
+      "cas_number": "110-19-0",
+      "ke_number": null,
+      "content": "10~20",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "인화성 액체",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "심한 눈 손상성/눈 자극성",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "피부 과민성",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "생식세포 변이원성",
+      "category": "구분 1B"
+    },
+    {
+      "hazard_class": "발암성",
+      "category": "구분 1B"
+    },
+    {
+      "hazard_class": "특정표적장기 독성(1회 노출)",
+      "category": "구분 3"
+    },
+    {
+      "hazard_class": "수생환경 유해성(만성)",
+      "category": "구분 2"
+    }
+  ],
+  "signal_word": {
+    "value": "위험",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H225",
+      "text": "고인화성 액체 및 증기"
+    },
+    {
+      "code": "H317",
+      "text": "알레르기성 피부 반응을 일으킬 수 있음"
+    },
+    {
+      "code": "H319",
+      "text": "눈에 심한 자극을 일으킴"
+    },
+    {
+      "code": "H335",
+      "text": "호흡기계 자극을 일으킬 수 있음"
+    },
+    {
+      "code": "H336",
+      "text": "졸음 또는 현기증을 일으킬 수 있음"
+    },
+    {
+      "code": "H340",
+      "text": "유전적인 결함을 일으킬 수 있음(원료별 `11. 독성에 관한 정보’에 표기된 특정장기에 영향을 끼침)"
+    },
+    {
+      "code": "H350",
+      "text": "암을 일으킬 수 있음(원료별 `11. 독성에 관한 정보’에 표기된 특정장기에 영향을 끼침)"
+    },
+    {
+      "code": "H411",
+      "text": "장기적인 영향에 의해 수생생물에게 유독함"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

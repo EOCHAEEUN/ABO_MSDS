@@ -2,6 +2,12 @@
 
 실제 MSDS 1~3항의 핵심 5개 항목을 고정 JSON으로 추출하는 Qwen3-4B QLoRA 모델과, 원문 근거·검토 상태를 붙이는 Rule Engine, 검토 화면을 3일 안에 구현한다. 기준 문서는 기획서 v5(MSDS-PL-2609-05)와 개인별 작업명세서다.
 
+## 현재 상태
+- **정답 라벨 세트 v1 편입·분할 완료 (2026-09-23)** — 50건(국문 43 · 영문 7). Train 24 · Val 4는 `data/labels/`, Test 20은 `eval/test/`, 영문 점검용 2는 `eval/val_en/`에 있다.
+- 검사: `python scripts/validate_labels.py data/labels`(+`eval/test`, `eval/val_en`) 50건 통과, `python scripts/check_splits.py` 규칙 위반 없음. 상세는 `data/README.md`와 `docs/labeling_review_notes.md`.
+- 다음 할 일: tag `split-frozen` → `eval/seal.py --write`로 `eval/test/` 봉인 → tag `test-sealed`.
+- 기획서 v5는 48건(영문 5) 기준이지만 실제 세트는 50건(영문 7)이다. 영문 2건은 test 대신 `val_en`으로 뺐다(사유는 `data/README.md` 분할 절).
+
 ## 실행 순서
 1. `pipeline/extract_text.py` — 원본 PDF → `data/text/`
 2. 라벨링 → `data/labels/`, `eval/test/`
@@ -38,9 +44,9 @@ ABO_MSDS/
 │   ├── raw/                   # [강덕우] 원본 PDF (gitignore)
 │   ├── text/                  # [양세윤 v1 → 강덕우 확정] preprocess 결과 {doc_id}.txt
 │   │   └── _cut_log.csv       # doc_id, status, section4_pattern, p_block_pattern, cut_page, token_count, note
-│   ├── sources.csv            # [강덕우] doc_id, URL, 받은 날짜, 유형, 제조사
+│   ├── sources.csv            # [강덕우] doc_id, 원본 파일명, 언어, 서식, 제조사, split_group, 건수 요약
 │   ├── splits.csv             # [강덕우] split의 유일한 기준, 확정 후 tag split-frozen
-│   ├── labels/                # [강덕우 14건 · 김건하 14건] Train·Val 정답 {doc_id}.json
+│   ├── labels/                # [강덕우 14건 · 김건하 14건] Train 24 + Val 4 정답 {doc_id}.json
 │   ├── train.jsonl            # [강덕우] Train 증강 8~10배
 │   └── val.jsonl              # [강덕우] Val 원본 + 건당 변형 5개
 │
@@ -61,7 +67,9 @@ ABO_MSDS/
 │   ├── score.py               # [양세윤] 파싱률·스키마·필드별·CAS F1·pair F1·H코드 F1
 │   ├── seal.py                # [양세윤 작성 · 어채은 실행] --write / --verify
 │   ├── fewshot.json           # [양세윤] few-shot 예시 2건 doc_id 고정 (Train에서만)
-│   └── test/                  # [어채은 국문 15 · 양세윤 영문 5] Real Test 정답 20건, 봉인 후 수정 금지
+│   ├── test/                  # [어채은 국문 15 · 양세윤 영문 5] Real Test 정답 20건, 봉인 후 수정 금지
+│   ├── val_en/                # 영문 파이프라인 점검용 2건, 성능 보고에 쓰지 않음
+│   └── hazard_class_alias.csv # 분류명 원문 → 고시 정규 분류명, normalize.py가 참조
 │
 ├── outputs/                   # [양세윤] 모델 출력 {조건}/{val|test}/{doc_id}.json
 ├── runs/                      # [강덕우] {날짜}_{r1|r2}/ — config.json·loss 로그만 커밋
@@ -73,6 +81,10 @@ ABO_MSDS/
 │   └── rules/                 # [김건하] engine.py, checks/ 9개, tables/, tests/
 │
 ├── web/                       # [어채은] 3일판 단일 검토 화면, mock/은 김건하 제공
+│
+├── docs/                      # [어채은] labeling_review_notes.md — 판정 결과·원문 모순 문서·PDF 추출 함정
+├── src/                       # schema.py — Pydantic 스키마 (정답 라벨·모델 출력·FastAPI 공용)
+├── scripts/                   # validate_labels.py(스키마 검사), check_splits.py(분할 규칙 검사)
 │
 └── report/                    # decisions[어채은] env_check[양세윤] length_stats[강덕우] scores[양세윤]
                                # label_audit/[어채은·강덕우·김건하] test_manifest[어채은]

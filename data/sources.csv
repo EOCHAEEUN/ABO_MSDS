@@ -1,1 +1,51 @@
-doc_id,url,received_date,type,manufacturer
+﻿doc_id,source_file,lang,form,manufacturer,split_group,sec1_3_pages,n_ingredients,n_substitute,n_cas_null,n_ghs,n_hazard_statements,h_code_missing,signal_word,hazard_list_status,pm_decision_needed,n_notes,url,collected_date
+KR-NOROO-001,뉴-탄성씰(KS)_2액형_탄성우레탄_실란트_GHS-MSDS.pdf,ko,구서식,노루페인트,NOROO,1-1,1,1,1,1,5,N,위험,기재,Y,3,,2026-09-22
+EN-HENKEL-001,0900766b8001f275.pdf,en,영문,Henkel,HENKEL,1-3,1,0,0,3,3,N,경고,기재,Y,3,,2026-09-22
+KR-SAMHWA-001,13050036-11_아크로텍스 잉크 흑색_GHS국문.pdf,ko,현행,삼화페인트,SAMHWA,1-1,2,0,0,1,1,N,경고,기재,N,0,,2026-09-22
+KR-SAMHWA-002,13220445-1_슈퍼레진 09110_GHS국문.pdf,ko,현행,에스피삼화,SAMHWA,1-2,3,0,0,1,1,N,경고,기재,N,4,,2026-09-22
+KR-GSC-001,1563415800689l1TrRckvDivg3w9Qw-2152768.pdf,ko,현행,GS칼텍스,GSC,1-2,4,1,1,0,0,N,해당없음,해당없음,N,2,,2026-09-22
+KR-KUMHO-001,21. SOL-6220E_MSDS 번호부여.pdf,ko,현행,금호석유화학,KUMHO,1-2,3,0,0,3,3,N,위험,기재,N,2,,2026-09-22
+KR-HANIL-001,A20230516171033_5.pdf,ko,현행,한일시멘트,HANIL,1-2,6,0,0,0,6,N,경고,기재,Y,4,,2026-09-22
+KR-HANIL-002,A20250121153940_5.pdf,ko,현행,한일시멘트,HANIL,1-2,3,0,0,6,4,N,경고,기재,N,4,,2026-09-22
+KR-HANIL-003,A20260116144745_5.pdf,ko,현행,한일시멘트,HANIL,1-3,3,0,0,7,7,Y,위험,기재,Y,4,,2026-09-22
+KR-HANIL-004,A20260630094129_5.pdf,ko,현행,한일시멘트,HANIL,1-2,5,0,1,2,2,N,위험,기재,Y,3,,2026-09-22
+KR-HANIL-005,A20260630095020_5.pdf,ko,현행,한일시멘트,HANIL,1-2,3,0,0,4,4,N,위험,기재,N,2,,2026-09-22
+KR-HANIL-006,A20260630095614_5.pdf,ko,현행,한일시멘트,HANIL,1-2,3,0,0,4,4,N,위험,기재,N,2,,2026-09-22
+EN-ALFA-001,Acetone-Alfa-Aesar-23Nov15_v1.pdf,en,영문,Alfa Aesar,ACETONE-PAIR,1-2,1,0,0,3,3,N,위험,기재,Y,5,,2026-09-22
+KR-THERMO-001,Acetone_MTR_KOSD_KO.pdf,ko,수입품 국문판,한국피셔과학,ACETONE-PAIR,1-2,1,0,0,3,3,N,위험,기재,N,5,,2026-09-22
+KR-OCI-001,Carbon Black_광양.pdf,ko,현행,OCI,OCI,1-4,1,0,0,0,0,N,해당없음,해당없음,Y,4,,2026-09-22
+KR-OCI-002,Carbon Black_포항.pdf,ko,현행,OCI,OCI,1-5,1,0,0,0,0,N,해당없음,해당없음,N,4,,2026-09-22
+KR-OCI-003,Caustic Soda(Sodium Hydroxide)_가성소다(50%)_MSDS_OCI_CA_rev.29(20260210).pdf,ko,현행,OCI,OCI,1-3,2,0,0,5,5,N,위험,기재,Y,5,,2026-09-22
+KR-OCI-004,Caustic Soda(Sodium Hydroxide)_11)가성소다(25%)_MSDS_OCI_CA_rev.29(20260210).pdf,ko,현행,OCI,OCI,1-3,2,0,0,4,4,N,위험,기재,N,2,,2026-09-22
+KR-OCI-005,Chlorine_염소_MSDS_OCI_CA_rev.19 (2026.02.10).pdf,ko,현행,OCI,OCI,1-3,1,0,0,10,10,N,위험,기재,Y,6,,2026-09-22
+KR-OCI-006,Cresol_OCI_MSDS_CRESOL_260630_REV18.pdf,ko,현행,OCI,OCI,1-2,5,0,0,11,10,N,위험,기재,N,3,,2026-09-22
+KR-KCC-001,F202310110121897.pdf,ko,현행,KCC,KCC,1-2,3,0,0,7,7,N,위험,기재,N,3,,2026-09-22
+EN-WD40-001,GHS-SDS-WD-40-Multi-Use-Product-Aerosol-English-LATAM.pdf,en,영문,WD-40,WD40,1-2,3,0,1,3,4,N,위험,기재,Y,6,,2026-09-22
+KR-SOIL-001,HDPE 공정 미반응 탄화수소 혼합물.pdf,ko,현행,S-OIL,SOIL,1-3,1,0,0,6,7,N,위험,기재,Y,4,,2026-09-22
+KR-ITW-001,IT195-KO-Plexus-MA2090-Adhesive-MSDS-Korea-Korean.pdf,ko,수입품 국문판,ITW Performance Polymers,ITW,1-2,5,0,0,6,6,N,위험,기재,Y,5,,2026-09-22
+KR-KUMHO-002,KTR-602HP_MSDS__KR_221130.pdf,ko,현행,금호석유화학,KUMHO,1-1,1,0,0,0,0,N,해당없음,해당없음,N,3,,2026-09-22
+KR-KUMHO-003,KUMHO HIPS_KR_ver.3.0_20230316.pdf,ko,현행,금호석유화학,KUMHO,1-2,2,0,0,0,0,N,해당없음,해당없음,Y,7,,2026-09-22
+KR-KUMHO-004,KUMHO PPG 450외_KR.pdf,ko,현행,금호석유화학,KUMHO,1-2,2,0,0,0,0,N,해당없음,해당없음,Y,3,,2026-09-22
+KR-KUMHO-005,KUMHO SAN_KR_ver.3.0_20220728.pdf,ko,현행,금호석유화학,KUMHO,1-2,1,0,0,0,0,N,해당없음,해당없음,Y,3,,2026-09-22
+KR-BARTOLINE-001,MSDS-Bartoline_Silicone_Sealant_MPS1_kor.pdf,ko,수입품 국문판,Bartoline,BARTOLINE,1-2,2,0,1,0,0,N,해당없음,해당없음,Y,5,,2026-09-22
+KR-KUMHO-006,MSDS_KUMANOX SP-N.pdf,ko,현행,금호석유화학,KUMHO,1-2,2,0,0,3,3,N,경고,기재,N,3,,2026-09-22
+KR-GSC-002,MSDS_Kixx PAO 1 SN 0W-30_ko_3.0.pdf,ko,현행,GS칼텍스,GSC,1-2,5,1,1,0,0,N,해당없음,해당없음,N,4,,2026-09-22
+KR-CKP-001,MSDS_RKB001_(R00)_ko-kr.pdf,ko,현행,조광페인트,CKP,1-3,13,0,0,10,10,N,위험,기재,N,6,,2026-09-22
+KR-SOTL-001,MSDS_S-OIL_7_BLUE_1_15W-40(KOR).pdf,ko,현행,에쓰-오일토탈윤활유,SOTL,1-2,6,0,4,0,0,N,해당없음,해당없음,Y,6,,2026-09-22
+KR-SIKA-001,MSDS_SikaTack® PRO_KR_250720_AA00068-0000000277.pdf,ko,현행,씨카코리아,SIKA,1-3,7,0,0,3,3,N,위험,기재,Y,4,,2026-09-22
+EN-SIKA-001,MSDS_SikaTherm®-4155_EN_250514_AA00068-0000000260.pdf,en,영문,Sika Korea,SIKA,1-2,3,0,0,1,1,N,해당없음,기재,Y,5,,2026-09-22
+KR-CKP-002,MSDS_WPD300_(R01)_ko-kr.pdf,ko,현행,조광페인트,CKP,1-2,4,0,0,1,1,N,경고,기재,N,4,,2026-09-22
+KR-CKP-003,MSDS_ZLA608_(R02)_ko-kr.pdf,ko,현행,조광페인트,CKP,1-3,12,0,0,7,8,N,위험,기재,N,3,,2026-09-22
+EN-3M-001,Mediawebserver.pdf,en,영문,3M,3M,1-3,7,1,1,8,9,Y,위험,기재,Y,6,,2026-09-22
+KR-NHCHEM-001,NCC_요소_MSDS_KR.pdf,ko,현행,남해화학,NHCHEM,1-2,4,0,0,3,3,N,경고,기재,N,2,,2026-09-22
+KR-CHIPQUIK-001,NCS10C.pdf,ko,수입품 국문판,Chip Quik,CHIPQUIK,1-3,6,3,3,9,9,N,위험,기재,Y,8,,2026-09-22
+KR-NOROO-002,PCA005701_DOCU03_a030102.pdf,ko,구서식,노루페인트,NOROO,1-2,4,2,2,7,7,Y,위험,기재,Y,7,,2026-09-22
+KR-NOROO-003,PXD001491_DOCU03_순&수 광택스(반광) GHS-MSDS.pdf,ko,구서식,노루페인트,NOROO,1-1,3,0,1,0,2,Y,경고,기재,Y,4,,2026-09-22
+KR-NOROO-004,PXI033991_AA_016_KO_20220729_1648.pdf,ko,현행,노루페인트,NOROO,1-1,7,1,1,2,3,N,경고,기재,N,5,,2026-09-22
+KR-ITW-002,S007-KO-Devweld-531-Adhesive-MSDS-Korea-Korean.pdf,ko,수입품 국문판,ITW Performance Polymers,ITW,1-2,2,0,0,4,4,N,위험,기재,N,3,,2026-09-22
+EN-APRINTA-001,SDS-Ethanol_99_9_-MT-en.pdf,en,영문,AprintaPro,APRINTA,1-2,1,0,0,2,2,N,위험,기재,Y,5,,2026-09-22
+KR-3DSYS-001,SDS_22-83104_MTR_KGHS_KO_08-12-2024-ColorBond _zbond 90.pdf,ko,수입품 국문판,3D Systems,3DSYS,1-2,1,0,0,0,0,N,자료없음,자료없음,Y,5,,2026-09-22
+KR-KCCSIL-001,SF1000NFX050_MSDS_kor.pdf,ko,현행,KCC실리콘,KCCSIL,1-1,1,0,0,0,0,N,해당없음,해당없음,N,3,,2026-09-22
+KR-NOROO-005,SHH710501_DOCU03_c090106.pdf,ko,구서식,노루케미칼,NOROO,1-2,6,0,0,12,13,Y,위험,기재,Y,6,,2026-09-22
+KR-NOROO-006,[1]큐피트_SG-3000(N)_아스팔트_슁글_방수재_중상도_GHS-MSDS.pdf,ko,구서식,노루페인트,NOROO,1-2,9,3,3,1,1,N,경고,기재,N,3,,2026-09-22
+EN-WD40-002,wd-40-multi-use-product-aerosol-low-voc-sds-us-ghs.pdf,en,영문,WD-40,WD40,1-2,4,0,0,3,4,Y,위험,기재,Y,7,,2026-09-22
