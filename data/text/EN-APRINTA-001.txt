@@ -1,0 +1,64 @@
+Safety Data Sheet
+according to Regulation (EC) No. 1907/2006 (REACH)
+Ethanol Denatured
+Version number: SDS 3.1 Revision: 2026-05-21
+Replaces version of: 2025-02-28 (SDS 2)
+SECTION 1: Identification of the substance/mixture and of the company/undertaking
+1.1 Product identifier
+Trade name Ethanol 99,9%
+Registration number (REACH) not relevant (mixture)
+Unique formula identifier (UFI) 6YDS-51E0-J00F-77AS
+1.2 Relevant identified uses of the substance or mixture and uses advised against
+Relevant identified uses. cleaning agent
+1.3 Details of the supplier of the safety data sheet
+AprintaPro GmbH
+Gutheil Schoder Gasse 17
+1230 Wien
+Austria
+Telephone: +43 1 997809410
+e-mail: office@aprintapro.com
+Website: https://www.aprintapro.com
+e-mail (competent person) office@aprintapro.com
+1.4 Emergency telephone number
+For 24/7 multilingual advice for a spill, leak, fire, exposure, or accident call CHEMTREC and provide CCN1025279.
+Country Telephone
+Malta +44 20 3885 0382 (United Kingdom, multilingual)
+SECTION 2: Hazards identification
+2.1 Classification of the substance or mixture
+Classification according to Regulation (EC) No 1272/2008 (CLP)
+Section Hazard class Category Hazard class and category Hazard state-
+ment
+2.6 2 Flam. Liq. 2 H225
+flammable liquid
+3.3 2 Eye Irrit. 2 H319
+serious eye damage/eye irritation
+For full text of abbreviations: see SECTION 16.
+The most important adverse physicochemical, human health and environmental effects
+The product is combustible and can be ignited by potential ignition sources.
+2.2 Label elements
+Labelling according to Regulation (EC) No 1272/2008 (CLP)
+- Signal word danger
+- Pictograms
+GHS02, GHS07
+- Hazard statements
+H225 Highly flammable liquid and vapour.
+H319 Causes serious eye irritation.
+MT-en AprintaPro GmbH Gutheil Schoder Gasse 17 1230 Wien Austria Page: 1 / 11
++43 1 997809410 office@aprintapro.com https://www.aprintapro.com
+Safety Data Sheet
+according to Regulation (EC) No. 1907/2006 (REACH)
+Ethanol Denatured
+Version number: SDS 3.1 Revision: 2026-05-21
+Replaces version of: 2025-02-28 (SDS 2)
+SECTION 3: Composition/information on ingredients
+3.1 Substances
+Not relevant (mixture)
+3.2 Mixtures
+Description of the mixture
+Name of substance Identifier Wt% Classification acc. to GHS
+Ethanol 99,9% CAS No 64-17-5 ≥ 90 Flam. Liq. 2 / H225
+Eye Irrit. 2 / H319
+Name of substance Specific Conc. Limits M-Factors ATE Exposure route
+Ethanol 99,9% Eye Irrit. 2; H319: C ≥ 50 % - -
+Remarks
+For full text of abbreviations: see SECTION 16

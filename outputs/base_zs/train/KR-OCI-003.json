@@ -1,0 +1,16 @@
+{
+  "doc_id": "KR-OCI-003",
+  "condition": "base_zs",
+  "split": "train",
+  "raw_output": "{\"product_name\":{\"value\":\"가성소다, 수산화나트륨(SODIUM HYDROXIDE)\",\"source_status\":\"기재\"},\n\"recommended_use\":{\"value\":\"펄프, 종이, 섬유, 표백, 비누원료의 제조, 향료, 섬유정제, 조미료 제조, 의약품제조\",\"source_status\":\"기재\"},\n\"use_restrictions\":{\"value\":\"자료없음\",\"source_status\":\"기재\"},\n\"supplier\":{\"company_name\":\"OCI㈜\",\"address\":\"군산공장\",\"emergency_phone\":\"063-460-6321\"},\n\"ingredients\":[{\"chemical_name\":\"수산화나트륨\",\"cas_number\":\"1310-73-2\",\"ke_number\":null,\"content\":\"49 ~ 51\",\"is_substitute_data\":false},\n{\"chemical_name\":\"물\",\"cas_number\":\"7732-18-5\",\"ke_number\":null,\"content\":\"49 ~ 51\",\"is_substitute_data\":false}],\n\"ghs_classification\":[{\"hazard_class\":\"구분1\",\"category\":null}],\n\"signal_word\":{\"value\":\"위험\",\"source_status\":\"기재\"},\n\"hazard_statements\":[{\"code\":\"H290\",\"text\":\"금속을 부식시킬 수 있음\"},\n{\"code\":\"H302\",\"text\":\"삼키면 유해함\"},\n{\"code\":\"H312\",\"text\":\"피부와 접촉하면 유해함\"},\n{\"code\":\"H314\",\"text\":\"피부에 심한 화상과 눈 손상을 일으킴\"},\n{\"code\":\"H318\",\"text\":\"눈에 심한 손상을 일으킴\"}],\n\"list_status\":{\"ingredients\":\"기재\",\"ghs_classification\":\"기재\",\"hazard_statements\":\"기재\"}}",
+  "gen_time_sec": 14.551,
+  "input_tokens": 2772,
+  "output_tokens": 397,
+  "hit_max_new_tokens": false,
+  "skipped": null,
+  "base_model": "Qwen/Qwen3-4B",
+  "adapter": null,
+  "fewshot_doc_ids": [],
+  "max_new_tokens": 1024,
+  "created_at": "2026-09-26T14:03:53"
+}

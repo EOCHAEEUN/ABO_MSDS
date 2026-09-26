@@ -1,0 +1,62 @@
+Safety Data Sheet
+California CARB Compliant
+1 - Identification
+Manufacturer: WD-40 Company
+Product Name: WD-40 Multi-Use Product Aerosol Address: 9715 Businesspark Avenue
+San Diego, California, USA
+Product Use: Lubricant, Penetrant, Drives Out 92131
+Moisture and Protects Surfaces from Corrosion Telephone:
+Emergency: 1-888-324-7596
+Restrictions on Use: None identified Information: 1-888-324-7596
+Chemical Spills: 1-800-424-9300 (Chemtrec)
+SDS Date of Preparation: November 13, 2024 1-703-527-3887 (International Calls)
+2 – Hazards Identification
+HCS 2024/GHS Classification:
+Aerosol Category 1
+Aspiration Toxicity Category 1
+Specific Target Organ Toxicity Single Exposure Category 3 (nervous system effects)
+Note: This product is a consumer product and is labeled in accordance with the US Consumer Product
+Safety Commission regulations which take precedence over OSHA Hazard Communication labeling. The
+actual container label will not include the label elements below. The labeling below applies to
+industrial/professional products.
+Label Elements:
+DANGER!
+Extremely Flammable Aerosol.
+Pressurized container: may burst if heated.
+May be fatal if swallowed and enters airways.
+May cause drowsiness or dizziness.
+Prevention
+Keep away from heat, hot surfaces, sparks, open flames, and other ignition sources. – No smoking.
+Do not spray on an open flame or other ignition source.
+Do not pierce or burn, even after use.
+Avoid breathing vapors or mists.
+Use only outdoors or in a well-ventilated area.
+Response
+IF SWALLOWED: Immediately call a POISON CENTER or physician. Do NOT induce vomiting.
+IF INHALED: Remove person to fresh air and keep comfortable for breathing. Call a POISON CENTER or
+physician if you feel unwell.
+Storage
+Store locked up.
+Protect from sunlight. Do not expose to temperatures exceeding 122°F (50°C). Store in a well-ventilated
+place.
+Disposal
+Dispose of contents and container in accordance with local and national regulations.
+Page 1 of 5
+3 - Composition/Information on Ingredients
+Ingredient CAS # Weight Percent US HSC 2024 / GHS
+Classification
+LVP Aliphatic Hydrocarbon 64742-47-8 45-50% Aspiration Toxicity Category 1
+Petroleum Base Oil 64742-56-9 <35% Not Hazardous
+64742-65-0
+64742-53-6
+64742-54-7
+64742-71-8
+Aliphatic Hydrocarbon 64742-47-8 10 - <25% Flammable Liquid Category 3
+Aspiration Toxicity Category 1
+Specific Target Organ Toxicity
+Single Exposure Category 3
+(nervous system effects)
+Carbon Dioxide 124-38-9 2-3% Simple Asphyxiant
+Gas Under Pressure,
+Compressed Gas
+Note: The specific chemical identity and exact percentages are a trade secret.

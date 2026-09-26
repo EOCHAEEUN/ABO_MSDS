@@ -48,10 +48,26 @@ def read_pages(path):
         return [(page.extract_text() or "") for page in pdf.pages]
 
 
+def undouble(text):
+    """굵은 글씨가 겹쳐 뽑힌 줄을 되돌린다.
+    네 번: "안안안안전전전전" → "안전"
+    두 번: "44.. 응응급급조조치치" → "4. 응급조치" — 한글 대부분이 짝으로 겹친 줄만 손댄다.
+    """
+    out = []
+    for line in text.split("\n"):
+        line = re.sub(r'([가-힣ㆍ·])\1{3}', r'\1', line)
+        han = re.findall(r'[가-힣]', line)
+        pairs = re.findall(r'([가-힣])\1', line)
+        if len(han) >= 4 and 2 * len(pairs) >= 0.6 * len(han):
+            line = re.sub(r'(\S)\1', r'\1', line)
+        out.append(line)
+    return "\n".join(out)
+
+
 def find_cut_page(pages):
     """4항 제목이 처음 나온 페이지 번호(1부터). 못 찾으면 None."""
     for n, page_text in enumerate(pages, start=1):
-        if find_first(SECTION4_PATTERNS, page_text.splitlines())[0] is not None:
+        if find_first(SECTION4_PATTERNS, undouble(page_text).splitlines())[0] is not None:
             return n
     return None
 
@@ -81,8 +97,7 @@ def process(path, out_dir, tokenizer, doc_ids):
                     cut_page=None, char_count=len(raw), token_count=None,
                     h_code_before=0, h_code_after=0, note="스캔 PDF 의심 (텍스트 부족)")
 
-    # 굵은 글씨가 네 번 겹쳐 뽑히는 PDF가 있다: "안안안안전전전전" → "안전"
-    raw = re.sub(r'([가-힣ㆍ·])\1{3}', r'\1', raw)
+    raw = undouble(raw)
     r = preprocess(raw)
     cut_page = find_cut_page(pages)
 
@@ -153,7 +168,7 @@ def main():
         toks.sort()
         pick = lambda p: toks[min(int(len(toks) * p / 100), len(toks) - 1)]  # noqa: E731
         print(f"\n토큰 길이  P50 {pick(50)} · P90 {pick(90)} · P95 {pick(95)} · MAX {toks[-1]}")
-        print("→ 기획서 5장 max length(1536) 결정에 사용")
+        print("→ 학습 max_length 결정에 사용 (출력 JSON 길이를 더해서 볼 것. 현재 configs: 4096)")
 
 
 if __name__ == "__main__":

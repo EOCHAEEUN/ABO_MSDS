@@ -1,0 +1,71 @@
+MSDS 번호AA02666-0000020305
+1. 화학제품과 회사에 관한 정보
+가. 제품명 프라톱 2000 VDS(BTX/F) / ZLA608
+나. 제품의 권고 용도와 사용상의 제한
+○ 제품의 권고 용도 A/P(자동차 내장제용), 유성 페인트
+○ 사용상의 제한 권고 용도 외에는 사용하지 마시오.
+다. 제조자/공급자/유통업자 정보
+○ 공급회사명 조광페인트(주)
+○ 주소 46909) 부산광역시 사상구 삼덕로 5번길 148(삼락동)
+○ 긴급전화번호 TEL : 051)304-7701/9, FAX : 051)304-7744
+○ 담당부서 모빌리티솔루션팀
+2. 유해성·위험성
+가. 유해성·위험성 분류
+인화성 액체 구분 2
+심한 눈 손상성/눈 자극성 구분 2
+피부 과민성 구분 1
+생식세포 변이원성 구분 1B
+발암성 구분 1B
+특정표적장기 독성(1회 노출) 구분 3(호흡기 자극/마취영향)
+수생환경 유해성(만성) 구분 2
+나. 예방조치 문구를 포함한 경고 표지 항목
+○ 그림문자
+○ 신호어 위험
+○ 유해·위험 문구 H225 고인화성 액체 및 증기
+H317 알레르기성 피부 반응을 일으킬 수 있음
+H319 눈에 심한 자극을 일으킴
+H335 호흡기계 자극을 일으킬 수 있음
+H336 졸음 또는 현기증을 일으킬 수 있음
+H340 유전적인 결함을 일으킬 수 있음(원료별 `11. 독성에 관한 정보’에 표기된 특정장기에 영향을 끼침)
+H350 암을 일으킬 수 있음(원료별 `11. 독성에 관한 정보’에 표기된 특정장기에 영향을 끼침)
+H411 장기적인 영향에 의해 수생생물에게 유독함
+다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성
+○ NFPA Carbon black : 보건=0, 화재=1, 반응성=자료없음
+Nitrocellulose : 보건=자료없음, 화재=2, 반응성=3
+Naphtha (petroleum), hydrodesulfurized heavy : 보건=1, 화재=3, 반응성=0
+Butyl acetate : 보건=3, 화재=2, 반응성=0
+Ethyl acetate : 보건=3, 화재=3, 반응성=0
+Methyl ethyl ketone : 보건=4, 화재=3, 반응성=0
+Solvent naphtha (petroleum), light arom. : 보건=1, 화재=2, 반응성=0
+Methylisobutyl ketone : 보건=0, 화재=3, 반응성=0
+Isobutyl acetate : 보건=0, 화재=3, 반응성=0
+3. 구성성분의 명칭 및 함유량
+화학물질명 관용명 및 이명 CAS번호 또는 식별번호 함유량(%)
+ALUMINIUM 자료없음 7429-90-5 1 ~ 10
+Carbon black Acetylene black 1333-86-4 1 ~ 10
+Nitrocellulose Pyroxylin 9004-70-0 1 ~ 10
+조광페인트주식회사 2/28
+Kerosine (petroleum),
+자료없음 64742-81-0 0.1 ~ 3
+hydrodesulfurized
+Naphtha (petroleum),
+자료없음 64742-82-1 0.1 ~ 3
+hydrodesulfurized heavy
+Butyl acetate n-Butyl Acetate 123-86-4 10 ~ 20
+Ethylene glycol
+2-Butoxyethanol 111-76-2 1 ~ 10
+monobutyl ether
+Ethyl acetate Acetic acid ethyl ester 141-78-6 20 ~ 30
+Methyl ethyl ketone MEK; 2-Butanone 78-93-3 1 ~ 10
+방향족 나프타, 타입
+Solvent naphtha (petroleum), light
+I(Aromatic naphtha, type 64742-95-6 1 ~ 10
+arom.
+I)
+Methylisobutyl ketone MIBK 108-10-1 10 ~ 20
+2-Methylpropyl acetate;
+Acetic acid isobutyl ester;
+Isobutyl acetate 110-19-0 10 ~ 20
+beta-Methylpropyl
+ethanoate
+※ 산업안전보건법 제 104조에 따른 구성성분 정보임. 단, 대상물질이 없는 경우 3항에 물질 정보가 기재되지 않을 수 있음.

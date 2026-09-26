@@ -1,0 +1,77 @@
+Safety Data Sheet according to (EC) No 1907/2006 as amended
+Page 1 of 12
+SDS No. : 624092
+V001.9
+LOCTITE 401 Revision: 24.07.2024
+printing date: 25.02.2025
+Replaces version from: 05.01.2024
+SECTION 1: Identification of the substance/mixture and of the company/undertaking
+1.1. Product identifier
+LOCTITE 401
+UFI: 75K2-7WCV-V202-4CX1
+1.2. Relevant identified uses of the substance or mixture and uses advised against
+Intended use:
+Adhesive
+1.3. Details of the supplier of the safety data sheet
+Henkel Ltd
+Adhesives
+Wood Lane End
+HP2 4RQ Hemel Hempstead
+Great Britain
+Phone: +44 (1442) 278000
+SDSinfo.Adhesive@henkel.com
+For Safety Data Sheet updates please visit our website www.mysds.henkel.com or www.henkel-adhesives.com.
+1.4. Emergency telephone number
+24 Hours Emergency Tel: +44 (0)1442 278497
+SECTION 2: Hazards identification
+2.1. Classification of the substance or mixture
+Classification (CLP):
+Skin irritation Category 2
+H315 Causes skin irritation.
+Serious eye irritation Category 2
+H319 Causes serious eye irritation.
+Specific target organ toxicity - single exposure Category 3
+H335 May cause respiratory irritation.
+Target organ: respiratory tract irritation
+2.2. Label elements
+Label elements (CLP):
+LOCTITE 401
+SDS No.: 624092 Page 2 of 12
+V001.9
+Hazard pictogram:
+Contains Ethyl 2-cyanoacrylate
+Signal word: Warning
+Hazard statement: H315 Causes skin irritation.
+H319 Causes serious eye irritation.
+H335 May cause respiratory irritation.
+Supplemental information Cyanoacrylate. Danger. Bonds skin and eyes in seconds. Keep out of the reach of
+children.
+Precautionary statement: P261 Avoid breathing vapors.
+Prevention P280 Wear protective gloves/eye protection.
+Precautionary statement: P337+P313 If eye irritation persists: Get medical advice/attention.
+Response P305+P351+P338 IF IN EYES: Rinse cautiously with water for several minutes. Remove
+contact lenses, if present and easy to do. Continue rinsing.
+Precautionary statement: P501 Dispose of contents/container in accordance with national regulation.
+Disposal
+2.3. Other hazards
+None if used properly.
+Following substances are present in a concentration ≥ the concentration limit for depiction in Section 3 and fulfill the
+criteria for PBT/vPvB, or were identified as endocrine disruptor (ED):
+This mixture does not contain any substances in a concentration ≥ the concentration limit for depiction in Section 3 that are
+assessed to be a PBT, vPvB or ED.
+SECTION 3: Composition/information on ingredients
+3.2. Mixtures
+Declaration of the ingredients according to CLP (EC) No 1272/2008:
+Hazardous components Concentration Classification Specific Conc. Limits, M- Add.
+CAS-No. factors and ATEs Information
+EC Number
+REACH-Reg No.
+Ethyl 2-cyanoacrylate 50- 100 % Eye Irrit. 2, H319 STOT SE 3; H335; C >= 10 %
+7085-85-0 STOT SE 3, H335
+230-391-5 Skin Irrit. 2, H315
+01-2119527766-29
+If no ATE values are displayed, please refer to LD/LC50 values in Section 11.
+For full text of the H - statements and other abbreviations see section 16 "Other information".
+LOCTITE 401
+SDS No.: 624092 Page 3 of 12
+V001.9

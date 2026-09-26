@@ -9,8 +9,9 @@ cnt = {k: len(v) for k, v in by.items()}
 print("건수:", cnt)
 ko = lambda s: [r for r in by[s] if r["lang"] == "ko"]
 en = lambda s: [r for r in by[s] if r["lang"] == "en"]
-if len(by["train"]) != 24: err.append("train은 24건이어야 함")
-if len(by["val"]) != 4: err.append("val은 4건이어야 함")
+# 2026-09-26 ITW 그룹(수입품 2건)을 train → val로 옮김 (val이 현행 서식뿐이라 Base가 만점에 가까웠음)
+if len(by["train"]) != 22: err.append("train은 22건이어야 함")
+if len(by["val"]) != 6: err.append("val은 6건이어야 함")
 if len(ko("test")) != 15 or len(en("test")) != 5: err.append("test는 국문 15 + 영문 5여야 함")
 if en("train") or en("val"): err.append("영문은 train·val에 들어갈 수 없음(학습·few-shot 금지)")
 # 같은 split_group이 train과 평가용(val/test)에 걸치면 안 됨. 예외: 노루 구서식(train 2 / test 3)
