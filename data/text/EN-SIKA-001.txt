@@ -1,0 +1,45 @@
+SAFETY DATA SHEET
+SikaTherm®-4155
+Version Revision Date: SDS Number (Internal): Date of last issue: 26.11.2023
+5.0 14.05.2025 100000014505 Date of first issue: 02.02.2018
+1. PRODUCT AND COMPANY IDENTIFICATION
+Product name : SikaTherm®-4155
+Recommended use of the chemical and restrictions on use
+Product use : S ealant/adhesive
+Manufacturer or supplier's details
+Company : Sika Korea Ltd.
+724, Anseongmatchum-daero
+Miyang-myeon
+Anseong-si
+Gyeonggi-do
+Korea
+Telephone : +82-31-8056-7777
+Emergency telephone number : +82-31-8056-7777
+E-mail address : ehs@kr.sika.com
+Telefax : +82-31-8056-7788
+2. HAZARDS IDENTIFICATION
+GHS Classification
+Long-term (chronic) aquatic : Category 3
+hazard
+GHS label elements
+H azard pictograms : Not applicable
+S ignal word : Not applicable
+Hazard statements : H412 Harmful to aquatic life with long lasting effects.
+3. COMPOSITION/INFORMATION ON INGREDIENTS
+1 / 12
+SAFETY DATA SHEET
+SikaTherm®-4155
+Version Revision Date: SDS Number (Internal): Date of last issue: 26.11.2023
+5.0 14.05.2025 100000014505 Date of first issue: 02.02.2018
+S ubstance / Mixture : Mixture
+Components
+Chemical name Common CAS-No. Concentration (%
+Name w/w)
+2,2'-(ethylenedioxy)diethanol 2,2'- 112-27-6 0.025 - < 0.25
+(ethylenedi-
+oxy)diethanol
+bronopol (INN) bronopol 52-51-7 >= 0.0025 - <
+(INN) 0.025
+2-octyl-2H-isothiazole-3-one (OIT) 2-octyl-2H- 26530-20-1 0.0025 - < 0.025
+isothiazole-3-
+one (OIT)

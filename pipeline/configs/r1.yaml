@@ -8,4 +8,7 @@ learning_rate: 2.0e-4
 num_epochs: 2
 per_device_batch_size: 1
 grad_accum: 8
-max_length: 1536
+# 입력+출력 실측(2026-09-26, train·val 28건): P50 1483 · P90 2397 · MAX 2998(KR-NOROO-005).
+# 1536이면 11건의 정답 JSON 끝이 잘려 닫히지 않은 JSON을 배우게 된다. 프롬프트 여유 포함 4096.
+max_length: 4096
+gradient_checkpointing: true   # 8GB GPU에서 3K 토큰 문서를 넣으려면 필요

@@ -1,0 +1,56 @@
+Safety Data Sheet
+1 - Identification
+Manufacturer: WD-40 Company
+Trade Name: WD-40 MULTI-USE PRODUCT AEROSOL Address: 9715 Businesspark Avenue
+San Diego, California, USA
+Product Use: Lubricant, Penetrant, Drives Out 92131
+Moisture, Removes and Protects Surfaces from Telephone:
+Corrosion Emergency: 1-888-324-7596
+Information: 1-888-324-7596
+Restrictions on Use: None identified Chemical Spills: 1-800-424-9300 (Chemtrec)
+1-703-527-3887 (International Calls)
+SDS Date of Preparation: May 21, 2024
+2 – Hazards Identification
+GHS Classification:
+Flammable Aerosol Category 1
+Aspiration Toxicity Category 1
+Specific Target Organ Toxicity Single Exposure Category 3 (nervous system effects)
+This product is a consumer product and is labeled in accordance with local regulations for consumer chemicals. The
+actual container label may not include the label elements below. The labeling below applies to industrial/professional
+products.
+Label Elements:
+DANGER!
+H222 Extremely Flammable Aerosol.
+H229 Pressurized container: may burst if heated.
+H304 May be fatal if swallowed and enters airways.
+H336 May cause drowsiness or dizziness.
+Prevention
+P210 Keep away from heat, hot surfaces, sparks, open flames, and other ignition sources. No smoking.
+P211 Do not spray on an open flame or other ignition source.
+P251 Do not pierce or burn, even after use.
+P261 Avoid breathing vapors or mists.
+P271 Use only outdoors or in a well-ventilated area.
+Response
+P301+P310 IF SWALLOWED: Immediately call a POISON CENTER or physician.
+P331 Do NOT induce vomiting.
+P304+P340 IF INHALED: Remove person to fresh air and keep comfortable for breathing.
+P312 Call a POISON CENTER or physician if you feel unwell.
+Storage
+P405 Store locked up.
+P410+P412+P403 Protect from sunlight. Do not expose to temperatures exceeding 50°C/122°F. Store in a well-ventilated
+place.
+Disposal
+P501 Dispose of contents and container in accordance with local and national regulations.
+Page 1 of 5
+3 - Composition/Information on Ingredients
+Ingredient CAS # Weight Percent GHS Classification
+Aliphatic Hydrocarbon 64742-47-8 50-70% Flammable Liquid Category 3
+Aspiration Toxicity Category 1
+Specific Target Organ Toxicity
+Single Exposure Category 3
+(nervous system effects)
+Petroleum Base Oil Mixture <25% Not Hazardous
+Carbon Dioxide 124-38-9 2-3% Simple Asphyxiant
+Gas Under Pressure,
+Compressed Gas
+Note: The exact percentages are a trade secret.

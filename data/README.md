@@ -14,7 +14,7 @@
 
 ```
 data/
-  labels/{doc_id}.json      Train 24 + Val 4 정답 라벨
+  labels/{doc_id}.json      Train 22 + Val 6 정답 라벨
   splits.csv                문서별 split 배정과 사유
   sources.csv               문서 목록: 원본 파일명, 언어, 서식, 제조사, split_group, 1~3항 쪽수, 건수 요약
   README.md                 이 문서
@@ -82,8 +82,8 @@ doc_id는 `KR|EN-제조사약칭-번호` 형식입니다.
 
 | split | 건수 | 위치 | 용도 |
 |---|---|---|---|
-| train | 24 (국문) | data/labels/ | QLoRA 학습·증강, few-shot 예시 추출 |
-| val | 4 (국문) | data/labels/ | 1·2차 비교, 사전 판정, 실패 분석 |
+| train | 22 (국문) | data/labels/ | QLoRA 학습·증강, few-shot 예시 추출 |
+| val | 6 (국문) | data/labels/ | 1·2차 비교, 사전 판정, 실패 분석 |
 | test | 20 (국문 15 + 영문 5) | eval/test/ | 모델 고정 후 최종 평가 1회. 봉인 |
 | val_en | 2 (영문) | eval/val_en/ | 영문 정규화·매핑표 점검용. 성능 보고에 쓰지 않음 |
 
@@ -95,17 +95,19 @@ doc_id는 `KR|EN-제조사약칭-번호` 형식입니다.
 - **사전 검증 문서 제외:** 9/22 사전 검증에 쓴 3건(real-01 아세톤 KR-THERMO-001, real-02 베란다용 페인트 KR-NOROO-004, real-03 에폭시 신나 KR-NOROO-005)은 이미 Base 모델을 돌렸으므로 test에서 뺐습니다(봉인 원칙).
 - **교차 언어 누수 방지:** 국문판이 train에 있는 EN-ALFA-001(아세톤)은 test에서 빼 val_en으로 보냈습니다.
 - **test 국문 구성:** 현행 9 · 수입품 국문판 3 · 구서식 3입니다.
+- **val 재구성 (2026-09-26):** ITW 그룹(수입품 국문판 2건)을 train에서 val로 통째로 옮겼습니다. 기존 val 4건이 모두 현행 서식이라 Base few-shot이 GHS·H코드·스키마 만점을 내서 조건 비교가 안 됐기 때문입니다(진단: `report/base_diagnosis.md`). 제조사 단위 배정·val/train 제조사 불겹침 규칙은 그대로 지킵니다.
 
 | split | 성분 | GHS 분류 | H문구 | 영업비밀 성분 | H코드 없는 문서 | 분류 해당없음 문서 |
 |---|---|---|---|---|---|---|
-| train | 68 | 87 | 96 | 2 | 2 | 6 |
-| val | 16 | 10 | 10 | 2 | 0 | 2 |
+| train | 61 | 77 | 86 | 2 | 2 | 6 |
+| val | 23 | 20 | 20 | 2 | 0 | 2 |
 | test | 92 | 64 | 71 | 9 | 4 | 3 |
 | val_en | 2 | 5 | 5 | 0 | 0 | 0 |
 
 **train의 약점:** 영업비밀 성분이 2건, H코드 없는 문서가 2건뿐입니다. 증강·합성 데이터에서 이 두 유형을 보강해야 합니다.
 
 **few-shot 후보(train):** KR-NOROO-004(v5 스키마 예시 문서, 영업비밀 포함)와 KR-KUMHO-002(해당없음 사례, 입력이 짧음)입니다.
+**few-shot 확정(2026-09-26, `eval/fewshot.json`):** KR-HANIL-002(수기 셋으로 검증, 괄호 부기 제거 예시) + KR-KUMHO-002(해당없음). 노루는 test 제조사라 뺐습니다. KUMHO-002 수기 검증 남음.
 
 **봉인:** eval/test/는 2일차 17:30 이후 수정 금지이며, 3일차 09:30 전까지 어떤 모델도 돌리지 않습니다.
 

@@ -1,0 +1,62 @@
+﻿문서ID,순번,성분명,CAS번호,KE번호,함유량,원문 그대로 복사,쪽,비고
+KR-NOROO-006,1,S1(영업비밀),자료없음,자료없음,28~38,S1(영업비밀) - - 28∼38,1,"영업비밀. 이명·CAS 원문 표기 ""-"" [수정] 문서ID KO-001 → KR-NOROO-006"
+KR-NOROO-006,2,물,7732-18-5,자료없음,25~35,물 Water 7732-18-5 25∼35,1,"함유량 물결표는 원문이 ""∼""(U+223C). 값 칸에는 ""~""로 통일 [수정] 문서ID KO-001 → KR-NOROO-006"
+KR-NOROO-006,3,석회암 ; 석회석,1317-65-3,자료없음,20~30,석회암 ; 석회석 Limestone 1317-65-3 20∼30,1,원문 성분명이 세미콜론 병기 [수정] 문서ID KO-001 → KR-NOROO-006
+KR-NOROO-006,4,S2(영업비밀),자료없음,자료없음,6~16,S2(영업비밀) - - 6∼16,2,영업비밀. 표가 2쪽으로 이어짐 [수정] 문서ID KO-001 → KR-NOROO-006
+KR-NOROO-006,5,에틸렌 프로필렌-디엔 테르폴리머,25038-36-2,자료없음,1~10,에틸렌 프로필렌-디엔 테르폴리머 Ethylene propylene-diene terpolymer 25038-36-2 1∼10,2,[수정] 문서ID KO-001 → KR-NOROO-006
+KR-NOROO-006,6,S3(영업비밀),자료없음,자료없음,1~10,S3(영업비밀) - - 1∼10,2,영업비밀 [수정] 문서ID KO-001 → KR-NOROO-006
+KR-NOROO-006,7,고령토 ; 카올린,1332-58-7,자료없음,1~10,고령토 ; 카올린 Kaolin 1332-58-7 1∼10,2,[수정] 문서ID KO-001 → KR-NOROO-006
+KR-NOROO-006,8,삼산화 이철,1309-37-1,자료없음,1~10,삼산화 이철 Diiron trioxide 1309-37-1 1∼10,2,[수정] 문서ID KO-001 → KR-NOROO-006
+KR-NOROO-006,9,등유,8008-20-6,자료없음,0.1~4,등유 Kerosine 8008-20-6 0.1∼4,2,[수정] 문서ID KO-001 → KR-NOROO-006
+KR-SAMHWA-001,1,Water,7732-18-5,자료없음,80~90,Water 물 7732-18-5 80 이상 ~90 % 미만,1,13050036-11_아크로텍스 잉크 흑색_GHS국문.pdf
+KR-SAMHWA-001,2,Carbon black ,1333-86-4,자료없음,1~10,Carbon black  카본 블랙 1333-86-4 1 이상 ~10 % 미만,2,
+KR-SAMHWA-002,1,"Styrene, n-butyl methacrylate, n-butyl acrylate, methyl methacrylate, 2-hydroxyethyl methacrylate",104318-70-9,KE-32301,50~60,"Styrene, n-butyl methacrylate, n-butyl acrylate, methyl methacrylate, 2-hydroxyethyl methacrylat 104318-70-9 (KE-32301) 50 이상 ~ 60 % 미만",1,13220445-1_슈퍼레진 09110_GHS국문.pdf
+KR-SAMHWA-002,2,Toluene ,108-88-3,KE-33936,30~40,Toluene  톨루엔 108-88-3 (KE-33936) 30 이상 ~40 % 미만,1,
+KR-SAMHWA-002,3,Butyl acetate,123-86-4,KE-04179,10~20,Butyl acetate  n-뷰틸 아세테이트123-86-4 (KE-04179),2,
+KR-GSC-001,1,"Distillates (petroleum), hydrotreated heavy paraffinic", 64742-54-7,자료없음,98~100,"Distillates (petroleum), hydrotreated heavy paraffinic 64742-54-7 265-157-1 98 ~ 100",2,1563415800689l1TrRckvDivg3w9Qw-2152768.pdf
+KR-GSC-001,2,"Phosphorodithioic acid O,O-dialkyl(C=1-14) esters zinc salts ",68649-42-3,자료없음,0.1~1,"Phosphorodithioic acid O,O-dialkyl(C=1-14) esters zinc salts  68649-42-3 272-028-3 0.1 ~ 1",2,
+KR-GSC-001,3,"2,6-di-tert-butylphenol",128-39-2,자료없음,0.1~0.5,"2,6-di-tert-butylphenol 128-39-2 204-884-0 0.1 ~ 0.5",2,
+KR-GSC-001,4,영업비밀1 ,자료없음,자료없음,0.1~2,영업비밀1   0.1 ~ 2,,
+KR-HANIL-001,1,Water,7732-18-5,자료없음,15~20,Water 디수소산화물 7732-18-5 15 – 20,2,A20230516171033_5
+KR-HANIL-001,2,하이드록시프로필 메틸셀룰로스 ,9004-65-3,자료없음,0~3,하이드록시프로필 메틸셀룰로스 셀룰로오스 9004-65-3 0 – 3,2,
+KR-HANIL-001,3,Acrylamide/sodium acrylate copolymer,25085-02-3,자료없음,10~20,"Acrylamide/sodium acrylate copolymer 아크릴아마이드 공중합체
+함유, 나트륨 아크릴산염 25085-02-3 10 – 20",2,[수정] CAS 오타 25085-02-03 → 25085-02-3 (원문·체크디짓 확인)
+KR-HANIL-001,4,SODIUM 2-PROPENOATE 2-PROPENAMIDE POLYMER,25987-30-8,자료없음,0~5,"SODIUM 2-PROPENOATE 2-PROPENAMIDE POLYMER 2-프로펜산, 2-프로펜아마이드와의 중합체, 나트륨 염 25987-30-8 0 – 5",2,
+KR-HANIL-001,5,Calcium carbonate,471-34-1 ,자료없음,40~60,Calcium carbonate 석회석 471-34-1 40 – 60,2,
+KR-HANIL-001,6,수산화나트륨 가성소다 ,1310-73-2,자료없음,0~5,수산화나트륨 가성소다 1310-73-2 0 – 5,2,
+KR-HANIL-002,1,비스페놀 A 다이글리시딜 에테르,1675-54-3,자료없음,30~40,"비스페놀 A 다이글리시딜 에테르
+다이페닐올 프로페인 다이실사이딜
+에터; 비스페놀A다이글리시딜에터;다
+이메틸메테인다이클리시딜에터;2,2-비
+스(4-(2,3-에폭시프로폭시)페닐)프로페
+인;2,2‘-[1-메틸에틸리텐)비스(4,1-페닐
+렌옥시메틸렌)]비스옥시레인;4,4-비스
+(2,3-에폭시프로폭시)다이페닐다이메틸
+메테인;비스(4-하이드록시페닐)다이메
+틸메테인 다이글리시딜에터;옥시레
+인,2.2’-[(1-메틸에틸리덴)비스(4,1-페닐
+렌옥시메틸렌]비스-(4,1-페닐렌옥시메
+틸렌)]비스옥시레인;비스페놀A다이클
+리시딜에터 1675-54-3 30~40
+",2,A20250121153940_5
+KR-HANIL-002,2,이산화티타늄,13463-67-7,자료없음,0~3,이산화티타늄 - 13463-67-7 0~3,2,
+KR-HANIL-002,3,석회석, 1317-65-3,자료없음,60~70,"석회석 Calciu Carbonate, natural Limestone 1317-65-3 60~70",2,
+KR-THERMO-001,1,아세톤,67-64-1,KE-29367 ,99~100,아세톤 2-Propanone 67-64-1 KE-29367 99 - 100,2,Acetone_MTR_KOSD_KO
+KR-GSC-002,1,"1-Decene, homopolymer, hydrogenated",68037-01-4,자료없음,70~80,"1-Decene, homopolymer, hydrogenated 68037-01-4 500-183-1 70 ~ 80",2,MSDS_Kixx PAO 1 SN 0W-30_ko_3.0 [수정] CAS 오타 68037-01-04 → 68037-01-4 (원문·체크디짓 확인)
+KR-GSC-002,2,영업비밀1 ,자료없음,자료없음,10~20,영업비밀1 10 ~ 20,2,
+KR-GSC-002,3,"Fatty acids, (C=8-10), triesters with trimethylolpropane", 91050-89-4,자료없음,0.1~5,"Fatty acids, (C=8-10), triesters with
+trimethylolpropane 91050-89-4 293-036-3 0.1 ~ 5",2,
+KR-GSC-002,4,ar-Nonyl-N-(nonylphenyl)benzenamine ,36878-20-3,자료없음,0.1~2,ar-Nonyl-N-(nonylphenyl)benzenamine 36878-20-3 253-249-4 0.1 ~ 2,2,
+KR-GSC-002,5,"Phosphorodithioic acid O,O-dialkyl(C=3-14) esters zinc salts",134759-18-5,자료없음,1~5,"Phosphorodithioic acid O,O-dialkyl(C=3-14) esters
+zinc salts
+134759-18-
+5 1 ~ 5",2,
+KR-HANIL-005,1,석고, 13397-24-5,자료없음,0~1,석고 13397-24-5 0 ~ 1,2,A20260630095020_5
+KR-HANIL-005,2,고로슬래그,65996-69-2,자료없음,40~50,"고로슬래그 (제1철 금속)(BLAST FURNACE SLAGS (FERROUS
+METAL))
+슬래그, 철을 함유한 금속, 용광로(SLAGS,
+FERROUS METAL, BLAST FURNACE); 65996-69-2 40 ~ 50",2,
+KR-HANIL-005,3,포틀랜드 시멘트, 65997-15-1,자료없음,50~60,포틀랜드 시멘트 65997-15-1 50 ~ 60,2,
+KR-KUMHO-001,1,스타이렌-부타디엔 고무,9003-55-8,KE-13258,78.5~81.5,스타이렌-부타디엔 고무 자료없음 9003-55-8 / KE-13258 78.5 ~ 81.5,1,[수정] golden_main 의 성분 행에서 옮김. KE는 원문 CAS 칸에 병기된 값
+KR-KUMHO-001,2,솔벤트-정제된 중질 파라핀 정제유(석유),64741-88-4,KE-12614,18.5~21.5,64741-88-4 / KE-12614 18.5 ~ 21.5,1,[수정] golden_main 의 성분 행에서 옮김. KE는 원문 CAS 칸에 병기된 값
+KR-KUMHO-001,3,"2,6-다이-3차-뷰틸-파라-크레솔",128-37-0,KE-03079,0.3~0.6,"2,6-다이-3차-뷰틸-파라-크레솔 2,6-비스(1,1-다이메틸에틸)-4-메틸페놀 128-37-0 / KE-03079 0.3 ~ 0.6",1,[수정] golden_main 의 성분 행에서 옮김. KE는 원문 CAS 칸에 병기된 값

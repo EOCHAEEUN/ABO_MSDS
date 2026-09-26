@@ -3,7 +3,7 @@
 실제 MSDS 1~3항의 핵심 5개 항목을 고정 JSON으로 추출하는 Qwen3-4B QLoRA 모델과, 원문 근거·검토 상태를 붙이는 Rule Engine, 검토 화면을 3일 안에 구현한다. 기준 문서는 기획서 v5(MSDS-PL-2609-05)와 개인별 작업명세서다.
 
 ## 현재 상태
-- **정답 라벨 세트 v1 편입·분할 완료 (2026-09-23)** — 50건(국문 43 · 영문 7). Train 24 · Val 4는 `data/labels/`, Test 20은 `eval/test/`, 영문 점검용 2는 `eval/val_en/`에 있다.
+- **정답 라벨 세트 v1 편입·분할 완료 (2026-09-23)** — 50건(국문 43 · 영문 7). Train 22 · Val 6은 `data/labels/`(09-26 ITW 2건 train→val), Test 20은 `eval/test/`, 영문 점검용 2는 `eval/val_en/`에 있다.
 - 검사: `python scripts/validate_labels.py data/labels`(+`eval/test`, `eval/val_en`) 50건 통과, `python scripts/check_splits.py` 규칙 위반 없음. 상세는 `data/README.md`와 `docs/labeling_review_notes.md`.
 - 다음 할 일: tag `split-frozen` → `eval/seal.py --write`로 `eval/test/` 봉인 → tag `test-sealed`.
 - 기획서 v5는 48건(영문 5) 기준이지만 실제 세트는 50건(영문 7)이다. 영문 2건은 test 대신 `val_en`으로 뺐다(사유는 `data/README.md` 분할 절).
@@ -46,7 +46,7 @@ ABO_MSDS/
 │   │   └── _cut_log.csv       # doc_id, status, section4_pattern, p_block_pattern, cut_page, token_count, note
 │   ├── sources.csv            # [강덕우] doc_id, 원본 파일명, 언어, 서식, 제조사, split_group, 건수 요약
 │   ├── splits.csv             # [강덕우] split의 유일한 기준, 확정 후 tag split-frozen
-│   ├── labels/                # [강덕우 14건 · 김건하 14건] Train 24 + Val 4 정답 {doc_id}.json
+│   ├── labels/                # [강덕우 14건 · 김건하 14건] Train 22 + Val 6 정답 {doc_id}.json
 │   ├── train.jsonl            # [강덕우] Train 증강 8~10배
 │   └── val.jsonl              # [강덕우] Val 원본 + 건당 변형 5개
 │

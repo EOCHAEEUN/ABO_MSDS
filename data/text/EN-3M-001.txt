@@ -1,0 +1,68 @@
+3M™ Heavy Duty 20 Spray Adhesive 10/29/24
+Safety Data Sheet
+Copyright,2024, 3M Company.
+All rights reserved. Copying and/or downloading of this information for the purpose of properly utilizing 3M products is
+allowed provided that: (1) the information is copied in full with no changes unless prior written agreement is obtained from
+3M, and (2) neither the copy nor the original is resold or otherwise distributed with the intention of earning a profit thereon.
+Document Group: 26-9520-3 Version Number: 6.08
+Issue Date: 10/29/24 Supercedes Date: 04/22/24
+SECTION 1: Identification
+1.1. Product identifier
+3M™ Heavy Duty 20 Spray Adhesive
+Product Identification Numbers
+62-4915-4920-0, 62-4915-4921-8, 62-4915-4925-9, 62-4915-4930-9
+7000028597, 7000121425, 7100179437, 7100179439
+1.2. Recommended use and restrictions on use
+Recommended use
+Adhesive aerosol, Industrial Use
+1.3. Supplier’s details
+MANUFACTURER: 3M
+DIVISION: Industrial Adhesives and Tapes Division
+ADDRESS: 3M Center, St. Paul, MN 55144-1000, USA
+Telephone: 1-888-3M HELPS (1-888-364-3577)
+1.4. Emergency telephone number
+1-800-364-3577 or (651) 737-6501 (24 hours)
+SECTION 2: Hazard identification
+2.1. Hazard classification
+Flammable Aerosol: Category 1.
+Gas Under Pressure: Liquefied gas.
+Serious Eye Damage/Irritation: Category 2B.
+Reproductive Toxicity: Category 1B.
+Simple Asphyxiant.
+Specific Target Organ Toxicity (single exposure): Category 1.
+Specific Target Organ Toxicity (single exposure): Category 3.
+Specific Target Organ Toxicity (repeated exposure): Category 1.
+2.2. Label elements
+Signal word
+Danger
+Symbols
+__________________________________________________________________________________________
+Page 1 of 14
+3M™ Heavy Duty 20 Spray Adhesive 10/29/24
+Flame | Gas cylinder | Exclamation mark | Health Hazard |
+Pictograms
+Hazard Statements
+Extremely flammable aerosol.
+Contains gas under pressure; may explode if heated.
+Causes eye irritation.
+May cause respiratory irritation.
+May cause drowsiness or dizziness.
+May damage fertility or the unborn child.
+May displace oxygen and cause rapid suffocation.
+Causes damage to organs:
+cardiovascular system |
+Causes damage to organs through prolonged or repeated exposure:
+nervous system |
+SECTION 3: Composition/information on ingredients
+Ingredient C.A.S. No. % by Wt
+Methyl Acetate 79-20-9 25 - 35 Trade Secret *
+Non-hazardous Components (NJTS Reg. No. 4499600- Trade Secret* 15 - 30 Trade Secret *
+6761)
+Dimethyl Ether 115-10-6 15 - 25 Trade Secret *
+Hexane 110-54-3 < 17 Trade Secret *
+Isobutane 75-28-5 < 10 Trade Secret *
+Propane 74-98-6 < 10 Trade Secret *
+Toluene 108-88-3 < 1 Trade Secret *
+NJTS or NJTSRN: New Jersey Trade Secret Registry Number.
+*The specific chemical identity and/or exact percentage (concentration) of this composition has been withheld as a trade
+secret.

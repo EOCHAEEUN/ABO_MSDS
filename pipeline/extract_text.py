@@ -2,7 +2,7 @@
 [강덕우] raw/ → text/ 일괄 변환, _cut_log.csv 기록
 """
 
-
+# 저장 위치: <프로젝트 루트>/pipeline/extract_text.py
 """data/raw/*.pdf → data/text/{doc_id}.txt + data/text/_cut_log.csv
 
 실행: python -m pipeline.extract_text
@@ -16,6 +16,7 @@ import argparse
 import csv
 import glob
 import os
+import re
 import sys
 from collections import Counter
 
@@ -47,16 +48,41 @@ def read_pages(path):
         return [(page.extract_text() or "") for page in pdf.pages]
 
 
+def undouble(text):
+    """굵은 글씨가 겹쳐 뽑힌 줄을 되돌린다.
+    네 번: "안안안안전전전전" → "안전"
+    두 번: "44.. 응응급급조조치치" → "4. 응급조치" — 한글 대부분이 짝으로 겹친 줄만 손댄다.
+    """
+    out = []
+    for line in text.split("\n"):
+        line = re.sub(r'([가-힣ㆍ·])\1{3}', r'\1', line)
+        han = re.findall(r'[가-힣]', line)
+        pairs = re.findall(r'([가-힣])\1', line)
+        if len(han) >= 4 and 2 * len(pairs) >= 0.6 * len(han):
+            line = re.sub(r'(\S)\1', r'\1', line)
+        out.append(line)
+    return "\n".join(out)
+
+
 def find_cut_page(pages):
     """4항 제목이 처음 나온 페이지 번호(1부터). 못 찾으면 None."""
     for n, page_text in enumerate(pages, start=1):
-        if find_first(SECTION4_PATTERNS, page_text.splitlines())[0] is not None:
+        if find_first(SECTION4_PATTERNS, undouble(page_text).splitlines())[0] is not None:
             return n
     return None
 
 
-def process(path, out_dir, tokenizer):
-    doc_id = os.path.splitext(os.path.basename(path))[0]
+def load_doc_ids(sources="data/sources.csv"):
+    """원본 파일명 → doc_id. 출력 파일명을 라벨(data/labels/{doc_id}.json)과 맞춘다."""
+    if not os.path.exists(sources):
+        return {}
+    with open(sources, encoding="utf-8-sig", newline="") as f:
+        return {r["source_file"]: r["doc_id"] for r in csv.DictReader(f)}
+
+
+def process(path, out_dir, tokenizer, doc_ids):
+    stem = os.path.splitext(os.path.basename(path))[0]
+    doc_id = doc_ids.get(os.path.basename(path), stem)
     try:
         pages = read_pages(path)
     except Exception as e:
@@ -71,6 +97,7 @@ def process(path, out_dir, tokenizer):
                     cut_page=None, char_count=len(raw), token_count=None,
                     h_code_before=0, h_code_after=0, note="스캔 PDF 의심 (텍스트 부족)")
 
+    raw = undouble(raw)
     r = preprocess(raw)
     cut_page = find_cut_page(pages)
 
@@ -100,6 +127,7 @@ def main():
     ap = argparse.ArgumentParser(description="MSDS PDF 전처리")
     ap.add_argument("--raw", default="data/raw")
     ap.add_argument("--out", default="data/text")
+    ap.add_argument("--sources", default="data/sources.csv", help="파일명 → doc_id 대응표")
     ap.add_argument("--ext", default=".pdf", help="입력 확장자 (.pdf 또는 .txt)")
     ap.add_argument("--no-token", action="store_true", help="토큰 수 측정 건너뛰기")
     args = ap.parse_args()
@@ -111,7 +139,11 @@ def main():
     os.makedirs(args.out, exist_ok=True)
     tokenizer = None if args.no_token else load_tokenizer()
 
-    rows = [process(p, args.out, tokenizer) for p in paths]
+    doc_ids = load_doc_ids(args.sources)
+    rows = [process(p, args.out, tokenizer, doc_ids) for p in paths]
+    unmapped = [os.path.basename(p) for p in paths if os.path.basename(p) not in doc_ids]
+    if unmapped:
+        print(f"[경고] sources.csv에 없는 파일 {len(unmapped)}건은 파일명 그대로 저장: {unmapped}")
     log_path = os.path.join(args.out, "_cut_log.csv")
     with open(log_path, "w", newline="", encoding="utf-8-sig") as f:   # 엑셀 한글 대응
         w = csv.DictWriter(f, fieldnames=LOG_COLUMNS)
@@ -136,7 +168,7 @@ def main():
         toks.sort()
         pick = lambda p: toks[min(int(len(toks) * p / 100), len(toks) - 1)]  # noqa: E731
         print(f"\n토큰 길이  P50 {pick(50)} · P90 {pick(90)} · P95 {pick(95)} · MAX {toks[-1]}")
-        print("→ 기획서 5장 max length(1536) 결정에 사용")
+        print("→ 학습 max_length 결정에 사용 (출력 JSON 길이를 더해서 볼 것. 현재 configs: 4096)")
 
 
 if __name__ == "__main__":

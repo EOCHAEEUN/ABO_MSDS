@@ -1,0 +1,60 @@
+Safety Data Sheet Page 1/5
+per OSHA HazCom 2012 Printing date 11/23/2015
+Reviewed on 04/28/2014
+1 Identification
+Product identifier
+Product name:Acetone
+Stock number:19392
+CAS Number:
+67-64-1
+EC number:
+200-662-2
+Index number:
+606-001-00-8
+Relevant identified uses of the substance or mixture and uses advised against.
+Identified use:SU24 Scientific research and development
+Details of the supplier of the safety data sheet
+Manufacturer/Supplier:
+Alfa Aesar
+Thermo Fisher Scientific Chemicals, Inc.
+30 Bond Street
+Ward Hill, MA 01835-8099
+Tel: 800-343-0660
+Fax: 800-322-4757
+Email: tech@alfa.com
+www.alfa.com
+Information Department:Health, Safety and Environmental Department
+Emergency telephone number:
+During normal business hours (Monday-Friday, 8am-7pm EST), call (800) 343-0660. After normal business hours, call Carechem 24 at (866) 928-0789.
+2 Hazard(s) identification
+Classification of the substance or mixture in accordance with 29 CFR 1910 (OSHA HCS)
+GHS02 Flame
+Flam. Liq. 2 H225 Highly flammable liquid and vapor.
+GHS07
+Eye Irrit. 2 H319 Causes serious eye irritation.
+STOT SE 3 H336 May cause drowsiness or dizziness.
+Hazards not otherwise classifiedNo information known.
+Label elements
+GHS label elementsThe product is classified and labeled in accordance with 29 CFR 1910 (OSHA HCS)
+Hazard pictograms
+GHS02GHS07
+Signal wordDanger
+Hazard statements
+H225Highly flammable liquid and vapor.
+H319Causes serious eye irritation.
+H336May cause drowsiness or dizziness.
+3 Composition/information on ingredients
+Chemical characterization: Substances
+CAS# Description:
+67-64-1 Acetone
+Identification number(s):
+EC number:200-662-2
+Index number:606-001-00-8
+USA
+(Contd. on page 2)
+38.0.2
+Safety Data Sheet Page 2/5
+per OSHA HazCom 2012 Printing date 11/23/2015
+Reviewed on 04/28/2014
+Product name:Acetone
+(Contd. of page 1)
