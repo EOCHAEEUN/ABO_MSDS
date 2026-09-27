@@ -189,4 +189,31 @@ self-check(정답을 예측으로 넣기)에서 `nocas_*` = 1.0, `misplace_*` = 
   - 고정 거부는 `test/test_gate.py` 13번, 고정 뒤 분석 대상 변경 시 생성 · 채점 거부(꼬리표로 넘기지 않음)는 14번, 배정 제안의 역할 반영은 `test/test_propose_splits.py` 7번이 본다.
 - **현재 상태:** test2 8건이 모두 `pending`이라 주 분석 대상 확정은 0건이다. 새 수집은 기존 분할과 영향받은 그룹 밖의 제조사에서 한다.
 
+## 두 번째 수집분 반영 (2026-09-27, 결정권자 승인)
+
+- **결정:**
+  - **EN-SOIL-001 · 002 → excluded.** 기존 test 제조사(SOIL)의 영문판이다. 기존 test 평가가 끝나기 전에 val_en에 두면 test 제조사 서식이 개발에 노출된다. 정답은 저장소에 넣지 않고 라벨링 쪽에 보존한다.
+  - **KR-NEOGEN-002 · KR-KNAUF-002 → test2, 역할 `exposed`.** 라벨 패키지에는 excluded로 되어 있었지만 라벨 담당의 부적격 판정이 아니었다(결정권자 확인). 그래서 결정 ②대로 노출 보조평가로 보존한다.
+  - 나머지는 라벨링 쪽 추가행대로 한다. SEBANG 2 · ASIACEM · CLOVER → test2 `exposed`, GSC 2 → val, 영문 4 → val_en. KR-HENKEL-002 · EN-SEBANG-001 · KR-AEKYUNG-001(스캔 PDF) → excluded.
+- **반영:**
+  - `data/splits.csv` · `data/sources.csv`에 17행씩 덧붙였다. 기존 행은 바꾸지 않았다.
+  - note는 새로 썼다. 라벨링 쪽 test2 · 보류 행의 note는 열지 않았다.
+  - test2 그룹 7행(test2 6건 + EN-SEBANG-001)은 집계 열을 비워 넣었다.
+  - `eval/test2_roles.csv`에 `exposed` 6행을 넣었다.
+  - 정답은 val 2건(KR-GSC-003 · 004)과 val_en 4건(EN-CQV · WURTH · LOTTE · AKCHEM-001)을 넣었다. `validate_labels.py` 스키마 통과.
+  - 결과: train 24 · val 8 · test 20 · test2 14(`pending` 8, `exposed` 6, 주 분석 대상 0) · val_en 13 · excluded 8. `check_splits.py` 규칙 위반 없음.
+- **확인:**
+  - 라벨링 쪽이 보고한 중복 2건을 해시로 확인했다: Würth PDF 사본, `KCC – EP1160(H)-B`(기존 EN-KCC-001 원본).
+  - 함께 받은 `splits_test2.csv`(원본 PDF zip 안)는 폐기한 재분할안(기존 test · HANIL · OCI를 test2로)과 옛 상태여서 쓰지 않았다.
+- **반영하지 않음:**
+  - test2 4건 · 보류 4건 정답: 1단계 봉인 뒤 라벨링 쪽이 복사한다.
+  - EN-SOIL 정답: excluded
+  - 별칭표 v3: 검수 담당 점검 대기
+  - 검토 메모 v3 추가분: 라벨링 쪽이 개발용 부분을 분리할 때까지 대기
+  - KR-NOROO-007 · KR-DUKSAN-001 정답: 패키지에 없음
+  - 원본 PDF: 받은 PDF zip 두 개는 모두 삭제됐다. 라벨링 쪽에서 원본을 다시 받아 `data/raw/`에 `source_file` 이름으로 둔다(중복 2개 제외). 봉인 · 텍스트 추출 전에 필요하다.
+- **파일 정리:**
+  - 라벨 패키지 zip은 저장소 밖 `~/abo_msds/labeling/`로 옮겼다. test2 정답이 들어 있어 개발 세션은 열지 않는다.
+  - `.gitignore`에 `*.[pP][dD][fF]`(대문자 `.PDF` 원본이 있었음)와 `*.zip`을 추가했다.
+
 ## 모델 고정 + Test 정답 확정

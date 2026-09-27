@@ -2,6 +2,9 @@
 data/raw/*
 !data/raw/.gitkeep
 *.pdf
+*.[pP][dD][fF]
+# 원본·라벨 묶음(zip) — PDF와 test2 정답이 들어 있을 수 있음
+*.zip
 
 # 학습 결과물 — 가중치·체크포인트만 제외하고 config.json·loss 로그는 커밋
 runs/**/*.safetensors

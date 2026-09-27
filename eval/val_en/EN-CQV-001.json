@@ -1,0 +1,60 @@
+{
+  "product_name": {
+    "value": "Automotive Kromax™ Splendor White AK-909K-OP",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "Automotive",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "CQV Co., Ltd.",
+    "address": "144, Seongjung-Ro, Jincheon-Eup, Jincheon-Gun, Chungbuk-Do, Korea",
+    "emergency_phone": "82-43-531-2500"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Synthetic Fluorphlogopite",
+      "cas_number": "12003-38-2",
+      "ke_number": null,
+      "content": "57-67",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Tin Oxide",
+      "cas_number": "18282-10-5",
+      "ke_number": null,
+      "content": "1-3",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Titanium Dioxide",
+      "cas_number": "13463-67-7",
+      "ke_number": null,
+      "content": "29-39",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Silane",
+      "cas_number": null,
+      "ke_number": null,
+      "content": "0-2",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [],
+  "signal_word": {
+    "value": null,
+    "source_status": "해당없음"
+  },
+  "hazard_statements": [],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "해당없음",
+    "hazard_statements": "해당없음"
+  }
+}

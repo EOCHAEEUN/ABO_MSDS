@@ -1,0 +1,49 @@
+{
+  "product_name": {
+    "value": "AHC-3 (Aekyung Hard Carbon-3)",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "Anode material for batteries",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": "Moisture may be present in humid environments.",
+    "source_status": "기재"
+  },
+  "supplier": {
+    "company_name": "AEKYUNG Chemical (Corporation)",
+    "address": "(Jeonju Factory) 283, Wanjusandan 6-ro, Bongdong-eup Wanju-gun, Jeollabuk-do, Korea. 55316",
+    "emergency_phone": "82-63-260-0322"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Amorphous Carbon",
+      "cas_number": "7440-44-0",
+      "ke_number": null,
+      "content": "100",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "Specific target organ toxicity (single exposure)",
+      "category": "구분 3"
+    }
+  ],
+  "signal_word": {
+    "value": "경고",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H335",
+      "text": "May Cause respiratory irritation"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

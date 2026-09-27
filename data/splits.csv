@@ -69,3 +69,20 @@ EN-KEIM-001,val_en,en,영문,KEIM,KEIM,신규 영문. test2는 국문만 → val
 EN-MAPEI-001,val_en,en,영문,Mapei,MAPEI,신규 영문. test2는 국문만 → val_en(보고 수치 아님)
 EN-3M-002,excluded,en,영문,3M,3M,"다중 SDS 묶음(키트 표지+Part A+Part B), A24"
 PT-ROBERLO-001,excluded,pt,영문 외 외국어,Roberlo,ROBERLO,"포르투갈어, 기획서 범위 밖, A24"
+KR-SEBANG-001,test2,ko,현행,세방전지,SEBANG,"두 번째 수집분. 정답 전체가 개발 세션에 유입(09-27) → 역할 exposed(노출 보조평가, eval/test2_roles.csv)"
+KR-SEBANG-002,test2,ko,현행,세방전지,SEBANG,"두 번째 수집분. 정답 전체가 개발 세션에 유입(09-27) → 역할 exposed(노출 보조평가, eval/test2_roles.csv)"
+KR-ASIACEM-001,test2,ko,현행,아세아시멘트,ASIACEM,"두 번째 수집분. 정답 전체가 개발 세션에 유입(09-27) → 역할 exposed(노출 보조평가, eval/test2_roles.csv)"
+KR-CLOVER-001,test2,ko,구서식,크로바케미칼,CLOVER,"노루 외 첫 구서식. 두 번째 수집분. 정답 전체가 개발 세션에 유입(09-27) → 역할 exposed(노출 보조평가, eval/test2_roles.csv)"
+KR-GSC-003,val,ko,현행,GS칼텍스,GSC,GSC 그룹 = val. 두 번째 수집분
+KR-GSC-004,val,ko,현행,GS칼텍스,GSC,GSC 그룹 = val. 두 번째 수집분
+EN-CQV-001,val_en,en,영문,CQV,CQV,두 번째 수집분 영문(보고 수치 아님)
+EN-SOIL-001,excluded,en,영문,S-OIL,SOIL,기존 test 제조사(SOIL)의 영문판. 기존 test 평가 전 val_en에 두면 test 제조사 서식이 개발에 노출 → 보존(09-27 결정)
+EN-SOIL-002,excluded,en,영문,S-OIL,SOIL,기존 test 제조사(SOIL)의 영문판. 기존 test 평가 전 val_en에 두면 test 제조사 서식이 개발에 노출 → 보존(09-27 결정)
+EN-WURTH-001,val_en,en,영문,Würth,WURTH,두 번째 수집분 영문(보고 수치 아님)
+EN-LOTTE-001,val_en,en,영문,롯데케미칼,LOTTE,두 번째 수집분 영문(보고 수치 아님)
+EN-AKCHEM-001,val_en,en,영문,애경케미칼,AKCHEM,두 번째 수집분 영문(보고 수치 아님)
+KR-NEOGEN-002,test2,ko,수입품 국문판,Neogen,NEOGEN,"같은 그룹 test2 문서의 추가 제품(라벨 쪽 excluded는 부적격 판정 아님). 두 번째 수집분. 정답 전체가 개발 세션에 유입(09-27) → 역할 exposed(노출 보조평가, eval/test2_roles.csv)"
+KR-HENKEL-002,excluded,ko,수입품 국문판,Henkel,HENKEL,"노출 제조사(HENKEL — 기존 test EN-HENKEL-001), KR-HENKEL-001과 같은 사유"
+KR-KNAUF-002,test2,ko,수입품 국문판,Knauf,KNAUF,"같은 그룹 test2 문서의 추가 제품(라벨 쪽 excluded는 부적격 판정 아님). 두 번째 수집분. 정답 전체가 개발 세션에 유입(09-27) → 역할 exposed(노출 보조평가, eval/test2_roles.csv)"
+EN-SEBANG-001,excluded,en,영문,세방전지,SEBANG,test2 제조사(SEBANG)의 영문판. val_en에 두면 test2 서식이 개발에 노출
+KR-AEKYUNG-001,excluded,ko,스캔 PDF,애경산업,AEKYUNG,스캔 PDF — 범위 밖(OCR 제외). 추출 실패율과 따로 '범위 밖 제외'로 셈
