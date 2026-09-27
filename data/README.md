@@ -17,6 +17,7 @@ data/
   labels/{doc_id}.json      Train 22 + Val 6 정답 라벨
   splits.csv                문서별 split 배정과 사유
   sources.csv               문서 목록: 원본 파일명, 언어, 서식, 제조사, split_group, 1~3항 쪽수, 건수 요약
+                            (test2 행의 쪽수·건수 요약 열은 빈칸 = 개발용 사본에서 숨김. 0·자료없음 아님)
   README.md                 이 문서
   raw/                      원본 PDF (git 제외)
 eval/
@@ -85,7 +86,7 @@ doc_id는 `KR|EN-제조사약칭-번호` 형식입니다.
 | train | 24 (국문) | data/labels/ | QLoRA 학습·증강, few-shot 예시 추출. 09-27 신규 2건(NOROO-007, DUKSAN-001)은 정답 작성 전 |
 | val | 6 (국문) | data/labels/ | 1·2차 비교, 사전 판정, 실패 분석 |
 | test | 20 (국문 15 + 영문 5) | eval/test/ | 모델 고정 후 최종 평가 1회. 봉인. `[C안]` 보조 평가 |
-| test2 `[C안]` | 8 (국문, 수집 중 — 목표 30~40) | eval/test2/ | C 최종 평가. 개발에 쓰지 않은 신규 문서만. 봉인 |
+| test2 `[C안]` | 8 (국문, 수집 중 — 주 분석 대상 현행 + 수입품 국문판 목표 30~40, 구서식은 따로) | eval/test2/ | C 최종 평가. 개발에 쓰지 않은 신규 문서만. 봉인 |
 | val_en | 9 (영문) | eval/val_en/ | 영문 정규화·매핑표 점검용. 성능 보고에 쓰지 않음. 09-27 신규 7건은 정답 작성 전 |
 | excluded | 3 | — | 범위 밖: EN-3M-002(다중 SDS 묶음), PT-ROBERLO-001(포르투갈어). 노출 제조사: KR-HENKEL-001 |
 

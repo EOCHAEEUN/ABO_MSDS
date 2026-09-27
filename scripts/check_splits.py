@@ -16,8 +16,10 @@
          excluded: 범위 밖·결함으로 뺀 문서. note에 사유 필수, 다른 규칙에서는 없는 문서로 본다
          sources.csv의 test2 행은 정답에서 나온 집계 열(TEST2_HIDDEN)이 비어 있어야 함(개발용 사본에서 숨김.
          빈칸 여부만 보고 값은 출력하지 않음)
-         --final: test2 30~40건, 현행:수입품 국문판 = 3:1(±1건, 구서식 제외 건수 기준), val 15건, train 47~52건
-         (구서식 20% 목표는 09-27 삭제 — 구서식은 모두 노루이고 노루가 train에 있음. report/decisions.md)
+         --final: test2 주 분석 대상(현행 + 수입품 국문판) 30~40건(최소 30 · 목표 40), 그 안에서 3:1(±1건),
+         val 15건, train 47~52건. test2 구서식은 목표 없이 따로 보고한다
+         (구서식 20% 목표는 09-27 삭제 — 구서식은 모두 노루이고 노루가 train에 있음. 주 분석 대상 기준도 09-27 결정.
+         report/decisions.md)
 """
 import argparse
 import collections
@@ -139,16 +141,16 @@ def main():
             if "few-shot" in w and d in split_of and split_of[d] != "train"]
 
     # ---- [C안] 건수·비율 (수집 중에는 경고)
-    n2 = len(by["test2"])
-    if not 30 <= n2 <= 40:
-        goal.append(f"test2 {n2}건 — 목표 30~40건")
-    forms = collections.Counter(r["form"] for r in by["test2"])
-    base = n2 - forms.get("구서식", 0)
-    if base:
+    main2 = [r for r in by["test2"] if r["form"] in TEST2_RATIO]   # 주 분석 대상: 현행 + 수입품 국문판
+    n_main = len(main2)
+    if not 30 <= n_main <= 40:
+        goal.append(f"test2 주 분석 대상(현행 + 수입품 국문판) {n_main}건 — 최소 30 · 목표 40")
+    forms = collections.Counter(r["form"] for r in main2)
+    if n_main:
         for f, share in TEST2_RATIO.items():
-            want = round(base * share)
+            want = round(n_main * share)
             if abs(forms.get(f, 0) - want) > 1:
-                goal.append(f"test2 {f} {forms.get(f, 0)}건 — 구서식 뺀 {base}건 기준 목표 {want}건(3:1, ±1)")
+                goal.append(f"test2 {f} {forms.get(f, 0)}건 — 주 분석 대상 {n_main}건 기준 목표 {want}건(3:1, ±1)")
     if len(by["val"]) != 15:
         goal.append(f"val {len(by['val'])}건 — 목표 15건(기존 6 + 9)")
     if not 47 <= len(by["train"]) <= 52:
@@ -171,6 +173,9 @@ def main():
     print("건수:", {s: len(by[s]) for s in sorted(by)} | ({"excluded": len(excluded)} if excluded else {}))
     if by["test2"]:
         print("test2 서식:", dict(collections.Counter(r["form"] for r in by["test2"])))
+        n_old = len(by["test2"]) - n_main
+        print(f"test2 주 분석 대상 {n_main}건 · split_group {len({r['split_group'] for r in main2})}개"
+              + (f" (구서식 {n_old}건은 따로 보고)" if n_old else ""))
     for w in warn:
         print("[경고]", w)
     print("\n".join(f"[오류] {e}" for e in err) if err else "규칙 위반 없음")
