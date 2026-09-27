@@ -11,6 +11,10 @@
 - 4항 경계를 못 찾으면(NOT_FOUND) data/text/에 쓰지 않고
   data/text/review_required/ 로 빼서 사람이 확인하게 한다. 자동 투입 금지.
 - 토큰 수는 transformers가 있을 때만 센다(--no-token으로 끌 수 있음).
+- --split test2 / --docs KR-A-001,KR-B-001 로 대상 문서만 처리한다(splits.csv·sources.csv 기준).
+- test2 2단계 봉인(report/test2_manifest.csv)에 든 문서는 다시 추출하지 않는다 — 봉인된 입력·추출 상태를 덮어쓰면
+  봉인 대조가 깨지고 원래 입력을 되돌릴 수 없다.
+- _cut_log.csv는 이번에 처리한 문서의 행만 바꾸고 나머지 행은 그대로 둔다(일부만 돌려도 기록이 사라지지 않게).
 """
 import argparse
 import csv
@@ -130,25 +134,54 @@ def main():
     ap.add_argument("--sources", default="data/sources.csv", help="파일명 → doc_id 대응표")
     ap.add_argument("--ext", default=".pdf", help="입력 확장자 (.pdf 또는 .txt)")
     ap.add_argument("--no-token", action="store_true", help="토큰 수 측정 건너뛰기")
+    ap.add_argument("--split", help="이 split 문서만(쉼표로 여러 개, data/splits.csv 기준)")
+    ap.add_argument("--docs", help="이 doc_id만(쉼표로 여러 개)")
+    ap.add_argument("--splits", default="data/splits.csv")
+    ap.add_argument("--sealed", default="report/test2_manifest.csv", help="봉인된 입력 목록(다시 추출하지 않음)")
     args = ap.parse_args()
 
     paths = sorted(glob.glob(os.path.join(args.raw, f"*{args.ext}")))
+    doc_ids = load_doc_ids(args.sources)
+    doc_of = lambda p: doc_ids.get(os.path.basename(p), os.path.splitext(os.path.basename(p))[0])  # noqa: E731
+    if args.split or args.docs:
+        want = set(args.docs.split(",")) if args.docs else set()
+        if args.split:
+            with open(args.splits, encoding="utf-8-sig", newline="") as f:
+                want |= {r["doc_id"] for r in csv.DictReader(f) if r["split"] in args.split.split(",")}
+        paths = [p for p in paths if doc_of(p) in want]
+        if lost := sorted(want - {doc_of(p) for p in paths}):
+            print(f"[경고] 원본 PDF를 찾지 못한 문서 {len(lost)}건: {lost}")
+    sealed = set()
+    if os.path.exists(args.sealed):
+        with open(args.sealed, encoding="utf-8-sig", newline="") as f:
+            sealed = {r["doc_id"] for r in csv.DictReader(f)}
+    if skip := sorted(doc_of(p) for p in paths if doc_of(p) in sealed):
+        print(f"[보호] 봉인된 입력이라 다시 추출하지 않음 {len(skip)}건: {skip}")
+        paths = [p for p in paths if doc_of(p) not in sealed]
     if not paths:
-        print(f"입력 파일이 없습니다: {args.raw}/*{args.ext}")
+        print(f"처리할 입력 파일이 없습니다: {args.raw}/*{args.ext}")
         return
     os.makedirs(args.out, exist_ok=True)
     tokenizer = None if args.no_token else load_tokenizer()
 
-    doc_ids = load_doc_ids(args.sources)
     rows = [process(p, args.out, tokenizer, doc_ids) for p in paths]
     unmapped = [os.path.basename(p) for p in paths if os.path.basename(p) not in doc_ids]
     if unmapped:
         print(f"[경고] sources.csv에 없는 파일 {len(unmapped)}건은 파일명 그대로 저장: {unmapped}")
     log_path = os.path.join(args.out, "_cut_log.csv")
+    merged = {}
+    if os.path.exists(log_path):   # 이번에 처리하지 않은 문서의 기록은 그대로 둔다
+        with open(log_path, encoding="utf-8-sig", newline="") as f:
+            merged = {r["doc_id"]: r for r in csv.DictReader(f) if r.get("doc_id")}
+    merged.update({r["doc_id"]: r for r in rows})
     with open(log_path, "w", newline="", encoding="utf-8-sig") as f:   # 엑셀 한글 대응
-        w = csv.DictWriter(f, fieldnames=LOG_COLUMNS)
+        w = csv.DictWriter(f, fieldnames=LOG_COLUMNS, extrasaction="ignore")
         w.writeheader()
-        w.writerows(rows)
+        w.writerows(merged.values())
+    stale = [r["doc_id"] for r in rows
+             if r["status"] != "SUCCESS" and os.path.exists(os.path.join(args.out, f"{r['doc_id']}.txt"))]
+    if stale:
+        print(f"[경고] 이번에 실패했는데 예전 텍스트가 남아 있음(입력으로 쓰이면 안 됨 — 확인 후 지울 것): {stale}")
 
     counts = Counter(r["status"] for r in rows)
     print(f"\n총 {len(rows)}건 · " + " · ".join(f"{k} {v}" for k, v in counts.items()))

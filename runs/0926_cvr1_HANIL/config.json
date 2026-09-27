@@ -1,0 +1,44 @@
+{
+  "config": {
+    "warmup_ratio": 0.03,
+    "weight_decay": 0.0,
+    "seed": 42,
+    "gradient_checkpointing": true,
+    "model": "Qwen/Qwen3-4B",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "learning_rate": 0.0002,
+    "num_epochs": 2,
+    "per_device_batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 4096
+  },
+  "name": "cvr1_HANIL",
+  "git_commit": "e7ed35e",
+  "created_at": "2026-09-26T20:20:41",
+  "train_jsonl": "data/train.jsonl",
+  "train_jsonl_sha256": "f86b325f981a57bc",
+  "val_jsonl_sha256": "32b15891d7395076",
+  "holdout_group": "HANIL",
+  "holdout_docs": [
+    "KR-HANIL-001",
+    "KR-HANIL-002",
+    "KR-HANIL-003",
+    "KR-HANIL-004",
+    "KR-HANIL-005",
+    "KR-HANIL-006"
+  ],
+  "n_train": 140,
+  "n_val": 36,
+  "optimizer_steps": 34,
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  }
+}

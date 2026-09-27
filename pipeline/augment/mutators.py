@@ -56,7 +56,37 @@ def drop_h_codes(text, label, rng):
     return new_text, new, gone
 
 
+def _ec_number(rng):
+    """형식·체크디짓이 맞는 EC 번호(NNN-NNN-R). R = Σ(i × d_i) mod 11, 10이 나오면 다시 뽑는다."""
+    while True:
+        d = [rng.randint(2, 9)] + [rng.randint(0, 9) for _ in range(5)]
+        r = sum((i + 1) * x for i, x in enumerate(d)) % 11
+        if r < 10:
+            return f"{''.join(map(str, d[:3]))}-{''.join(map(str, d[3:]))}-{r}"
+
+
+def add_ec_column(text, label, rng):
+    """성분표의 CAS 뒤에 EC 번호 칸을 끼워 넣는다. 라벨은 그대로(EC는 버리는 값, ke_number는 KE만).
+
+    train에 EC 번호가 있는 문서가 없어 r1이 val GSC 문서에서 EC를 ke_number에 넣었다(test에도 2건 있음).
+    실제 표기: "68037-01-4 500-183-1 70 ~ 80" — CAS 바로 뒤(KE가 붙어 있으면 KE 뒤)에 온다.
+    """
+    cands = [c for c in label["ingredients"] if c.get("cas_number") and text.count(c["cas_number"]) == 1]
+    if not cands:
+        return None
+    new_text = text
+    for c in cands:
+        pat = re.escape(c["cas_number"])
+        if c.get("ke_number"):
+            pat += r"(?:\s*/?\s*" + re.escape(c["ke_number"]) + ")?"
+        new_text = re.sub(pat, lambda m: f"{m.group(0)} {_ec_number(rng)}", new_text, count=1)
+    # 표 머리에 CAS 칸 이름이 있으면 EC 칸 이름도 붙인다
+    new_text = re.sub(r"(CAS\s*번호(?:\s*또는\s*식별번호)?)", r"\1 EC번호", new_text, count=1)
+    return new_text, label, ()
+
+
 MUTATORS = {
     "secret": secret_ingredient,
     "nohcode": drop_h_codes,
+    "ecnum": add_ec_column,
 }

@@ -31,6 +31,7 @@ subset은 ko / en으로 나눠 쓰고 합산하지 않는다(기획서 보고 �
 import argparse
 import csv
 import json
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -50,16 +51,23 @@ from core.normalize import (  # noqa: E402
     norm_signal_word,
     norm_statement_text,
     split_hcodes,
+    squash,
 )
 from core.schema import check_schema, extract_json  # noqa: E402
-from eval.seal import verify as verify_seal  # noqa: E402
+from eval.infer import base_doc, variant_texts  # noqa: E402
+from eval.gate import gate_score, sealed  # noqa: E402
 
 SPLITS_CSV = ROOT / "data" / "splits.csv"
 SCORES_CSV = ROOT / "report" / "scores.csv"
 OUTPUT_ROOT = ROOT / "outputs"
 GOLD_DIRS = {"val": ROOT / "data" / "labels", "test": ROOT / "eval" / "test", "val_en": ROOT / "eval" / "val_en",
-             "train": ROOT / "data" / "labels"}  # train: Base 난이도 진단 전용 — scores.csv에 쓰지 않는다
+             "train": ROOT / "data" / "labels", "val_var": ROOT / "data" / "labels",
+             "test2": ROOT / "eval" / "test2"}  # test2: C안 새 독립 test(봉인)  # val_var: val 형식 변형(정답은 원본 문서)  # train: Base 난이도 진단 전용 — scores.csv에 쓰지 않는다
 FEWSHOT_JSON = ROOT / "eval" / "fewshot.json"
+TEXT_DIR = ROOT / "data" / "text"
+H_CODE = re.compile(r"H\d{3}")
+KE_FULL = re.compile(r"KE-\d{3,6}")
+CAS_LIKE = re.compile(r"\d{2,7}-\d{2}-\d")
 SPLITS = tuple(GOLD_DIRS)
 
 
@@ -123,6 +131,35 @@ def ingredients(obj):
     return [(norm_cas(_str(it.get("cas_number"))), it.get("content")) for it in _items(obj.get("ingredients"))]
 
 
+def nocas_items(obj):
+    """CAS가 null인 성분(영업비밀 포함) → [(is_substitute_data, 함유량 원문)]. plan 4절: 영업비밀은 is_substitute_data와 content로 판정"""
+    return [(bool(it.get("is_substitute_data")), it.get("content"))
+            for it in _items(obj.get("ingredients")) if not norm_cas(_str(it.get("cas_number")))]
+
+
+def nocas_match(gold_items, pred_items):
+    """(is_substitute_data 같음, 함유량 min/max 같음)으로 1:1 매칭 → tp, fp, fn"""
+    left = list(gold_items)
+    tp = 0
+    for sub, content in pred_items:
+        for i, (gs, gc) in enumerate(left):
+            if gs == sub and content_equal(gc, content):
+                left.pop(i)
+                tp += 1
+                break
+    return tp, len(pred_items) - tp, len(gold_items) - tp
+
+
+def misplaced(obj):
+    """다른 칸에 넣은 값: ke_number에 KE가 아닌 값(EC 번호 등), content에 CAS 형식 값"""
+    ke = content = 0
+    for it in _items(obj.get("ingredients")):
+        k = squash(_str(it.get("ke_number")) or "")
+        ke += bool(k) and not KE_FULL.fullmatch(k.upper())
+        content += bool(CAS_LIKE.search(_str(it.get("content")) or ""))
+    return ke, content
+
+
 def pair_match(gold_ings, pred_ings):
     """CAS로 짝짓고 같은 CAS 안에서 함유량이 같은 것끼리 1:1 매칭.
     반환: tp, fp, fn, CAS로 짝지어진 수, 상세(함유량 불일치 목록)"""
@@ -181,7 +218,7 @@ class PRF:
 
 
 class Acc:
-    PRF_NAMES = ("ghs", "hcode", "htext", "cas", "pair")
+    PRF_NAMES = ("ghs", "hcode", "htext", "cas", "pair", "nocas")
     HIT_NAMES = ("product_name", "signal_word", "ghs_status", "hazard_status")
 
     def __init__(self):
@@ -189,6 +226,8 @@ class Acc:
         self.hits = defaultdict(int)
         self.prf = defaultdict(PRF)
         self.cas_paired = 0
+        self.exact = self.exact_ext = 0
+        self.fab = defaultdict(int)  # 지어낸 값: 원문 텍스트에 없는 H코드·CAS, 비어야 할 분류 목록을 채운 문서
         self.gen_time, self.in_tok, self.out_tok = [], [], []
 
     def rows(self):
@@ -204,6 +243,18 @@ class Acc:
             p, r, f1 = self.prf[name].result()
             out += [(f"{name}_p", p), (f"{name}_r", r), (f"{name}_f1", f1)]
         out.append(("content_acc", self.prf["pair"].tp / self.cas_paired if self.cas_paired else None))
+        # F1은 "지어낸 값"을 평균에 묻는다(H코드 13개를 지어내도 F1 0.9). 안전 문서에서 가장 위험한 오류라 따로 센다
+        out += [
+            ("doc_exact_rate", self.exact / n),
+            ("doc_exact_ext_rate", self.exact_ext / n),  # 확장 기준: 기존 + nocas 정답 + 다른 칸 오입력 없음
+            ("fab_hcode_n", self.fab["hcode_n"]),
+            ("fab_hcode_docs", self.fab["hcode_docs"]),
+            ("fab_ghs_docs", self.fab["ghs_docs"]),
+            ("fab_cas_n", self.fab["cas_n"]),
+            ("fab_any_docs", self.fab["any_docs"]),
+            ("misplace_ke_n", self.fab["misplace_ke"]),
+            ("misplace_content_n", self.fab["misplace_content"]),
+        ]
         out += [
             ("gen_time_mean_s", mean(self.gen_time) if self.gen_time else None),
             ("input_tokens_mean", mean(self.in_tok) if self.in_tok else None),
@@ -214,7 +265,36 @@ class Acc:
 
 
 # ---------------------------------------------------------------- 문서 1건 채점
-def score_doc(gold, pred, acc, include_non_ghs, unknown):
+def fabrications(gold, pred, source):
+    """원문에 없는 값을 지어냈는지. source(1~3항 텍스트)가 없으면 None.
+    → {"hcode": [원문에 없는 H코드], "ghs": 비어야 할 분류 목록을 채웠는지, "cas": [원문에 없는 CAS]}"""
+    if source is None:
+        return None
+    src_codes = set(H_CODE.findall(source))
+    flat = re.sub(r"\s+", "", source)
+    fab_codes = sorted(c for c in hcode_set(pred) if c not in src_codes)
+    fab_ghs = list_status(gold, "ghs_classification") != "기재" and bool(_items(pred.get("ghs_classification")))
+    # PDF 표에서 CAS가 "134759-18-" / "5"로 줄이 갈리는 경우가 있어, 마지막 체크디짓 앞까지만 있어도 원문에 있는 것으로 본다
+    fab_cas = sorted({c for c, _ in ingredients(pred) if c and c not in flat and c.rsplit("-", 1)[0] + "-" not in flat})
+    return {"hcode": fab_codes, "ghs": fab_ghs, "cas": fab_cas}
+
+
+def doc_exact(detail, pred):
+    """문서 완전 정답 → (기존 기준, 확장 기준).
+
+    기존: 스키마 통과 + 제품명·신호어·목록 상태 + GHS·H코드·H문구·CAS·pair 모두 맞음 (정의를 바꾸지 않는다)
+    확장: 기존 + CAS 없는 성분(nocas) 정답 + 다른 칸 오입력(misplaced) 없음 — plan 4절 영업비밀 판정까지 포함
+    두 기준은 따로 보고한다(report/decisions.md "평가 기준 사전 고정").
+    """
+    exact = (bool(pred) and check_schema(pred)[0]
+             and all(detail[k] == "ok" for k in ("ghs", "hcode", "htext", "cas", "pair"))
+             and detail["product_name"]["ok"] and detail["signal_word"]["ok"]
+             and "ghs_status" not in detail and "hazard_status" not in detail)
+    ext = exact and detail.get("nocas", "ok") == "ok" and not detail.get("misplaced")
+    return exact, ext
+
+
+def score_doc(gold, pred, acc, include_non_ghs, unknown, source=None):
     detail = {}
 
     gs, gv = value_field(gold, "product_name")
@@ -248,12 +328,33 @@ def score_doc(gold, pred, acc, include_non_ghs, unknown):
     acc.cas_paired += paired
     detail["pair"] = {"tp": tp, "fp": fp, "fn": fn, "content_mismatch": mismatch}
 
+    # 변수 이름을 따로 둔다 — 아래 pair "ok" 판정이 위의 pair tp/fp/fn을 쓴다
+    n_tp, n_fp, n_fn = nocas_match(nocas_items(gold), nocas_items(pred))
+    acc.prf["nocas"].add(n_tp, n_fp, n_fn)
+    detail["nocas"] = "ok" if not n_fp and not n_fn else {"tp": n_tp, "fp": n_fp, "fn": n_fn,
+                                                          "gold": nocas_items(gold), "pred": nocas_items(pred)}
+    mk, mc = misplaced(pred)
+    acc.fab["misplace_ke"] += mk
+    acc.fab["misplace_content"] += mc
+    if mk or mc:
+        detail["misplaced"] = {"ke_number": mk, "content": mc}
+
     # 상세 파일을 읽기 쉽게: 틀린 게 없는 항목은 "ok"로 줄인다
     for k in ("ghs", "hcode", "htext", "cas"):
         if not detail[k]["fp"] and not detail[k]["fn"]:
             detail[k] = "ok"
     if not mismatch and not fp and not fn:
         detail["pair"] = "ok"
+
+    fab = fabrications(gold, pred, source)
+    if fab is not None:
+        acc.fab["hcode_n"] += len(fab["hcode"])
+        acc.fab["hcode_docs"] += bool(fab["hcode"])
+        acc.fab["ghs_docs"] += fab["ghs"]
+        acc.fab["cas_n"] += len(fab["cas"])
+        acc.fab["any_docs"] += bool(fab["hcode"] or fab["ghs"] or fab["cas"])
+        if fab["hcode"] or fab["ghs"] or fab["cas"]:
+            detail["fabricated"] = fab
     return detail
 
 
@@ -303,21 +404,25 @@ def main():
     ap.add_argument("--include-non-ghs", action="store_true", help="Simple Asphyxiant 같은 GHS 외 항목도 채점")
     ap.add_argument("--self-check", action="store_true", help="정답을 예측으로 넣어 채점기 자체를 점검(파일 안 씀)")
     ap.add_argument("--no-write", action="store_true", help="scores.csv·상세 파일을 쓰지 않고 화면에만 출력")
+    ap.add_argument("--allow-test", action="store_true", help="test·test2 채점 허용(최종 평가 뒤, eval/gate.py 검사 통과 시)")
     args = ap.parse_args()
 
     if not args.self_check and not args.condition:
         ap.error("--condition이 필요함(--self-check일 때만 생략 가능)")
-    if args.split == "test" and not args.self_check:
-        ok, msg = verify_seal()
-        if not ok:
-            sys.exit(f"[중단] Test 봉인 대조 실패: {msg}")
-        print(msg)
+    if sealed(args.split) and args.self_check:
+        sys.exit(f"[거부] {args.split}에는 self-check를 돌리지 않는다(봉인된 정답을 여는 일이라서). 채점기 점검은 val·train으로")
 
     splits = read_splits()
     doc_ids = sorted(d for d, r in splits.items() if r["split"] == args.split)
+    var = variant_texts() if args.split == "val_var" else {}
+    if var:
+        doc_ids = sorted(var)
     if args.split == "train":
         fs = set(json.loads(FEWSHOT_JSON.read_text(encoding="utf-8")).get("fewshot_doc_ids", []))
         doc_ids = [d for d in doc_ids if d not in fs]
+    # test·test2: 정답을 읽기 전에 게이트(허용 조건 · 추론 완료 · 실행 기록 · 봉인 · 실험 고정). 채점 파일이 고정 시점과
+    # 다르면 결과를 "채점 기준 변경" 이름으로 따로 기록한다
+    tag = gate_score(args.split, [args.condition], args.allow_test, doc_ids) if args.condition else ""
     gold_dir = GOLD_DIRS[args.split]
     pred_dir = OUTPUT_ROOT / (args.condition or "_self_check") / args.split
 
@@ -325,7 +430,7 @@ def main():
     unknown = defaultdict(set)
     details = {}
     for doc_id in doc_ids:
-        gold_path = gold_dir / f"{doc_id}.json"
+        gold_path = gold_dir / f"{base_doc(doc_id)}.json"
         if not gold_path.exists():
             sys.exit(f"정답 파일 없음: {gold_path}")
         gold = json.loads(gold_path.read_text(encoding="utf-8"))
@@ -338,7 +443,7 @@ def main():
         else:
             pred, rec, err = load_prediction(pred_dir / f"{doc_id}.json")
 
-        lang = splits[doc_id]["lang"]
+        lang = splits[base_doc(doc_id)]["lang"]
         acc = accs[lang]
         acc.n += 1
         d = {"lang": lang}
@@ -359,7 +464,12 @@ def main():
             acc.schema_ok += s_ok
             if not s_ok:
                 d["schema_errors"] = s_err[:10]
-        d.update(score_doc(gold, pred, acc, args.include_non_ghs, unknown))
+        tp_ = TEXT_DIR / f"{doc_id}.txt"
+        source = var[doc_id] if var else (tp_.read_text(encoding="utf-8") if tp_.exists() else None)
+        d.update(score_doc(gold, pred, acc, args.include_non_ghs, unknown, source))
+        d["exact"], d["exact_ext"] = doc_exact(d, pred)
+        acc.exact += d["exact"]
+        acc.exact_ext += d["exact_ext"]
         details[doc_id] = d
 
     rows = [(subset, m, v) for subset in sorted(accs) for m, v in accs[subset].rows()]
@@ -379,14 +489,15 @@ def main():
 
     if args.self_check:
         bad = sorted({m for s in subsets for m, v in table[s].items()
-                      if m.endswith(("_acc", "_rate", "_p", "_r", "_f1")) and v is not None and v < 1.0})
+                      if m.endswith(("_acc", "_rate", "_p", "_r", "_f1")) and v is not None and v < 1.0}
+                     | {m for s in subsets for m, v in table[s].items() if m.startswith(("fab_", "misplace_")) and v})
         print("\nself-check:", "통과 (채점 대상 지표 모두 1.0)" if not bad else f"실패 — 1.0이 아닌 지표 {bad}")
         sys.exit(0 if not bad else 1)
 
     if not args.no_write:
         if args.split != "train":  # 진단 점수는 보고용 scores.csv와 섞지 않는다
-            upsert_scores(args.condition, args.split, rows)
-        detail_path = pred_dir / "_score_detail.json"
+            upsert_scores(args.condition + tag, args.split, rows)
+        detail_path = pred_dir / f"_score_detail{tag}.json"
         detail_path.write_text(
             json.dumps({"include_non_ghs": args.include_non_ghs, "unknown_hazard_classes": sorted(unknown),
                         "docs": details}, ensure_ascii=False, indent=2, default=list),

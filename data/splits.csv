@@ -22,7 +22,7 @@ KR-OCI-003,train,ko,현행,OCI,OCI,
 KR-OCI-004,train,ko,현행,OCI,OCI,
 KR-OCI-005,train,ko,현행,OCI,OCI,
 KR-OCI-006,train,ko,현행,OCI,OCI,
-KR-THERMO-001,train,ko,수입품 국문판,한국피셔과학,ACETONE-PAIR,사전 검증 real-01 → Test 제외. 영문 쌍 EN-ALFA-001은 val_en
+KR-THERMO-001,train,ko,수입품 국문판,한국피셔과학,THERMO,사전 검증 real-01 → Test 제외. 영문 쌍 EN-ALFA-001은 val_en
 KR-GSC-001,val,ko,현행,GS칼텍스,GSC,
 KR-GSC-002,val,ko,현행,GS칼텍스,GSC,
 KR-KCC-001,val,ko,현행,KCC,KCC,
@@ -47,5 +47,25 @@ KR-SAMHWA-002,test,ko,현행,에스피삼화,SAMHWA,
 KR-SIKA-001,test,ko,현행,씨카코리아,SIKA,
 KR-SOIL-001,test,ko,현행,S-OIL,SOIL,
 KR-SOTL-001,test,ko,현행,에쓰-오일토탈윤활유,SOTL,
-EN-ALFA-001,val_en,en,영문,Alfa Aesar,ACETONE-PAIR,국문 쌍 KR-THERMO-001이 train이라 test 불가 → 영문 파이프라인 점검용
+EN-ALFA-001,val_en,en,영문,Alfa Aesar,THERMO,국문 쌍 KR-THERMO-001이 train이라 test 불가 → 영문 파이프라인 점검용
 EN-APRINTA-001,val_en,en,영문,AprintaPro,APRINTA,영문 파이프라인 점검용(EU REACH 양식)
+KR-NOROO-007,train,ko,구서식,노루페인트,NOROO,구서식 train 3건 중 1건(노루가 train에 있어 test2 불가)
+KR-DUKSAN-001,train,ko,현행,덕산약품공업,DUKSAN,"원문 판독 가능, 성분·신호어 공란 → 스키마대로 라벨(상태 자료없음, 값 null·빈 목록). 개발 세션에 내용이 알려져 train. 자료없음 학습 사례"
+KR-KZ-001,test2,ko,현행,고려아연,KZ,
+KR-KZ-002,test2,ko,현행,고려아연,KZ,
+KR-KZ-003,test2,ko,현행,고려아연,KZ,
+KR-DAIKIN-001,test2,ko,수입품 국문판,Daikin,DAIKIN,
+KR-DAIKIN-002,test2,ko,수입품 국문판,Daikin,DAIKIN,
+KR-DAIKIN-003,test2,ko,수입품 국문판,Daikin,DAIKIN,
+KR-NEOGEN-001,test2,ko,수입품 국문판,Neogen,NEOGEN,
+KR-KNAUF-001,test2,ko,수입품 국문판,Knauf,KNAUF,
+KR-HENKEL-001,excluded,ko,수입품 국문판,Henkel,HENKEL,"개발 중 노출된 제조사(기존 test EN-HENKEL-001, EC 정보가 증강 판단에 쓰임)라 독립 평가에서 제외"
+EN-FISHER-001,val_en,en,영문,Fisher Scientific UK,THERMO,Thermo Fisher 계열(국문 KR-THERMO-001이 train) → val_en
+EN-ALFA-002,val_en,en,영문,Alfa Aesar,THERMO,Thermo Fisher 계열(국문 KR-THERMO-001이 train) → val_en
+EN-KCC-001,val_en,en,영문,KCC,KCC,국문 KR-KCC-001이 val → val_en
+EN-KCC-002,val_en,en,영문,KCC,KCC,국문 KR-KCC-001이 val → val_en
+EN-BASF-001,val_en,en,영문,BASF,BASF,신규 영문. test2는 국문만 → val_en(보고 수치 아님)
+EN-KEIM-001,val_en,en,영문,KEIM,KEIM,신규 영문. test2는 국문만 → val_en(보고 수치 아님)
+EN-MAPEI-001,val_en,en,영문,Mapei,MAPEI,신규 영문. test2는 국문만 → val_en(보고 수치 아님)
+EN-3M-002,excluded,en,영문,3M,3M,"다중 SDS 묶음(키트 표지+Part A+Part B), A24"
+PT-ROBERLO-001,excluded,pt,영문 외 외국어,Roberlo,ROBERLO,"포르투갈어, 기획서 범위 밖, A24"

@@ -78,7 +78,14 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "fabricated": {
+        "hcode": [],
+        "ghs": true,
+        "cas": []
+      },
+      "exact": false
     },
     "KR-HANIL-003": {
       "lang": "ko",
@@ -114,7 +121,9 @@
         ]
       },
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     },
     "KR-HANIL-004": {
       "lang": "ko",
@@ -144,7 +153,25 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "gold": [
+          [
+            false,
+            "0~10"
+          ]
+        ],
+        "pred": [
+          [
+            true,
+            "0~10"
+          ]
+        ]
+      },
+      "exact": true
     },
     "KR-HANIL-005": {
       "lang": "ko",
@@ -174,7 +201,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-HANIL-006": {
       "lang": "ko",
@@ -204,7 +233,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-KUMHO-001": {
       "lang": "ko",
@@ -234,7 +265,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-KUMHO-003": {
       "lang": "ko",
@@ -264,7 +297,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-KUMHO-004": {
       "lang": "ko",
@@ -294,7 +329,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     },
     "KR-KUMHO-005": {
       "lang": "ko",
@@ -324,7 +361,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     },
     "KR-KUMHO-006": {
       "lang": "ko",
@@ -354,7 +393,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-NOROO-001": {
       "lang": "ko",
@@ -387,7 +428,25 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "gold": [
+          [
+            true,
+            "100"
+          ]
+        ],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": false
     },
     "KR-NOROO-004": {
       "lang": "ko",
@@ -434,7 +493,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     },
     "KR-NOROO-005": {
       "lang": "ko",
@@ -596,7 +657,39 @@
         "fp": 0,
         "fn": 1,
         "content_mismatch": []
-      }
+      },
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            false,
+            "8∼18"
+          ]
+        ]
+      },
+      "fabricated": {
+        "hcode": [
+          "H226",
+          "H302",
+          "H304",
+          "H306",
+          "H314",
+          "H317",
+          "H318",
+          "H319",
+          "H332",
+          "H333",
+          "H340",
+          "H361",
+          "H362"
+        ],
+        "ghs": false,
+        "cas": []
+      },
+      "exact": false
     },
     "KR-OCI-001": {
       "lang": "ko",
@@ -626,7 +719,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-OCI-002": {
       "lang": "ko",
@@ -656,7 +751,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-OCI-003": {
       "lang": "ko",
@@ -717,7 +814,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     },
     "KR-OCI-004": {
       "lang": "ko",
@@ -747,7 +846,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-OCI-005": {
       "lang": "ko",
@@ -788,7 +889,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     },
     "KR-OCI-006": {
       "lang": "ko",
@@ -818,7 +921,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
     },
     "KR-THERMO-001": {
       "lang": "ko",
@@ -871,7 +976,9 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
     }
   }
 }

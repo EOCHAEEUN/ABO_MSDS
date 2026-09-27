@@ -1,0 +1,1352 @@
+{
+  "include_non_ghs": false,
+  "unknown_hazard_classes": [],
+  "docs": {
+    "KR-HANIL-001": {
+      "lang": "ko",
+      "parse_error": "JSON 파싱 실패: Expecting ',' delimiter (pos 328)",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "레미픽스 17000W"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "자료없음",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": "ok",
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H290",
+          "H302",
+          "H312",
+          "H315",
+          "H319",
+          "H335"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "1310-73-2",
+          "25085-02-3",
+          "25987-30-8",
+          "471-34-1",
+          "7732-18-5",
+          "9004-65-3"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-HANIL-003": {
+      "lang": "ko",
+      "schema_errors": [
+        "hazard_statements.6.code: Value error, H코드 형식 오류: '17'"
+      ],
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "신.구콘크리트접착제(경화제)"
+        ],
+        "pred": [
+          "기재",
+          "신.구콘크리트접착제(경화제)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": {
+        "tp": [
+          "H302",
+          "H312",
+          "H314",
+          "H318",
+          "H332",
+          "H413"
+        ],
+        "fp": [
+          "17"
+        ],
+        "fn": []
+      },
+      "htext": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "알레르기성피부반응을일으킬수있음"
+        ]
+      },
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "fabricated": {
+        "hcode": [
+          "17"
+        ],
+        "ghs": false,
+        "cas": []
+      },
+      "exact": false
+    },
+    "KR-HANIL-004": {
+      "lang": "ko",
+      "parse_error": "JSON 파싱 실패: Expecting ',' delimiter (pos 1052)",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "레미코트 단열용 (정벌용)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "특정표적장기독성(1회노출)",
+            "구분 3"
+          ],
+          [
+            "흡인유해성",
+            "구분 1"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H304",
+          "H335"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "10034-76-1",
+          "65997-15-1",
+          "9004-65-3",
+          "93763-70-3"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "content_mismatch": []
+      },
+      "nocas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "gold": [
+          [
+            false,
+            "0~10"
+          ]
+        ],
+        "pred": []
+      },
+      "exact": false
+    },
+    "KR-HANIL-005": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "고로슬래그 시멘트 (2종)"
+        ],
+        "pred": [
+          "기재",
+          "고로슬래그 시멘트 (2종)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
+    },
+    "KR-HANIL-006": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "해양 시멘트"
+        ],
+        "pred": [
+          "기재",
+          "해양 시멘트"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
+    },
+    "KR-KUMHO-001": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "SOL-6220E"
+        ],
+        "pred": [
+          "기재",
+          "SOL-6220E"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            false,
+            "0.3~0.6"
+          ]
+        ]
+      },
+      "exact": true
+    },
+    "KR-KUMHO-003": {
+      "lang": "ko",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "HI 425, HI 425E, HI 425EH, HI 425ESH, HI 425EP, HI 425ER, HI 425TV, HI EF425TV HI 425TVL, HI 450PG, HI 450PG E, HI 450W, HI 470R, HI 490FB, MIB IT, MIB 237"
+        ],
+        "pred": [
+          "기재",
+          "HI 425, HI 425E, HI 425EH, HI 425ESH, HI 425EP, HI 425ER, HI 425TV, HI EF425TV, HI 450PG, HI 450PG E, HI 450W, HI 470R, HI 490FB, MIB IT, MIB 237"
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "자료없음",
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "해당없음",
+        "pred": "자료없음"
+      },
+      "hazard_status": {
+        "gold": "해당없음",
+        "pred": "자료없음"
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-KUMHO-004": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "PPG 450, PPG 1000, PPG 2070, PPG 2100, PPG 2300, PPG 3022, PPG 3544, PPG 3546, PPG 4000, PPG 5000"
+        ],
+        "pred": [
+          "기재",
+          "PPG 450, PPG 1000, PPG 2070, PPG 2100, PPG 2300, PPG 3022, PPG 3544, PPG 3546, PPG 4000, PPG 5000"
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "자료없음",
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "해당없음",
+        "pred": "자료없음"
+      },
+      "hazard_status": {
+        "gold": "해당없음",
+        "pred": "자료없음"
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-KUMHO-005": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "300A, 300H, 310TR, 310CTR, 320A, 326A, 330EF, 340EF, 330I, 335T, 335N, 350, 350A, 350F, 350HM, 350HW, 350CHW, 326PI, 340PI"
+        ],
+        "pred": [
+          "기재",
+          "300A, 300H, 310TR, 310CTR, 320A, 326A, 330EF, 340EF, 330I, 335T, 335N, 350, 350A, 350F, 350HM, 350HW, 350CHW, 326PI, 340PI"
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "자료없음",
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "해당없음",
+        "pred": "자료없음"
+      },
+      "hazard_status": {
+        "gold": "해당없음",
+        "pred": "자료없음"
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-KUMHO-006": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "KUMANOX SP-N"
+        ],
+        "pred": [
+          "기재",
+          "KUMANOX SP-N"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          "기재",
+          "경고"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true
+    },
+    "KR-NOROO-001": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "뉴-탄성씰(KS) (주제)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "인화성액체",
+            "구분 3"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H226",
+          "H312",
+          "H332",
+          "H372",
+          "H373"
+        ]
+      },
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "gold": [
+          [
+            true,
+            "100"
+          ]
+        ],
+        "pred": []
+      },
+      "exact": false
+    },
+    "KR-NOROO-004": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "순&수 베란다용 페인트 (소프트화이트)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "급성독성(경피)",
+            "구분 5"
+          ],
+          [
+            "만성수생환경유해성",
+            "구분 3"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H302",
+          "H313",
+          "H412"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "1317-65-3",
+          "13463-67-7",
+          "14807-96-6",
+          "61790-53-2",
+          "7732-18-5",
+          "92704-41-1"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "content_mismatch": []
+      },
+      "nocas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "gold": [
+          [
+            true,
+            "10∼20"
+          ]
+        ],
+        "pred": []
+      },
+      "exact": false
+    },
+    "KR-NOROO-005": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "에폭시 신나(하절용) DR-100(S) (신나)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "급성독성(경피)",
+            "구분 3"
+          ],
+          [
+            "급성독성(흡입)",
+            "구분 3"
+          ],
+          [
+            "급성독성(흡입)",
+            "구분 4"
+          ],
+          [
+            "발암성",
+            "구분 1A"
+          ],
+          [
+            "생식독성",
+            "구분 1A"
+          ],
+          [
+            "생식독성",
+            "구분 2"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2A"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "특정표적장기독성(1회노출)",
+            "구분 3"
+          ],
+          [
+            "특정표적장기독성(반복노출)",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ],
+          [
+            "흡인유해성",
+            "구분 1"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "고인화성액체또는증기",
+          "눈에심한자극을일으킴",
+          "삼켜서기도로유입되면치명적일수있음",
+          "암을일으킬수있음",
+          "장기간또는반복노출되면장기에손상을일으킬수있음",
+          "졸음또는현기증을일으킬수있음",
+          "태아또는생식능력에손상을일으킬것으로의심됨",
+          "태아또는생식능력에손상을일으킬수있음",
+          "피부에자극을일으킴",
+          "피부와접촉하면유독함",
+          "호흡기계자극을일으킬수있음",
+          "흡입하면유독함",
+          "흡입하면유해함"
+        ]
+      },
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "108-88-3",
+          "110-80-5",
+          "111-76-2",
+          "1330-20-7",
+          "64742-95-6",
+          "71-36-3"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-OCI-001": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "카본 블랙(Carbon black)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "해당없음",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "해당없음",
+        "pred": null
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "1333-86-4"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-OCI-002": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "카본블랙"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "해당없음",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "해당없음",
+        "pred": null
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "1333-86-4"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-OCI-003": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "가성소다, 수산화나트륨(SODIUM HYDROXIDE)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "금속부식성물질",
+            "구분 1"
+          ],
+          [
+            "급성독성(경구)",
+            "구분 4"
+          ],
+          [
+            "급성독성(경피)",
+            "구분 4"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 1"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 1"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H290",
+          "H302",
+          "H312",
+          "H314",
+          "H318"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "1310-73-2",
+          "7732-18-5"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-OCI-004": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "가성소다, 수산화나트륨(SODIUM HYDROXIDE)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "금속부식성물질",
+            "구분 1"
+          ],
+          [
+            "급성독성(경구)",
+            "구분 4"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 1"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 1"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H290",
+          "H302",
+          "H314",
+          "H318"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "1310-73-2",
+          "7732-18-5"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-OCI-005": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "염소(CHLORINE)"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "고압가스",
+            "액화가스"
+          ],
+          [
+            "급성독성(경구)",
+            "구분 4"
+          ],
+          [
+            "급성독성(흡입)",
+            "구분 2"
+          ],
+          [
+            "급성수생환경유해성",
+            "구분 1"
+          ],
+          [
+            "만성수생환경유해성",
+            "구분 1"
+          ],
+          [
+            "산화성가스",
+            "구분 1"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 1"
+          ],
+          [
+            "특정표적장기독성(1회노출)",
+            "구분 3"
+          ],
+          [
+            "특정표적장기독성(반복노출)",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 1"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H270",
+          "H280",
+          "H302",
+          "H314",
+          "H318",
+          "H330",
+          "H335",
+          "H373",
+          "H400",
+          "H410"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "7782-50-5"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-OCI-006": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "CRESOL"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "급성독성(경구)",
+            "구분 3"
+          ],
+          [
+            "급성독성(경피)",
+            "구분 3"
+          ],
+          [
+            "급성독성(흡입)",
+            "구분 1"
+          ],
+          [
+            "급성독성(흡입)",
+            "구분 2"
+          ],
+          [
+            "만성수생환경유해성",
+            "구분 3"
+          ],
+          [
+            "생식세포변이원성",
+            "구분 2"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 1"
+          ],
+          [
+            "인화성액체",
+            "구분 4"
+          ],
+          [
+            "특정표적장기독성(1회노출)",
+            "구분 3"
+          ],
+          [
+            "특정표적장기독성(반복노출)",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 1"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H227",
+          "H301",
+          "H311",
+          "H314",
+          "H318",
+          "H330",
+          "H335",
+          "H341",
+          "H373",
+          "H412"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "106-44-5",
+          "108-39-4",
+          "108-95-2",
+          "1300-71-6",
+          "95-48-7"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    },
+    "KR-THERMO-001": {
+      "lang": "ko",
+      "parse_error": "출력 파일 없음",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "Acetone"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "signal_word": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          null,
+          null
+        ]
+      },
+      "ghs_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "hazard_status": {
+        "gold": "기재",
+        "pred": null
+      },
+      "ghs": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "특정표적장기독성(1회노출)",
+            "구분 3"
+          ]
+        ]
+      },
+      "hcode": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "H225",
+          "H319",
+          "H336"
+        ]
+      },
+      "htext": "ok",
+      "cas": {
+        "tp": [],
+        "fp": [],
+        "fn": [
+          "67-64-1"
+        ]
+      },
+      "pair": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "content_mismatch": []
+      },
+      "nocas": "ok",
+      "exact": false
+    }
+  }
+}

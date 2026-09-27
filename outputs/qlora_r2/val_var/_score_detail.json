@@ -1,0 +1,1453 @@
+{
+  "include_non_ghs": false,
+  "unknown_hazard_classes": [
+    "건강 유해성",
+    "건강 유해성 피부 부식성/자극성",
+    "물리적 위험성",
+    "환경 유해성",
+    "환경 유해성 수생환경 유해성, 만성"
+  ],
+  "docs": {
+    "KR-GSC-001__bullet": {
+      "lang": "ko",
+      "schema_errors": [
+        "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '265-157-1'",
+        "ingredients.1.ke_number: Value error, KE 번호 형식 오류: '272-028-3'",
+        "ingredients.2.ke_number: Value error, KE 번호 형식 오류: '204-884-0'"
+      ],
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ],
+        "pred": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 3,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-GSC-001__colon": {
+      "lang": "ko",
+      "schema_errors": [
+        "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '265-157-1'",
+        "ingredients.1.ke_number: Value error, KE 번호 형식 오류: '272-028-3'",
+        "ingredients.2.ke_number: Value error, KE 번호 형식 오류: '204-884-0'"
+      ],
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ],
+        "pred": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 3,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-GSC-001__pagehdr": {
+      "lang": "ko",
+      "schema_errors": [
+        "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '265-157-1'",
+        "ingredients.1.ke_number: Value error, KE 번호 형식 오류: '272-028-3'",
+        "ingredients.2.ke_number: Value error, KE 번호 형식 오류: '204-884-0'"
+      ],
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ],
+        "pred": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 3,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-GSC-001__section": {
+      "lang": "ko",
+      "schema_errors": [
+        "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '265-157-1'",
+        "ingredients.1.ke_number: Value error, KE 번호 형식 오류: '272-028-3'",
+        "ingredients.2.ke_number: Value error, KE 번호 형식 오류: '204-884-0'"
+      ],
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ],
+        "pred": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 3,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-GSC-001__subnum": {
+      "lang": "ko",
+      "schema_errors": [
+        "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '265-157-1'",
+        "ingredients.1.ke_number: Value error, KE 번호 형식 오류: '272-028-3'",
+        "ingredients.2.ke_number: Value error, KE 번호 형식 오류: '204-884-0'"
+      ],
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ],
+        "pred": [
+          "기재",
+          "Kixx RD HD 46(구 Rando HD 46)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 3,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-GSC-002__bullet": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ],
+        "pred": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-GSC-002__colon": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ],
+        "pred": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-GSC-002__pagehdr": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ],
+        "pred": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-GSC-002__section": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ],
+        "pred": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-GSC-002__subnum": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ],
+        "pred": [
+          "기재",
+          "Kixx PAO 1 SN 0W-30"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "해당없음",
+          null
+        ],
+        "pred": [
+          "해당없음",
+          null
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-ITW-001__bullet": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "생식독성",
+            "구분 1B"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2"
+          ],
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 2"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 2"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-001__colon": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "생식독성",
+            "구분 1B"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2"
+          ],
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 2"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 2"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-001__pagehdr": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "생식독성",
+            "구분 1B"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성피부부식성/자극성",
+            "구분 2"
+          ],
+          [
+            "환경유해성수생환경유해성,만성",
+            "구분 2"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-001__section": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "생식독성",
+            "구분 1B"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2"
+          ],
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 2"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 2"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-001__subnum": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Plexus MA2090 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "생식독성",
+            "구분 1B"
+          ],
+          [
+            "심한눈손상성/눈자극성",
+            "구분 2"
+          ],
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 2"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 2"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-002__bullet": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Devweld 531 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Devweld 531 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 3"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 3"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-002__colon": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Devweld 531 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Devweld 531 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 3"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 3"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-002__pagehdr": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Devweld 531 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Devweld 531 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": true,
+      "exact_ext": false
+    },
+    "KR-ITW-002__section": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Devweld 531 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Devweld 531 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 3"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 3"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-ITW-002__subnum": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "Devweld 531 접착제"
+        ],
+        "pred": [
+          "기재",
+          "Devweld 531 접착제"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": {
+        "tp": [
+          [
+            "피부과민성",
+            "구분 1"
+          ]
+        ],
+        "fp": [
+          [
+            "건강유해성",
+            "구분 2"
+          ],
+          [
+            "물리적위험성",
+            "구분 2"
+          ],
+          [
+            "환경유해성",
+            "구분 3"
+          ]
+        ],
+        "fn": [
+          [
+            "만성수생환경유해성",
+            "구분 3"
+          ],
+          [
+            "인화성액체",
+            "구분 2"
+          ],
+          [
+            "피부부식성/피부자극성",
+            "구분 2"
+          ]
+        ]
+      },
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-KCC-001__bullet": {
+      "lang": "ko",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "006(N)"
+        ],
+        "pred": [
+          "기재",
+          "신너 (자동차용 수용성 세정신너)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-KCC-001__colon": {
+      "lang": "ko",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "006(N)"
+        ],
+        "pred": [
+          "기재",
+          "2-뷰톡시에탄올 O-부틸 에틸렌 글라이콜 ; 에틸렌 글라이콜 부틸 에테르 ; 에틸렌 글라이콜 N-부틸 에테르 ; 글라이콜 부틸 에테르 ;"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-KCC-001__pagehdr": {
+      "lang": "ko",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "006(N)"
+        ],
+        "pred": [
+          "기재",
+          "신너 (자동차용 수용성 세정신너)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-KCC-001__section": {
+      "lang": "ko",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "006(N)"
+        ],
+        "pred": [
+          "기재",
+          "2-뷰톡시에탄올"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-KCC-001__subnum": {
+      "lang": "ko",
+      "product_name": {
+        "ok": false,
+        "gold": [
+          "기재",
+          "006(N)"
+        ],
+        "pred": [
+          "기재",
+          "신너 (자동차용 수용성 세정신너)"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "위험"
+        ],
+        "pred": [
+          "기재",
+          "위험"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
+    },
+    "KR-NHCHEM-001__bullet": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "요소"
+        ],
+        "pred": [
+          "기재",
+          "요소"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          "기재",
+          "경고"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-NHCHEM-001__colon": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "요소"
+        ],
+        "pred": [
+          "기재",
+          "요소"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          "기재",
+          "경고"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-NHCHEM-001__pagehdr": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "요소"
+        ],
+        "pred": [
+          "기재",
+          "요소"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          "기재",
+          "경고"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-NHCHEM-001__section": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "요소"
+        ],
+        "pred": [
+          "기재",
+          "요소"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          "기재",
+          "경고"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    },
+    "KR-NHCHEM-001__subnum": {
+      "lang": "ko",
+      "product_name": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "요소"
+        ],
+        "pred": [
+          "기재",
+          "요소"
+        ]
+      },
+      "signal_word": {
+        "ok": true,
+        "gold": [
+          "기재",
+          "경고"
+        ],
+        "pred": [
+          "기재",
+          "경고"
+        ]
+      },
+      "ghs": "ok",
+      "hcode": "ok",
+      "htext": "ok",
+      "cas": "ok",
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": true,
+      "exact_ext": true
+    }
+  }
+}

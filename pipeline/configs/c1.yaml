@@ -1,0 +1,8 @@
+# C1 (docs/plan_c.md 7절): r1에서 학습 데이터만 바꾼다 — 보강 문서(train 약 50건)를 포함한 증강 JSONL.
+# 나머지 설정(epoch 2 · 배치 1×8 · lr 2e-4 · rank 16 · max_length 4096)은 r1.yaml 그대로 물려받는다.
+# step 수는 데이터 양에 따라 늘어난다 → 개선이 나오면 "데이터 보강 + 그에 따른 학습량 증가"의 효과로 보고한다.
+# 만들기: python pipeline/build_jsonl.py --train-out train_c1.jsonl --val-out val_c1.jsonl
+# 학습:   python pipeline/train_qlora.py --config pipeline/configs/c1.yaml   (→ runs/{MMDD}_c1/)
+# 실행 전에 결정권자 승인. 새 val 채점 뒤 채택·중단 기준은 docs/plan_c.md 7절.
+train_jsonl: data/train_c1.jsonl
+val_jsonl: data/val_c1.jsonl

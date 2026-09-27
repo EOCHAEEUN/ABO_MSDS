@@ -18,6 +18,15 @@
 7. Real Test 최초 평가 (Base zero-shot / few-shot / QLoRA 최종, 각 1회)
 8. `app/main.py` 서빙, `web/` 검토 화면
 
+## 프런트엔드 실행
+
+```bash
+npm --prefix web ci
+npm --prefix web run dev
+```
+
+http://localhost:5173 에서 React JSX·CSS로 구현한 랜딩페이지와 문서 검토·목록·실험 비교 화면을 확인합니다. 랜딩 화면은 `web/src/LandingPage.jsx`, 작업공간은 `web/src/workspace/`의 JSX와 CSS에서 수정합니다. 검토 버튼으로 문서 검토·문서 목록·실험 비교 작업공간(`/workspace.html`)에 들어갑니다. 기본은 화면 시연용 예시 모드이며 실제 모델 추출·DB 저장은 API 연결이 필요합니다. 실행 방법과 API 연동 계약은 [web/README.md](web/README.md)를 참고하세요.
+
 ## 원칙
 - 전처리·스키마·프롬프트는 `core/` 한 곳에서만 고친다. 수정 시 책임자 리뷰 필수.
 - split의 유일한 기준은 `data/splits.csv`다.

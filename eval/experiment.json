@@ -1,0 +1,34 @@
+{
+  "설명": "C안 최종 평가 실험 정의(docs/plan_c.md 6·7절). test·test2의 출력 생성·채점은 이 파일이 고정(frozen)되고 python eval/experiment.py --check가 통과해야 돈다. max_new_tokens와 qlora_final 어댑터를 채운 뒤 --freeze → 커밋. 고정 뒤 common·conditions를 고치면 check가 실패한다.",
+  "common": {
+    "base_model": "Qwen/Qwen3-4B",
+    "max_new_tokens": null,
+    "decoding": "greedy (eval/infer.py generate, do_sample=False)",
+    "enable_thinking": false,
+    "generation_files": [
+      "core/prompt.py",
+      "core/preprocess.py",
+      "pipeline/extract_text.py",
+      "eval/infer.py",
+      "eval/seal.py",
+      "eval/gate.py",
+      "eval/experiment.py"
+    ],
+    "scoring_files": [
+      "eval/score.py",
+      "eval/paired.py",
+      "core/normalize.py",
+      "core/schema.py",
+      "src/schema.py",
+      "eval/hazard_class_alias.csv"
+    ],
+    "packages": ["torch", "transformers", "peft", "bitsandbytes", "accelerate", "tokenizers"]
+  },
+  "conditions": {
+    "base_zs": {"fewshot": false, "adapter": null},
+    "base_fs": {"fewshot": true, "adapter": null},
+    "qlora_r1": {"fewshot": false, "adapter": "runs/0926_r1/adapter"},
+    "qlora_final": {"fewshot": false, "adapter": null}
+  },
+  "frozen": null
+}

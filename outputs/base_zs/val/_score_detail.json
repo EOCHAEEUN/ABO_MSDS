@@ -45,7 +45,14 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 3,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
     },
     "KR-GSC-002": {
       "lang": "ko",
@@ -81,7 +88,14 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "misplaced": {
+        "ke_number": 4,
+        "content": 0
+      },
+      "exact": false,
+      "exact_ext": false
     },
     "KR-ITW-001": {
       "lang": "ko",
@@ -165,7 +179,10 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
     },
     "KR-ITW-002": {
       "lang": "ko",
@@ -226,7 +243,21 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            true,
+            null
+          ]
+        ]
+      },
+      "exact": false,
+      "exact_ext": false
     },
     "KR-KCC-001": {
       "lang": "ko",
@@ -305,7 +336,10 @@
       "hcode": "ok",
       "htext": "ok",
       "cas": "ok",
-      "pair": "ok"
+      "pair": "ok",
+      "nocas": "ok",
+      "exact": false,
+      "exact_ext": false
     },
     "KR-NHCHEM-001": {
       "lang": "ko",
@@ -376,7 +410,25 @@
         "fp": 0,
         "fn": 1,
         "content_mismatch": []
-      }
+      },
+      "nocas": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "gold": [],
+        "pred": [
+          [
+            false,
+            "68611-64-3 / KE-35223"
+          ]
+        ]
+      },
+      "misplaced": {
+        "ke_number": 0,
+        "content": 1
+      },
+      "exact": false,
+      "exact_ext": false
     }
   }
 }

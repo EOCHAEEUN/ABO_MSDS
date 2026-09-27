@@ -1,4 +1,8 @@
 # [강덕우] r1에서 조건 1개만 변경 (epoch 3 / 증강 배수 / 학습률 중 하나)
+# 2026-09-26 선택: 증강 배수 축소. r1 val loss가 2 epoch에서 올라(0.0142→0.0159) 과적합 신호가 있었고,
+# 렌더러 변형은 같은 정답의 반복이라서. train_r2.jsonl = train.jsonl에서 렌더러 변형만 문서당 5종→2종(9.0배→6.1배).
+# 만들기: python pipeline/build_jsonl.py --renderers 2 --train-out train_r2.jsonl
+train_jsonl: data/train_r2.jsonl
 # 아래 두 값은 r1과 같게 둔다 (비교 변수가 아님)
 max_length: 4096
 gradient_checkpointing: true

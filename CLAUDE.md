@@ -4,7 +4,8 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
 상세: @docs/plan.md · 팀 규칙: @docs/TEAM_GUIDE.md · 라벨 표기 세부: data/README.md · 판정 기록: docs/labeling_review_notes.md
 
 ## 절대 규칙
-- **Real Test 봉인:** eval/test/(20건)는 3일차 09:30 전까지 어떤 모델에도 넣지 않는다(Base 포함). test 추론, few-shot·프롬프트 예시, 화면 샘플, 조건 선택 근거로 쓰지 않는다.
+- **Real Test 봉인:** eval/test/(20건)는 C안 최종 모델 고정 전까지 어떤 모델에도 넣지 않는다(Base 포함). C안에서는 노출 이력이 있는 보조 평가로 1회만 쓴다. test 추론, few-shot·프롬프트 예시, 화면 샘플, 조건 선택 근거로 쓰지 않는다.
+- **test2 봉인(C안):** test2는 모델 고정 전 학습·프롬프트·증강·조건 선택에 쓰지 않는다. 지정된 라벨링·검수 담당과 고정된 전처리·봉인 도구는 자료 준비 목적으로 접근할 수 있으나, 그 과정에서 얻은 문서별 내용이나 오류 정보를 모델 개발에 반영하지 않는다. 코드를 고치는 개발 세션은 test2 원문·텍스트·정답·채점 상세를 열지 않는다(LLM 라벨 초안은 별도 세션에서). 평가 모델의 출력 생성은 `eval/experiment.json` 고정 후 비교군 4개에 한해 1회 실행하고, 고정된 출력의 재채점은 허용하되 채점 기준이 바뀌면 최초 결과와 구분해 보고한다.
 - Test 정답 검수나 길이 측정을 명시적으로 요청받은 경우가 아니면 eval/test/*.json과 labeling_review_notes.md의 test 문서 메모를 열지 않는다. 열었더라도 그 값을 코드·정규식·프롬프트에 반영하지 않는다.
 - **데이터 용도는 data/splits.csv가 유일한 기준:** 학습(증강·JSONL)과 few-shot은 split=train 문서만, 조건 선택(1·2차 비교·모델 고정)은 split=val 문서만 쓴다. data/labels/에는 train과 val이 섞여 있다. eval/val_en/은 영문 점검용이라 학습·보고 수치에 쓰지 않는다. splits.csv는 임의로 바꾸지 않는다.
 - **정답은 사람이 확정한다.** 요청받지 않은 정답 값 수정은 하지 않는다. 정답을 고칠 때는 JSON 수정 → `python3 scripts/validate_labels.py data/labels`(test면 eval/test) → docs/labeling_review_notes.md에 이유 한 줄 → 커밋 메시지 `fix(label): KR-XXX-001 …` 순서를 지킨다. test-sealed 태그 이후 eval/test/는 수정 금지.
@@ -25,7 +26,7 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
 
 ## 규약
 - doc_id: `KR|EN-제조사약칭-번호`, 정답·출력 파일명은 `{doc_id}.json`
-- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_final}/{val|test|val_en}/{doc_id}.json`. 이 파일에는 모델이 낸 JSON만 둔다(파싱 실패도 모델 출력 그대로 저장해 실패로 집계). 시간·토큰·원문 로그는 `.jsonl`, 채점 상세는 `*.json`이 아닌 이름으로 둔다(검사기가 폴더의 `*.json`을 모두 검사함)
+- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_final}/{val|test|test2|val_en}/{doc_id}.json`. 이 파일에는 모델이 낸 JSON만 둔다(파싱 실패도 모델 출력 그대로 저장해 실패로 집계). 시간·토큰·원문 로그는 `.jsonl`, 채점 상세는 `*.json`이 아닌 이름으로 둔다(검사기가 폴더의 `*.json`을 모두 검사함)
 - 전처리: `data/text/{doc_id}.txt`, 실패 기록은 `data/text/_cut_log.csv` + `data/text/review_required/` (실패 로그 파일을 따로 만들지 않는다)
 - 점수: `report/scores.csv` (condition, split, subset, metric, value). 평가셋별 행을 나누고 합산하지 않는다
 - 학습: `pipeline/configs/r1.yaml` 기준, r2는 조건 1개만 변경. 기록은 `runs/{날짜}_{r1|r2}/`
