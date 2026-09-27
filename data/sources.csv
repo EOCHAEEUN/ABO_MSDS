@@ -50,16 +50,16 @@ KR-NOROO-005,SHH710501_DOCU03_c090106.pdf,ko,구서식,노루케미칼,NOROO,1-2
 KR-NOROO-006,[1]큐피트_SG-3000(N)_아스팔트_슁글_방수재_중상도_GHS-MSDS.pdf,ko,구서식,노루페인트,NOROO,1-2,9,3,3,1,1,N,경고,기재,N,3,,2026-09-22
 EN-WD40-002,wd-40-multi-use-product-aerosol-low-voc-sds-us-ghs.pdf,en,영문,WD-40,WD40,1-2,4,0,0,3,4,Y,위험,기재,Y,7,,2026-09-22
 KR-NOROO-007,예그리나_뉴-스웨이드_GHS-MSDS.pdf,ko,구서식,노루페인트,NOROO,1-1,6,1,1,2,2,N,경고,기재,N,4,,2026-09-27
-KR-KZ-001,KZ-A-A002_Sb Metal(Antimony).pdf,ko,현행,고려아연,KZ,1-2,1,0,0,1,1,N,경고,기재,N,2,,2026-09-27
-KR-KZ-002,KZ-A-C002_카드뮴스틱(Cadmium).pdf,ko,현행,고려아연,KZ,1-2,1,0,0,7,7,N,위험,기재,N,2,,2026-09-27
-KR-KZ-003,KZ-A-S002_반도체황산(Sulfuric acid).pdf,ko,현행,고려아연,KZ,1-2,2,0,0,7,7,N,위험,기재,N,2,,2026-09-27
+KR-KZ-001,KZ-A-A002_Sb Metal(Antimony).pdf,ko,현행,고려아연,KZ,,,,,,,,,,,,,2026-09-27
+KR-KZ-002,KZ-A-C002_카드뮴스틱(Cadmium).pdf,ko,현행,고려아연,KZ,,,,,,,,,,,,,2026-09-27
+KR-KZ-003,KZ-A-S002_반도체황산(Sulfuric acid).pdf,ko,현행,고려아연,KZ,,,,,,,,,,,,,2026-09-27
 KR-DUKSAN-001,덕산물질안전보건자료.pdf,ko,현행,덕산약품공업,DUKSAN,1-2,0,0,0,2,2,N,자료없음,기재,Y,4,,2026-09-27
-KR-DAIKIN-001,"POLYFLON PTFE F-104,201,205,208,302_MSDS_KR_1.0.pdf",ko,수입품 국문판,Daikin,DAIKIN,1-2,1,0,0,0,0,N,해당없음,해당없음,N,3,,2026-09-27
-KR-DAIKIN-002,"NEOFLON FEP NP-20,NP-21,NP-30,NP-101,NP-120_MSDS_KR_1.2 (2).pdf",ko,수입품 국문판,Daikin,DAIKIN,1-2,1,0,0,0,0,N,해당없음,해당없음,N,3,,2026-09-27
-KR-DAIKIN-003,"NEW POLYFLON PTFE M-111, 112, 139_MSDS_KR_1.0 (1).pdf",ko,수입품 국문판,Daikin,DAIKIN,1-2,1,0,0,0,0,N,해당없음,해당없음,N,3,,2026-09-27
-KR-NEOGEN-001,9790_ko-kr_sds_v.1.0.pdf,ko,수입품 국문판,Neogen,NEOGEN,1-5,7,0,0,6,5,N,경고,기재,Y,6,,2026-09-27
+KR-DAIKIN-001,"POLYFLON PTFE F-104,201,205,208,302_MSDS_KR_1.0.pdf",ko,수입품 국문판,Daikin,DAIKIN,,,,,,,,,,,,,2026-09-27
+KR-DAIKIN-002,"NEOFLON FEP NP-20,NP-21,NP-30,NP-101,NP-120_MSDS_KR_1.2 (2).pdf",ko,수입품 국문판,Daikin,DAIKIN,,,,,,,,,,,,,2026-09-27
+KR-DAIKIN-003,"NEW POLYFLON PTFE M-111, 112, 139_MSDS_KR_1.0 (1).pdf",ko,수입품 국문판,Daikin,DAIKIN,,,,,,,,,,,,,2026-09-27
+KR-NEOGEN-001,9790_ko-kr_sds_v.1.0.pdf,ko,수입품 국문판,Neogen,NEOGEN,,,,,,,,,,,,,2026-09-27
 KR-HENKEL-001,alfa-laval-loctite-648.pdf,ko,수입품 국문판,Henkel,HENKEL,1-3,11,0,0,5,5,N,위험,기재,N,4,,2026-09-27
-KR-KNAUF-001,dd_-MDSD.pdf,ko,수입품 국문판,Knauf,KNAUF,1-1,0,0,0,0,0,N,해당없음,해당없음,Y,3,,2026-09-27
+KR-KNAUF-001,dd_-MDSD.pdf,ko,수입품 국문판,Knauf,KNAUF,,,,,,,,,,,,,2026-09-27
 EN-KCC-001,F202404190551207.pdf,en,영문,KCC,KCC,1-4,8,0,0,14,14,N,위험,기재,N,4,,2026-09-27
 EN-KCC-002,kcc_msds_et5660-a-d40434-1018.pdf,en,영문,KCC,KCC,1-1,16,1,1,0,0,N,자료없음,자료없음,Y,5,,2026-09-27
 EN-FISHER-001,10763991.pdf,en,영문,Fisher Scientific UK,THERMO,1-3,3,0,0,1,1,N,경고,기재,Y,5,,2026-09-27

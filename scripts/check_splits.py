@@ -14,6 +14,8 @@
          (splits.csv에서 split만 바꿔도 이력은 남으므로 파일 이름·doc_id로 본다. 내용은 열지 않음)
          few-shot 문서는 항상 train
          excluded: 범위 밖·결함으로 뺀 문서. note에 사유 필수, 다른 규칙에서는 없는 문서로 본다
+         sources.csv의 test2 행은 정답에서 나온 집계 열(TEST2_HIDDEN)이 비어 있어야 함(개발용 사본에서 숨김.
+         빈칸 여부만 보고 값은 출력하지 않음)
          --final: test2 30~40건, 현행:수입품 국문판 = 3:1(±1건, 구서식 제외 건수 기준), val 15건, train 47~52건
          (구서식 20% 목표는 09-27 삭제 — 구서식은 모두 노루이고 노루가 train에 있음. report/decisions.md)
 """
@@ -31,6 +33,9 @@ EVAL = {"val", "test", "test2"}
 TEST2_FORMS = ("현행", "수입품 국문판", "구서식")                # test2에 넣을 수 있는 서식
 TEST2_RATIO = {"현행": 0.75, "수입품 국문판": 0.25}               # 구서식을 뺀 건수 기준 목표(원래 60:20)
 PRECHECK_DOCS = ("KR-THERMO-001", "KR-NOROO-004", "KR-NOROO-005")  # 9/22 사전 검증에 Base를 돌린 문서
+# sources.csv에서 정답으로 만든 집계 열. test2 행은 개발용 사본에서 비워 둔다(원본은 검수 담당 자료, 09-27 결정)
+TEST2_HIDDEN = ("sec1_3_pages", "n_ingredients", "n_substitute", "n_cas_null", "n_ghs", "n_hazard_statements",
+                "h_code_missing", "signal_word", "hazard_list_status", "pm_decision_needed", "n_notes")
 
 
 def norm_mfr(s):
@@ -152,11 +157,16 @@ def main():
     # ---- sources.csv 대응 (수집 중에는 한쪽에만 있을 수 있음)
     src_path = Path(args.sources)
     if src_path.exists():
-        src = {r["doc_id"] for r in csv.DictReader(open(src_path, encoding="utf-8-sig"))}
+        src_rows = list(csv.DictReader(open(src_path, encoding="utf-8-sig")))
+        src = {r["doc_id"] for r in src_rows}
         if only := sorted(ids.keys() - src):
             err.append(f"sources.csv에 없는 doc_id: {only}")
         if only := sorted(src - ids.keys()):
             goal.append(f"splits.csv에 아직 배정 안 된 문서: {only}")
+        t2 = {r["doc_id"] for r in by["test2"]}
+        for r in src_rows:
+            if r["doc_id"] in t2 and (filled := [c for c in TEST2_HIDDEN if (r.get(c) or "").strip()]):
+                err.append(f"sources.csv test2 {r['doc_id']}: 개발용 사본에서 비워야 할 집계 열이 채워짐 {filled}")
 
     print("건수:", {s: len(by[s]) for s in sorted(by)} | ({"excluded": len(excluded)} if excluded else {}))
     if by["test2"]:
