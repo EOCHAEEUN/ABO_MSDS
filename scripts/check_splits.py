@@ -16,10 +16,12 @@
          excluded: 범위 밖·결함으로 뺀 문서. note에 사유 필수, 다른 규칙에서는 없는 문서로 본다
          sources.csv의 test2 행은 정답에서 나온 집계 열(TEST2_HIDDEN)이 비어 있어야 함(개발용 사본에서 숨김.
          빈칸 여부만 보고 값은 출력하지 않음)
-         --final: test2 주 분석 대상(현행 + 수입품 국문판) 30~40건(최소 30 · 목표 40), 그 안에서 3:1(±1건),
-         val 15건, train 47~52건. test2 구서식은 목표 없이 따로 보고한다
-         (구서식 20% 목표는 09-27 삭제 — 구서식은 모두 노루이고 노루가 train에 있음. 주 분석 대상 기준도 09-27 결정.
-         report/decisions.md)
+         test2 역할 목록(eval/test2_roles.csv, eval/test2_roles.py): test2 문서마다 역할 한 줄
+         (main 주 분석 대상 · oldform 구서식 · exposed 노출 보조평가 · pending 영향 점검 대기)
+         --final: test2 주 분석 대상(역할 main — 국문 현행 · 수입품 국문판) 30~40건(최소 30 · 목표 40),
+         그 안에서 3:1(±1건), 점검 대기 없음, val 15건, train 47~52건. 구서식 · 노출 보조는 목표 없이 따로 보고
+         (구서식 20% 목표는 09-27 삭제 — 구서식은 모두 노루이고 노루가 train에 있음. 주 분석 대상 기준 · 역할 목록도
+         09-27 결정. report/decisions.md)
 """
 import argparse
 import collections
@@ -30,6 +32,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from eval.test2_roles import ROLES, problems as role_problems, read_roles  # noqa: E402
+
 SPLITS = {"train", "val", "test", "val_en", "test2", "excluded"}
 EVAL = {"val", "test", "test2"}
 TEST2_FORMS = ("현행", "수입품 국문판", "구서식")                # test2에 넣을 수 있는 서식
@@ -70,6 +76,7 @@ def main():
     ap.add_argument("path", nargs="?", default=str(ROOT / "data" / "splits.csv"))
     ap.add_argument("--final", action="store_true", help="건수·비율 미달도 오류로(분할 확정 전에 실행)")
     ap.add_argument("--sources", default=str(ROOT / "data" / "sources.csv"))
+    ap.add_argument("--roles", default=str(ROOT / "eval" / "test2_roles.csv"), help="test2 역할 목록")
     args = ap.parse_args()
 
     all_rows = list(csv.DictReader(open(args.path, encoding="utf-8-sig")))
@@ -141,10 +148,17 @@ def main():
             if "few-shot" in w and d in split_of and split_of[d] != "train"]
 
     # ---- [C안] 건수·비율 (수집 중에는 경고)
-    main2 = [r for r in by["test2"] if r["form"] in TEST2_RATIO]   # 주 분석 대상: 현행 + 수입품 국문판
+    try:
+        roles = read_roles(args.roles)
+        r_err, r_warn = role_problems(all_rows, roles, final=args.final)
+    except ValueError as e:                                   # 중복 doc_id 등 — 목록을 믿을 수 없으니 역할 집계 생략
+        roles, r_err, r_warn = {}, [str(e)], []
+    err += r_err
+    warn += r_warn
+    main2 = [r for r in by["test2"] if roles.get(r["doc_id"], {}).get("role") == "main"]   # 주 분석 대상
     n_main = len(main2)
     if not 30 <= n_main <= 40:
-        goal.append(f"test2 주 분석 대상(현행 + 수입품 국문판) {n_main}건 — 최소 30 · 목표 40")
+        goal.append(f"test2 주 분석 대상(역할 main — 현행 + 수입품 국문판) {n_main}건 — 최소 30 · 목표 40")
     forms = collections.Counter(r["form"] for r in main2)
     if n_main:
         for f, share in TEST2_RATIO.items():
@@ -173,9 +187,9 @@ def main():
     print("건수:", {s: len(by[s]) for s in sorted(by)} | ({"excluded": len(excluded)} if excluded else {}))
     if by["test2"]:
         print("test2 서식:", dict(collections.Counter(r["form"] for r in by["test2"])))
-        n_old = len(by["test2"]) - n_main
-        print(f"test2 주 분석 대상 {n_main}건 · split_group {len({r['split_group'] for r in main2})}개"
-              + (f" (구서식 {n_old}건은 따로 보고)" if n_old else ""))
+        rc = collections.Counter(roles.get(r["doc_id"], {}).get("role", "(없음)") for r in by["test2"])
+        print("test2 역할:", " · ".join(f"{ROLES.get(k, k)} {v}" for k, v in sorted(rc.items())))
+        print(f"test2 주 분석 대상 {n_main}건 · split_group {len({r['split_group'] for r in main2})}개")
     for w in warn:
         print("[경고]", w)
     print("\n".join(f"[오류] {e}" for e in err) if err else "규칙 위반 없음")

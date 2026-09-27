@@ -64,7 +64,7 @@ val 6건 기준. 출처 `report/scores.csv`, 문서별 상세 `outputs/*/val/_sc
 
 **test2 서식 비율 (수집 전 고정):** ~~현행 60% · 수입품 국문판 20% · 구서식 20% (기존 test 국문 비율). 40건이면 24 · 8 · 8, 30건이면 18 · 6 · 6.~~ 모델이 잘하는 유형에 맞춰 조정하지 않는다.
 → **(09-27 변경) 현행 : 수입품 국문판 = 3 : 1, 구서식 목표 없음.** 구서식은 모두 노루 계열이고 노루가 train에 있어 test2에 넣을 수 없다. 30건이면 22~23 · 7~8건이다. 구서식이 들어오면 따로 보고한다. C 결론은 구서식을 다루지 않는다. 라벨링 · 추론 전, 문서 공급 때문에 바꿨다(`report/decisions.md` "C안 데이터 배정").
-→ **(09-27 결정) 건수 목표도 주 분석 대상(현행 + 수입품 국문판)으로 센다:** 최소 30 · 목표 40, 그 안에서 3 : 1(30건이면 22~23 · 7~8, 40건이면 30 · 10). test2의 구서식은 목표 건수에 넣지 않고 따로 보고한다. 문서 수와 제조사 그룹 수를 함께 적는다. 30건을 채웠다고 우위가 입증되는 것은 아니다(`report/decisions.md` "test2 목표 기준").
+→ **(09-27 결정) 건수 목표도 주 분석 대상(`eval/test2_roles.csv`의 역할 `main` — 국문 현행 · 수입품 국문판이고 독립 주평가 적격성이 확인된 문서)으로 센다:** 최소 30 · 목표 40, 그 안에서 3 : 1(30건이면 22~23 · 7~8, 40건이면 30 · 10). test2의 구서식과 노출 보조평가(`exposed`)는 목표 건수에 넣지 않고 따로 보고한다. 문서 수와 제조사 그룹 수를 함께 적는다. 30건을 채웠다고 우위가 입증되는 것은 아니다(`report/decisions.md` "test2 목표 기준").
 
 **출처 기록:** `data/sources.csv`에 추가. 원본 PDF는 커밋하지 않는다(기존 규칙).
 
@@ -78,13 +78,13 @@ val 6건 기준. 출처 `report/scores.csv`, 문서별 상세 `outputs/*/val/_sc
    **적격성:** 원문을 판독해 정답을 확정할 수 있는 문서는 평가 대상이다. 원문의 빈칸은 스키마대로 라벨링하고, 전처리 · 텍스트 추출 실패는 평가 분모에 남긴다. 원본 손상 · 필요한 페이지 누락으로 정답을 확정할 수 없는 문서와 범위 밖 문서(다중 SDS 묶음 · 영문 외 외국어)는 분할 확정 전에 `excluded`로 두고 사유와 건수를 기록한다.
 3. 분할은 **라벨링과 모델 추론 전에** 문서 목록만 보고 정한다. test2 문서는 분할 직후 봉인 대상에 넣는다.
 4. split 이름: `train`(기존+추가), `val`(기존+추가), **`test2`**(새 test, 정답 `eval/test2/`), 기존 test는 `test`(노출 이력 표기) 유지.
-5. **신규 배정 규칙 — 결정적 균형 배정** *(초안, 결정권자 승인 전. 도구 `scripts/propose_splits.py`)*
+5. **신규 배정 규칙 — 결정적 균형 배정** *(09-27 결정권자 승인. **다음 수집분부터** 적용한다 — 두 번째 수집분 17건은 라벨링 전에 기록된 제안 배정을 기준으로 중복 · 적격성 · 그룹 충돌 · 노출만 바로잡는다. 도구 `scripts/propose_splits.py`)*
    - **입력:** 사전 메타데이터(doc_id · lang · form · manufacturer · split_group)만. 정답 · 모델 성능 · `sources.csv`의 집계 열(성분 수 · 신호어 등)은 보지 않는다. 결과를 보고 재배정하지 않는다.
    - **기존 배정 유지:** `splits.csv`에 있는 문서는 옮기지 않는다. 이미 있는 `split_group`의 신규 문서는 그 그룹을 따른다(국문 train · val · test2 그룹 → 같은 분할, 그 그룹의 영문판 → train · val이면 val_en, test2면 excluded 권고). 기존 test 그룹의 국문 문서는 excluded 권고(test 동결, 다른 분할은 제조사 규칙 위반), 영문판은 사람 판단.
    - **그룹:** 사람이 정한 `split_group` 값을 그대로 쓴다(같은 제조사의 다른 제품, 번역 · 개정 문서를 묶음). 제조사명 · 제품명을 이어 붙여 키를 만들지 않는다. 다른 그룹인데 제조사 표기가 같으면 제안표에 "split_group 확인"을 띄운다.
    - **신규 그룹:** 영문만 있으면 val_en, 영문 외 외국어는 excluded. 국문이 있으면 아래 균형 배정.
    - **순서:** `sha256(JSON 배열 [SEED, split_group])` 오름차순. SEED = `C-2026-09-27` 고정. 바꾸려면 이유를 `report/decisions.md`에 먼저 적는다. **원하는 구성이 나올 때까지 SEED를 바꾸지 않는다.**
-   - **목표(칸):** train 50 · val 15 · test2 현행 30 · test2 수입품 국문판 10(3절). 칸마다 부족분 = 목표 − 현재 건수(기존 + 이번 제안에서 앞서 배정된 것), 부족분 비율 = 부족분 ÷ 목표(분수로 정확히 비교).
+   - **목표(칸):** train 50 · val 15 · test2 현행 30 · test2 수입품 국문판 10(3절). 칸마다 부족분 = 목표 − 현재 건수(기존 + 이번 제안에서 앞서 배정된 것), 부족분 비율 = 부족분 ÷ 목표(분수로 정확히 비교). test2 현재 건수는 역할 `main`과 점검 결과가 나올 때까지 자리를 차지하는 `pending`만 센다(`exposed` · `oldform`은 세지 않음). 노출 · 점검 대기 문서가 있는 test2 그룹을 따르는 신규 문서는 세지 않고 "영향받은 그룹"으로 표시한다.
    - **들어갈 수 있는 분할:** train은 같은 제조사가 val · test · test2에 없을 때, val은 train · test2에 없을 때, test2는 같은 제조사가 다른 어느 분할에도 없고 그룹 문서에 개발 노출 이력(`check_splits.py`의 노출 검사)이 없을 때. 구서식만 있는 그룹은 test2 목표가 없어 train · val 중에서 고른다.
    - **선택:** 부족분이 1 이상인 분할 중 ① 그룹 국문 문서 수가 남은 부족분 안에 들어가는 곳 ② 부족분 비율이 큰 곳 ③ 동률이면 test2 > val > train(train은 기존 train 제조사의 다른 제품으로도 채울 수 있어서). 들어가는 곳이 없으면 비율이 가장 큰 곳에 두고 "목표 초과"를 표시한다. 부족분이 남은 분할이 없으면 "사람 판단".
    - **서식이 섞인 그룹:** test2 비율은 그룹의 주 서식(국문 문서가 가장 많은 서식, 동수면 현행 > 수입품 국문판) 칸으로 보고, 들어가는지는 서식별로 본다. 제안표에 "서식 혼합 그룹"을 표시한다. test2에 간 구서식 문서는 따로 보고한다.
@@ -126,6 +126,7 @@ val 6건 기준. 출처 `report/scores.csv`, 문서별 상세 `outputs/*/val/_sc
 - **악화 불허 필드:** 파싱률 · 스키마 준수율 · 제품명 · CAS F1 · pair F1 중 하나라도 base_fs보다 떨어지면 "우위" 결론을 내지 않는다.
 - **문서 단위 짝 비교:** 조건 쌍마다 승 · 패 · 무 수와 부트스트랩 신뢰구간을 함께 보고한다. 부트스트랩은 **split_group 단위**로 복원추출한다(같은 제조사 문서는 함께 뽑음). 부호 검정은 참고용이다.
 - 서식별(현행 · 구서식 · 수입품) 분리 보고, 합산 금지(기존 원칙). test2와 기존 test도 합산하지 않는다.
+- **test2 역할 목록(09-27):** `eval/test2_roles.csv`로 test2를 주 분석 대상(`main`) · 구서식(`oldform`) · 노출 보조평가(`exposed`)로 나눈다. 채점 · 짝 비교가 같은 목록을 쓰고 목록의 모든 문서를 분모에 둔다. test2에는 "전체" 합산을 두지 않는다. 점검 대기(`pending`)가 남으면 실험을 고정하지 않는다. 고정 때 분석 대상 목록(doc_id · 역할 · 언어 · 서식 · 그룹)을 기록하고, 고정 뒤 바뀌면 출력 생성 · 채점을 거부한다(채점기 변경 꼬리표로 허용하지 않음. 대상을 바꾼 분석은 결정 기록 후 별도 사후 분석). 역할은 정답 · 모델 결과를 보고 바꾸지 않는다.
 
 **채점기 동결:** 평가 전에 `eval/score.py`를 고정하고 커밋 해시를 기록한다. 회귀 테스트(`test/test_score.py`, 현재 9건)가 통과해야 한다 — pair만 틀린 경우, `nocas`만 틀린 경우, 영업비밀 플래그, 다른 칸 오입력, 무근거 생성, 줄이 갈린 CAS, 빈 예측.
 
@@ -157,21 +158,22 @@ val 6건 기준. 출처 `report/scores.csv`, 문서별 상세 `outputs/*/val/_sc
 
 | 단계 | 명령 | 하는 일 |
 |---|---|---|
-| 배정 제안 | `python scripts/propose_splits.py [--candidates 후보.csv] [--out 제안.csv]` | 4절 5항 규칙(초안)으로 신규 문서의 분할 제안표를 만든다. 메타데이터 열만 읽고 `splits.csv`는 고치지 않는다 |
-| 분할 검사 | `python scripts/check_splits.py` (수집 중) · `--final` (확정 전) | test2 제조사·그룹 불겹침, 노출 이력, few-shot은 train만, 서식, 영문 금지, 기존 test 동결. sources.csv의 test2 행 집계 열이 채워져 있으면 오류(개발용 사본에서 숨김). `--final`이면 건수(test2는 주 분석 대상 기준)와 현행:수입품 3:1 비율까지 오류 |
+| test2 역할 목록 | `eval/test2_roles.csv` · `eval/test2_roles.py` | test2 문서마다 역할(main · oldform · exposed · pending). 채점 · 짝 비교 · 분할 검사 · 배정 제안이 공유. 중복 doc_id 거부. `pending`이 남으면 `--freeze` 거부, 고정 뒤 분석 대상 목록이 바뀌면 생성 · 채점 거부 |
+| 배정 제안 | `python scripts/propose_splits.py [--candidates 후보.csv] [--out 제안.csv]` | 4절 5항 규칙으로 신규 문서의 분할 제안표를 만든다. 메타데이터 열만 읽고 `splits.csv`는 고치지 않는다 |
+| 분할 검사 | `python scripts/check_splits.py` (수집 중) · `--final` (확정 전) | test2 제조사·그룹 불겹침, 노출 이력, test2 역할 목록, few-shot은 train만, 서식, 영문 금지, 기존 test 동결. sources.csv의 test2 행 집계 열이 채워져 있으면 오류(개발용 사본에서 숨김). `--final`이면 건수(test2는 주 분석 대상 기준)와 현행:수입품 3:1 비율까지 오류 |
 | test2 1단계 봉인 | `python eval/seal.py --split test2 --write-docs` | 분할 직후·라벨링 전. 문서 목록 + 원본 PDF 해시 → `report/test2_docs_manifest.csv` (정답이 이미 있으면 거부) |
 | test2 추출 | `python pipeline/extract_text.py --split test2` | 1단계 봉인 뒤. test2만 처리하고 `_cut_log.csv`는 행 단위로 병합. 2단계 봉인된 문서는 다시 추출하지 않음. 개발 세션은 성공 여부만 본다 |
 | test2 2단계 봉인 | `python eval/seal.py --split test2 --write` | 2차 검수 뒤. 정답 + 입력 텍스트 해시 + 추출 상태 → `report/test2_manifest.csv`. 텍스트가 없는 문서는 실패 기록이 있어야 하고(분모에 남음), 1·2단계 목록이 같아야 함 |
 | 길이 측정 | `python pipeline/length_stats.py` | train·val만. `max_new_tokens`(정답 MAX × 1.3) · `max_length` 권장값 → `report/length_stats.md` |
 | C1 데이터 · 학습 | `python pipeline/build_jsonl.py --train-out train_c1.jsonl --val-out val_c1.jsonl` → `python pipeline/train_qlora.py --config pipeline/configs/c1.yaml` | r1 데이터 파일을 덮어쓰지 않는다 |
-| 실험 고정 | `python eval/experiment.py --freeze` → 커밋 · `--check` | 평가 전. `eval/experiment.json`의 공통 설정(생성 길이 · Base · 디코딩)과 조건별 설정(few-shot · 어댑터)을 고정하고, 평가에 영향을 주는 파일 해시 · 모델 리비전 · 라이브러리 버전 · 어댑터 해시를 기록. 대상 파일이 미커밋이면 거부 |
+| 실험 고정 | `python eval/experiment.py --freeze` → 커밋 · `--check` | 평가 전. `eval/experiment.json`의 공통 설정(생성 길이 · Base · 디코딩)과 조건별 설정(few-shot · 어댑터)을 고정하고, 평가에 영향을 주는 파일 해시 · 모델 리비전 · 라이브러리 버전 · 어댑터 해시를 기록. 대상 파일이 미커밋이면 거부 test2 분석 대상 목록(doc_id · 역할 · 언어 · 서식 · 그룹)도 기록하고, 바뀌면 생성 · 채점 거부 |
 | 평가 | `python eval/infer.py --condition X --split test2 --allow-test` → `python eval/score.py --condition X --split test2 --allow-test` | `eval/gate.py`: 봉인 대조 · 실험 고정 · 비교군 4개 · 실행 기록 `_run.jsonl` 일치(재개 시 다른 모델이 섞이지 않게). 출력 생성은 조건당 1회, 재채점은 허용(채점기가 바뀌면 따로 기록) |
-| 짝 비교 | `python eval/paired.py base_fs qlora_final --split test2 --allow-test --out report/paired_test2.md` | 승·패·무, split_group 단위 부트스트랩 95% 신뢰구간, 부호 검정(참고), 서식별 |
-| 테스트 | `python test/test_score.py` · `test_seal.py` · `test_paired.py` · `test_gate.py` · `test_propose_splits.py` | 채점기 회귀 9건 · 봉인 14건(바꿔치기, 목록 누락, 실패 기록 없는 빈 입력, 추출 상태 변경) · 그룹 부트스트랩 3건 · 게이트 12건(재개 시 다른 어댑터, 고정 전 실행, 미커밋, 추론 미완료 채점, 채점기 변경 표시) · 배정 제안 6건(입력 순서 무관, 동률 순서, 부족분 안에 드는 곳 우선, 기존 그룹 따르기, 노출 · 제조사 겹침 시 test2 불가, 메타데이터 외 열 무시) |
+| 짝 비교 | `python eval/paired.py base_fs qlora_final --split test2 --allow-test --out report/paired_test2.md` | 승·패·무, split_group 단위 부트스트랩 95% 신뢰구간, 부호 검정(참고), 서식별. test2는 역할별(주 분석 대상 · 구서식 · 노출 보조), "전체" 없음 |
+| 테스트 | `python test/test_score.py` · `test_seal.py` · `test_paired.py` · `test_gate.py` · `test_propose_splits.py` · `test_test2_roles.py` | 채점기 회귀 9건 · 봉인 14건(바꿔치기, 목록 누락, 실패 기록 없는 빈 입력, 추출 상태 변경) · 그룹 부트스트랩 3건 · 게이트 14건(재개 시 다른 어댑터, 고정 전 실행, 미커밋, 추론 미완료 채점, 채점기 변경 표시, 역할 목록 문제 시 고정 거부, 고정 뒤 분석 대상 변경 거부) · 배정 제안 7건(입력 순서 무관, 동률 순서, 부족분 안에 드는 곳 우선, 기존 그룹 따르기, 노출 · 제조사 겹침 시 test2 불가, 메타데이터 외 열 무시, test2는 main · pending만 셈) · 역할 목록 8건(목록 규칙, 영향 그룹 경고, 역할별 집계와 실패 분모, pending 거부, 채점 · 짝 비교 목록 일치, 다른 분할 불변, 중복 doc_id 거부, 분석 대상 목록) |
 
 ## 9. 결론 문구 (결과 보기 전에 정해 둔다)
 
-test2 결과는 **주 분석 대상(현행 + 수입품 국문판)** 기준이다. test2의 구서식 문서는 따로 보고하고 결론에 넣지 않는다(3절).
+test2 결과는 **주 분석 대상(`eval/test2_roles.csv`의 `main`)** 기준이다. test2의 구서식 · 노출 보조평가 문서는 따로 보고하고 결론에 넣지 않는다(3 · 6절). "개발에 쓰지 않은 새 문서"라는 표현은 `main`에만 쓴다.
 
 | test2 결과 | 결론 |
 |---|---|
@@ -197,7 +199,8 @@ test2 결과는 **주 분석 대상(현행 + 수입품 국문판)** 기준이다
 - [x] 6·9절 (09-27): qlora_r1 비교군 유지, 결론 문구 수정(신뢰구간이 0을 포함하면 "차이 미확인"), 실험 정의 파일 · 평가 게이트
 - [x] 4절: split 이름 train · val · test2 · test
 - [x] 3·9절 (09-27): test2 건수 목표를 주 분석 대상(현행 + 수입품 국문판) 기준으로, 구서식은 따로 보고
-- [ ] 4절 5항: 신규 배정 규칙(결정적 균형 배정) — 초안, 결정권자 승인 필요
+- [x] 4절 5항 (09-27): 신규 배정 규칙(결정적 균형 배정) 승인, 다음 수집분부터. 두 번째 수집분 17건은 재배정 안 함
+- [x] 3 · 6 · 9절 (09-27): test2 역할 목록(main · oldform · exposed · pending), 정답 유입 6건은 노출 보조평가, 기존 test2 8건은 영향 점검 대기
 - [ ] 5절: 담당자 — 기존 역할 기준 제안, 팀 확인 필요
 - [x] 6절: few-shot 예시 유지, 주지표(확장 기준 문서 정답률), 악화 불허 필드
 - [x] 7절: 학습 횟수 상한 2회(C1 + 선택 C2)

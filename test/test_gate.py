@@ -19,6 +19,7 @@ import eval.experiment as experiment  # noqa: E402
 import eval.gate as gate  # noqa: E402
 
 DOCS = ["KR-NEWA-001", "KR-NEWB-001"]
+ASET = [["KR-NEWA-001", "main", "ko", "현행", "NEWA"], ["KR-NEWB-001", "main", "ko", "수입품 국문판", "NEWB"]]
 EXP = {
     "common": {"base_model": "Base/M", "max_new_tokens": 1200, "decoding": "greedy", "enable_thinking": False,
                "generation_files": ["core/prompt.py", "gen.py"], "scoring_files": ["score.py"], "packages": ["pip"]},
@@ -50,6 +51,8 @@ def sandbox(frozen=True):
         setattr(experiment, name, t / rel)
     experiment.ROOT = t
     experiment.model_revision = lambda base: "rev1"
+    experiment.roles_problems = lambda: []            # 역할 목록 검사는 test_test2_roles.py가 따로 본다
+    experiment.analysis_state = lambda: ([list(r) for r in ASET], [])
     gate.ROOT, gate.OUTPUT_ROOT = t, t / "outputs"
     gate.verify_seal = lambda split: (True, "봉인 대조 통과(테스트)")
     if frozen:
@@ -100,6 +103,37 @@ def test_02_resume_same_config_ok_but_partial_overwrite_refused():
 
 
 # ---------------------------------------------------------------- 실험 고정
+def test_13_freeze_refused_with_role_problems():
+    """test2 역할 목록에 점검 대기가 남았거나 목록이 어긋나면 고정하지 않는다(주 분석 대상을 결과 전에 고정)"""
+    t = sandbox(frozen=False)
+    experiment.roles_problems = lambda: ["test2 KR-NEWA-001: 영향 점검 대기가 남음"]
+    try:
+        msg = exits(experiment.freeze)
+    finally:
+        experiment.roles_problems = lambda: []
+    assert msg and "test2 역할 목록" in msg and "KR-NEWA-001" in msg, msg
+    assert json.loads((t / "eval/experiment.json").read_text(encoding="utf-8"))["frozen"] is None
+
+
+def test_14_analysis_set_change_after_freeze_refused_not_tagged():
+    """고정 뒤 주 분석 대상을 바꾸면(main → exposed, 커밋해도) 생성 · 채점 모두 거부. 채점기 변경 꼬리표로 넘기지 않는다"""
+    t = sandbox()
+    outputs(t, "base_zs", "test2", rec_for(t))
+    fz = json.loads((t / "eval/experiment.json").read_text(encoding="utf-8"))["frozen"]
+    assert fz["test2_analysis_set"] == ASET
+    changed = [list(r) for r in ASET]
+    changed[1][1] = "exposed"
+    experiment.analysis_state = lambda: (changed, [])
+    try:
+        ok, p, _ = experiment.check("generate")
+        assert not ok and any("분석 대상 목록" in x and "KR-NEWB-001" in x for x in p), p
+        msg = exits(gate.gate_score, "test2", ["base_zs"], True, DOCS)
+        assert msg and "분석 대상 목록" in msg, msg
+    finally:
+        experiment.analysis_state = lambda: ([list(r) for r in ASET], [])
+    assert gate.gate_score("test2", ["base_zs"], True, DOCS) == ""      # 되돌리면 통과
+
+
 def test_03_freeze_refused_with_uncommitted_file():
     t = sandbox(frozen=False)
     (t / "gen.py").write_text("G = 2\n", encoding="utf-8")

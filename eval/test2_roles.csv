@@ -1,0 +1,9 @@
+doc_id,role,note
+KR-DAIKIN-001,pending,sources.csv 집계 열(defa79b)
+KR-DAIKIN-002,pending,sources.csv 집계 열(defa79b)
+KR-DAIKIN-003,pending,sources.csv 집계 열(defa79b)
+KR-KNAUF-001,pending,sources.csv 집계 열(defa79b); 같은 그룹 KR-KNAUF-002 정답 유입
+KR-KZ-001,pending,sources.csv 집계 열(defa79b); 새 별칭표 문서 열에 원문 분류명
+KR-KZ-002,pending,sources.csv 집계 열(defa79b); 새 별칭표 문서 열에 원문 분류명
+KR-KZ-003,pending,sources.csv 집계 열(defa79b); 새 별칭표 문서 열에 원문 분류명
+KR-NEOGEN-001,pending,sources.csv 집계 열(defa79b); 새 별칭표 문서 열에 원문 분류명; 같은 그룹 KR-NEOGEN-002 정답 유입

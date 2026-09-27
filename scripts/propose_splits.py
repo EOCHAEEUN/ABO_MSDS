@@ -5,6 +5,9 @@
     sources.csv의 집계 열(n_ingredients · signal_word 등)은 읽지 않는다.
   - 기존 배정은 그대로 둔다. splits.csv에 이미 있는 split_group의 신규 문서는 그 그룹을 따르고,
     신규 그룹만 균형 배정한다.
+  - test2 목표는 주 분석 대상으로 센다: 역할 목록(eval/test2_roles.csv)의 main과, 점검 결과가 나올 때까지 자리를
+    차지하는 pending만 센다. exposed · oldform은 세지 않는다. 노출 · 점검 대기 문서가 있는 test2 그룹을 따르는
+    신규 문서는 주평가로 세지 않고 "영향받은 그룹"으로 표시한다.
   - 신규 국문 그룹 순서: sha256(JSON [SEED, split_group]) 오름차순. SEED는 고정(바꾸면 decisions.md에 기록).
   - 그룹마다 들어갈 수 있는 분할 중 부족분 비율 (목표 − 현재) / 목표가 가장 큰 곳. 그룹이 남은 부족분 안에
     들어가는 분할을 먼저 보고, 동률이면 test2 > val > train.
@@ -28,6 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from scripts.check_splits import exposure, norm_mfr  # noqa: E402
+from eval.test2_roles import read_roles  # noqa: E402
 
 SEED = "C-2026-09-27"
 META = ("doc_id", "lang", "form", "manufacturer", "split_group")
@@ -74,12 +78,19 @@ def follow(lang, splits_of_group):
     return "excluded", f"범위 밖 언어({lang})", "확인"
 
 
-def propose(existing, candidates, seen=None, seed=SEED):
-    """existing: splits.csv 행, candidates: 신규 문서(META 열), seen: {doc_id: 노출 경로}.
-    반환 (제안 행 목록, 배정 전 건수, 배정 후 건수)"""
+def propose(existing, candidates, seen=None, seed=SEED, roles=None):
+    """existing: splits.csv 행, candidates: 신규 문서(META 열), seen: {doc_id: 노출 경로},
+    roles: test2 역할 목록(None이면 test2 문서를 모두 센다). 반환 (제안 행 목록, 배정 전 건수, 배정 후 건수)"""
     seen = seen or {}
     live = [r for r in existing if r["split"] != "excluded"]
-    n = collections.Counter(cell(r["split"], r["form"]) for r in live if r["split"] in ("train", "val", "test2"))
+
+    def counts(r):          # test2는 주 분석 대상 자리만: main · pending(점검 전) · 역할 미기재
+        return r["split"] != "test2" or roles is None or roles.get(r["doc_id"], {}).get("role") in (None, "main", "pending")
+
+    n = collections.Counter(cell(r["split"], r["form"]) for r in live
+                            if r["split"] in ("train", "val", "test2") and counts(r))
+    affected = {r["split_group"] for r in live if r["split"] == "test2" and roles is not None
+                and roles.get(r["doc_id"], {}).get("role") in ("exposed", "pending")}
     before = {c: n[c] for c in TARGET}
     grp_splits = collections.defaultdict(set)
     for r in existing:
@@ -90,9 +101,9 @@ def propose(existing, candidates, seen=None, seed=SEED):
 
     out = {}
 
-    def put(r, split, why, check, order="-"):
+    def put(r, split, why, check, order="-", count=True):
         out[r["doc_id"]] = {"순서": order, **{k: r[k] for k in META}, "제안": split, "근거": why, "확인": check}
-        if split in ("train", "val", "test2") and r["lang"] == "ko":
+        if count and split in ("train", "val", "test2") and r["lang"] == "ko":
             n[cell(split, r["form"])] += 1
         if split and split != "excluded":
             mfr_at[norm_mfr(r["manufacturer"])].add((r["split_group"], split))
@@ -105,6 +116,10 @@ def propose(existing, candidates, seen=None, seed=SEED):
             if got is not None:
                 if got[0] == "test2" and r["doc_id"] in seen:
                     got = ("", got[1], f"개발 노출({', '.join(seen[r['doc_id']])}) → test2 불가, 사람 판단")
+                if got[0] == "test2" and r["split_group"] in affected:
+                    put(r, "test2", got[1], "영향받은 그룹(노출 · 점검 대기) — 주평가로 세지 않음, 역할은 사람 판단",
+                        count=False)
+                    continue
                 put(r, *got)
                 continue
         new_groups[r["split_group"]].append(r)
@@ -217,7 +232,11 @@ def main():
     if not cands:
         print("배정할 신규 문서 없음")
         return
-    rows, before, after = propose(existing, cands, exposure())
+    try:
+        roles = read_roles()
+    except ValueError as e:
+        sys.exit(f"[거부] test2 역할 목록: {e}")
+    rows, before, after = propose(existing, cands, exposure(), roles=roles)
 
     print(f"SEED {SEED} · 신규 {len(rows)}건")
     cols = ["순서", "doc_id", "split_group", "manufacturer", "lang", "form", "제안", "근거", "확인"]

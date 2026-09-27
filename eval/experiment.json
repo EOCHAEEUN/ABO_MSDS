@@ -20,7 +20,8 @@
       "core/normalize.py",
       "core/schema.py",
       "src/schema.py",
-      "eval/hazard_class_alias.csv"
+      "eval/hazard_class_alias.csv",
+      "eval/test2_roles.py"
     ],
     "packages": ["torch", "transformers", "peft", "bitsandbytes", "accelerate", "tokenizers"]
   },

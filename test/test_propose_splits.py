@@ -81,6 +81,17 @@ def test_05_exposed_or_shared_manufacturer_never_test2():
     assert pick(rows)["KR-W-001"] == "train" and "split_group 확인" in rows[0]["확인"], rows
 
 
+def test_07_test2_target_counts_main_and_pending_only():
+    ex = existing(train=50, val=15, t2_cur=4, t2_imp=10)
+    roles = {"KR-T2C-000": {"role": "main"}, "KR-T2C-001": {"role": "pending"},
+             "KR-T2C-002": {"role": "exposed"}, "KR-T2C-003": {"role": "exposed"}}
+    _, before, _ = ps.propose(ex, [], roles=roles)
+    assert before["test2/현행"] == 2, before                  # exposed 2건은 주 분석 자리로 세지 않음
+    rows, _, after = ps.propose(ex, [cand("KR-T2C-900", "T2C")], roles=roles)
+    assert pick(rows)["KR-T2C-900"] == "test2" and "영향받은 그룹" in rows[0]["확인"], rows
+    assert after["test2/현행"] == 2, after                    # 영향받은 그룹을 따른 문서도 세지 않음
+
+
 def test_06_only_metadata_columns_are_read():
     with tempfile.TemporaryDirectory() as d:
         p = os.path.join(d, "c.csv")

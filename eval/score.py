@@ -6,7 +6,8 @@
 
 outputs/{condition}/{split}/{doc_id}.json(infer.py 결과)을 정답과 비교해
 report/scores.csv에 (condition, split, subset, metric, value)로 기록한다.
-subset은 ko / en으로 나눠 쓰고 합산하지 않는다(기획서 보고 원칙).
+subset은 ko / en으로 나눠 쓰고 합산하지 않는다(기획서 보고 원칙). test2는 역할 목록(eval/test2_roles.csv)으로
+main(주 분석 대상) · oldform(구서식) · exposed(노출 보조평가)로 나누고, 각 목록의 모든 문서를 분모에 둔다.
 
   python eval/score.py --condition base_zs --split val
   python eval/score.py --condition qlora_final --split test      # 봉인 대조 통과해야 실행
@@ -56,6 +57,7 @@ from core.normalize import (  # noqa: E402
 from core.schema import check_schema, extract_json  # noqa: E402
 from eval.infer import base_doc, variant_texts  # noqa: E402
 from eval.gate import gate_score, sealed  # noqa: E402
+from eval.test2_roles import REPORT_ORDER, problems as role_problems, read_roles, subset_ids  # noqa: E402
 
 SPLITS_CSV = ROOT / "data" / "splits.csv"
 SCORES_CSV = ROOT / "report" / "scores.csv"
@@ -397,6 +399,70 @@ def upsert_scores(condition, split, rows):
             w.writerow({"condition": condition, "split": split, "subset": subset, "metric": metric, "value": fmt(value)})
 
 
+def subset_plan(split, doc_ids, splits, roles=None):
+    """{doc_id: subset}. test2는 역할 목록(eval/test2_roles.csv)의 main · oldform · exposed로, 나머지는 언어(ko/en)로.
+    test2 목록이 역할 목록과 어긋나거나 점검 대기(pending)가 남아 있으면 ValueError"""
+    if split != "test2":
+        return {d: splits[base_doc(d)]["lang"] for d in doc_ids}
+    roles = read_roles() if roles is None else roles
+    errs, _ = role_problems(list(splits.values()), roles, final=True)
+    if errs:
+        raise ValueError("test2 역할 목록 오류:\n  " + "\n  ".join(errs))
+    return {d: role for role, ds in subset_ids(doc_ids, roles) for d in ds}
+
+
+def score_docs(doc_ids, subset_of, splits, gold_dir, pred_dir, self_check=False, include_non_ghs=False, var=None):
+    """문서 목록 전체를 채점 → (subset별 Acc, 별칭표 밖 분류명, 문서별 상세).
+    목록의 모든 문서가 분모에 들어간다. 출력 파일이 없거나 파싱에 실패한 문서는 빈 예측으로 채점한다."""
+    var = var or {}
+    accs = defaultdict(Acc)
+    unknown = defaultdict(set)
+    details = {}
+    for doc_id in doc_ids:
+        gold_path = gold_dir / f"{base_doc(doc_id)}.json"
+        if not gold_path.exists():
+            sys.exit(f"정답 파일 없음: {gold_path}")
+        gold = json.loads(gold_path.read_text(encoding="utf-8"))
+        g_ok, g_err = check_schema(gold)
+        if not g_ok:
+            print(f"[경고] 정답 {doc_id}가 스키마를 어김: {g_err[:3]}")
+
+        if self_check:
+            pred, rec, err = gold, None, None
+        else:
+            pred, rec, err = load_prediction(pred_dir / f"{doc_id}.json")
+
+        lang = splits[base_doc(doc_id)]["lang"]
+        acc = accs[subset_of[doc_id]]
+        acc.n += 1
+        d = {"lang": lang} if subset_of[doc_id] == lang else {"lang": lang, "subset": subset_of[doc_id]}
+        if not self_check and (rec is None or rec.get("skipped")):
+            acc.missing += 1
+        if rec and not rec.get("skipped"):
+            acc.gen_time.append(rec["gen_time_sec"])
+            acc.in_tok.append(rec["input_tokens"])
+            acc.out_tok.append(rec["output_tokens"])
+            acc.hit_max += bool(rec.get("hit_max_new_tokens"))
+
+        if pred is None:
+            d["parse_error"] = err
+            pred = {}
+        else:
+            acc.parsed += 1
+            s_ok, s_err = check_schema(pred)
+            acc.schema_ok += s_ok
+            if not s_ok:
+                d["schema_errors"] = s_err[:10]
+        tp_ = TEXT_DIR / f"{doc_id}.txt"
+        source = var[doc_id] if var else (tp_.read_text(encoding="utf-8") if tp_.exists() else None)
+        d.update(score_doc(gold, pred, acc, include_non_ghs, unknown, source))
+        d["exact"], d["exact_ext"] = doc_exact(d, pred)
+        acc.exact += d["exact"]
+        acc.exact_ext += d["exact_ext"]
+        details[doc_id] = d
+    return accs, unknown, details
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--condition", help="outputs/ 아래 조건 폴더 이름 (base_zs, base_fs, qlora_r1, ...)")
@@ -420,62 +486,22 @@ def main():
     if args.split == "train":
         fs = set(json.loads(FEWSHOT_JSON.read_text(encoding="utf-8")).get("fewshot_doc_ids", []))
         doc_ids = [d for d in doc_ids if d not in fs]
+    try:
+        subset_of = subset_plan(args.split, doc_ids, splits)
+    except ValueError as e:
+        sys.exit(f"[거부] {e}")
     # test·test2: 정답을 읽기 전에 게이트(허용 조건 · 추론 완료 · 실행 기록 · 봉인 · 실험 고정). 채점 파일이 고정 시점과
     # 다르면 결과를 "채점 기준 변경" 이름으로 따로 기록한다
     tag = gate_score(args.split, [args.condition], args.allow_test, doc_ids) if args.condition else ""
     gold_dir = GOLD_DIRS[args.split]
     pred_dir = OUTPUT_ROOT / (args.condition or "_self_check") / args.split
 
-    accs = defaultdict(Acc)
-    unknown = defaultdict(set)
-    details = {}
-    for doc_id in doc_ids:
-        gold_path = gold_dir / f"{base_doc(doc_id)}.json"
-        if not gold_path.exists():
-            sys.exit(f"정답 파일 없음: {gold_path}")
-        gold = json.loads(gold_path.read_text(encoding="utf-8"))
-        g_ok, g_err = check_schema(gold)
-        if not g_ok:
-            print(f"[경고] 정답 {doc_id}가 스키마를 어김: {g_err[:3]}")
-
-        if args.self_check:
-            pred, rec, err = gold, None, None
-        else:
-            pred, rec, err = load_prediction(pred_dir / f"{doc_id}.json")
-
-        lang = splits[base_doc(doc_id)]["lang"]
-        acc = accs[lang]
-        acc.n += 1
-        d = {"lang": lang}
-        if not args.self_check and (rec is None or rec.get("skipped")):
-            acc.missing += 1
-        if rec and not rec.get("skipped"):
-            acc.gen_time.append(rec["gen_time_sec"])
-            acc.in_tok.append(rec["input_tokens"])
-            acc.out_tok.append(rec["output_tokens"])
-            acc.hit_max += bool(rec.get("hit_max_new_tokens"))
-
-        if pred is None:
-            d["parse_error"] = err
-            pred = {}
-        else:
-            acc.parsed += 1
-            s_ok, s_err = check_schema(pred)
-            acc.schema_ok += s_ok
-            if not s_ok:
-                d["schema_errors"] = s_err[:10]
-        tp_ = TEXT_DIR / f"{doc_id}.txt"
-        source = var[doc_id] if var else (tp_.read_text(encoding="utf-8") if tp_.exists() else None)
-        d.update(score_doc(gold, pred, acc, args.include_non_ghs, unknown, source))
-        d["exact"], d["exact_ext"] = doc_exact(d, pred)
-        acc.exact += d["exact"]
-        acc.exact_ext += d["exact_ext"]
-        details[doc_id] = d
-
-    rows = [(subset, m, v) for subset in sorted(accs) for m, v in accs[subset].rows()]
+    accs, unknown, details = score_docs(doc_ids, subset_of, splits, gold_dir, pred_dir,
+                                        args.self_check, args.include_non_ghs, var)
+    subsets = [s for s in REPORT_ORDER if s in accs] if args.split == "test2" else sorted(accs)
+    rows = [(subset, m, v) for subset in subsets for m, v in accs[subset].rows()]
 
     # 화면 출력: 지표 × subset 표
-    subsets = sorted(accs)
     table = {s: dict(accs[s].rows()) for s in subsets}
     print(f"\n[{args.condition or 'self-check'} / {args.split}]  " + "  ".join(f"{s}={accs[s].n}건" for s in subsets))
     print(f"{'metric':<24}" + "".join(f"{s:>10}" for s in subsets))

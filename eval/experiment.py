@@ -13,7 +13,11 @@ C안 최종 평가 실험 정의 고정 — eval/experiment.json
   eval/gate.py가 "채점 기준 변경" 결과로 따로 기록한다(최초 결과를 덮어쓰지 않음).
 
 고정 조건: max_new_tokens와 모든 qlora 어댑터가 정해져 있고, 고정 대상 파일이 git에 커밋돼 있어야 한다
-(미커밋 변경이 있으면 커밋 해시가 실제 코드를 가리키지 못한다).
+(미커밋 변경이 있으면 커밋 해시가 실제 코드를 가리키지 못한다). test2 역할 목록(eval/test2_roles.csv)은
+splits.csv의 test2와 맞고 점검 대기(pending)가 없어야 한다 — 주 분석 대상을 결과 전에 고정하기 위해서다.
+  분석 대상 목록(test2 문서마다 doc_id · 역할 · 언어 · 서식 · split_group)은 고정 기록에 그대로 남긴다. 고정 뒤
+  목록이 바뀌면 출력 생성 · 채점을 모두 거부한다(채점 파일 변경처럼 꼬리표를 달고 허용하지 않는다). 대상을 바꾼
+  분석은 결정 기록 후 별도 사후 분석으로 한다.
 """
 import argparse
 import hashlib
@@ -25,6 +29,10 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from eval.test2_roles import check_files as test2_role_check, current_analysis_set  # noqa: E402
+
 EXPERIMENT_JSON = ROOT / "eval" / "experiment.json"
 FEWSHOT_JSON = ROOT / "eval" / "fewshot.json"
 TEXT_DIR = ROOT / "data" / "text"
@@ -149,6 +157,8 @@ def snapshot(exp):
     rev = model_revision(c["base_model"])
     if rev is None:
         problems.append(f"Base 모델 리비전을 찾지 못함({c['base_model']}, HF 캐시)")
+    aset, p = analysis_state()
+    problems += [f"test2 분석 대상 목록: {x}" for x in p]
     return {
         "definition_sha256": definition_sha(exp),
         "generation_sha256": gen,
@@ -157,7 +167,19 @@ def snapshot(exp):
         "python": platform.python_version(),
         "packages": package_versions(c["packages"]),
         "conditions": conds,
+        "test2_analysis_set": aset,
     }, problems
+
+
+def roles_problems():
+    """test2 역할 목록 오류(eval/test2_roles.py). 테스트에서 바꿔 끼울 수 있게 함수로 둔다"""
+    errs, _ = test2_role_check(final=True)
+    return errs
+
+
+def analysis_state():
+    """test2 분석 대상 목록 → (목록, 문제). 테스트에서 바꿔 끼울 수 있게 함수로 둔다"""
+    return current_analysis_set()
 
 
 # ---------------------------------------------------------------- 고정 · 대조
@@ -171,6 +193,7 @@ def freeze(force=False):
         problems.append("common.max_new_tokens가 정해지지 않음(새 라벨로 pipeline/length_stats.py 재측정 후 기입)")
     snap, p = snapshot(exp)
     problems += p
+    problems += [f"test2 역할 목록: {e}" for e in roles_problems()]
     if unclean := git_unclean(c["generation_files"] + c["scoring_files"] + ["eval/fewshot.json"]):
         problems.append(f"커밋되지 않은 고정 대상 파일: {unclean}")
     if problems:
@@ -197,6 +220,12 @@ def check(scope="generate"):
     if git_unclean(["eval/experiment.json"]):
         problems.append("eval/experiment.json이 커밋되지 않음(고정 직후 커밋할 것)")
     scoring_changed = snap["scoring_sha256"] != fz["scoring_sha256"]
+    if snap["test2_analysis_set"] != fz.get("test2_analysis_set"):
+        was = {r[0]: r for r in fz.get("test2_analysis_set") or []}
+        now = {r[0]: r for r in snap["test2_analysis_set"]}
+        diff = sorted(d for d in set(was) | set(now) if was.get(d) != now.get(d))
+        problems.append(f"고정 뒤 test2 분석 대상 목록(doc_id · 역할 · 언어 · 서식 · 그룹)이 바뀜 {diff} — "
+                        "생성 · 채점 불가. 대상을 바꾼 분석은 결정 기록 후 별도 사후 분석으로")
     if scope == "generate":
         for key in ("generation_sha256", "model_revision", "python", "packages", "conditions"):
             if snap[key] != fz[key]:

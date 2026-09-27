@@ -11,6 +11,8 @@
   그룹이 1개뿐인 구간은 신뢰구간을 내지 않는다. 부호 검정은 문서 독립을 가정하므로 참고로만 본다.
 - 필드 지표(GHS·H코드·CAS·pair·nocas F1, 스키마·제품명)도 같은 방식으로 micro F1 차이의 신뢰구간을 낸다.
 - 서식(현행·수입품 국문판·구서식·영문)별로 나눠 보고한다. 합산 결과는 "전체" 행으로 따로 둔다.
+- test2는 역할 목록(eval/test2_roles.csv)으로 나눈다: 주 분석 대상(C 결론, 그 안에서 서식별) · 구서식 · 노출 보조평가.
+  test2에는 "전체"를 두지 않는다(합산 금지). 채점기(eval/score.py)와 같은 목록 · 같은 분모를 쓴다.
 - test·test2는 봉인 대조를 통과해야 돈다. 채점 규칙은 eval/score.py 그대로다(같은 함수를 쓴다).
 """
 import argparse
@@ -27,7 +29,8 @@ sys.path.insert(0, str(ROOT))
 
 from eval.infer import base_doc, variant_texts  # noqa: E402
 from eval.score import (FEWSHOT_JSON, GOLD_DIRS, OUTPUT_ROOT, SPLITS, TEXT_DIR, Acc,  # noqa: E402
-                        doc_exact, load_prediction, read_splits, score_doc)
+                        doc_exact, load_prediction, read_splits, score_doc, subset_plan)
+from eval.test2_roles import REPORT_ORDER  # noqa: E402
 from eval.gate import gate_score  # noqa: E402
 from core.schema import check_schema  # noqa: E402
 
@@ -44,6 +47,35 @@ def doc_ids_for(split, splits):
         fs = set(json.loads(FEWSHOT_JSON.read_text(encoding="utf-8")).get("fewshot_doc_ids", []))
         ids = [d for d in ids if d not in fs]
     return ids
+
+
+TEST2_TITLES = {"main": "주 분석 대상 (C 결론)", "oldform": "구서식 (따로 보고, 결론에 넣지 않음)",
+                "exposed": "노출 보조평가 (따로 보고, 결론에 넣지 않음)"}
+
+
+def sections_for(split, ids, splits, roles=None):
+    """[(제목, 문서 목록)]. test2는 역할별(주 분석 대상은 서식별도), 나머지는 전체 + 서식별.
+    test2 역할 목록이 어긋나면 ValueError(eval.score.subset_plan과 같은 검사)"""
+    def by_form(docs):
+        out = defaultdict(list)
+        for d in docs:
+            out[splits[base_doc(d)]["form"]].append(d)
+        return out
+
+    if split != "test2":
+        forms = by_form(ids)
+        return [("전체", ids)] + ([(f"서식: {f}", forms[f]) for f in sorted(forms)] if len(forms) > 1 else [])
+    role_of = subset_plan(split, ids, splits, roles)
+    out = []
+    for role in REPORT_ORDER:
+        docs = sorted(d for d in ids if role_of[d] == role)
+        if not docs:
+            continue
+        out.append((TEST2_TITLES[role], docs))
+        forms = by_form(docs)
+        if role == "main" and len(forms) > 1:
+            out += [(f"주 분석 대상 · 서식: {f}", forms[f]) for f in sorted(forms)]
+    return out
 
 
 def per_doc(cond, split, ids):
@@ -161,6 +193,10 @@ def main():
 
     splits = read_splits()
     ids = doc_ids_for(args.split, splits)
+    try:
+        sections = sections_for(args.split, ids, splits)
+    except ValueError as e:
+        sys.exit(f"[거부] {e}")
     # test·test2: 정답을 읽기 전에 게이트(두 조건 모두 허용 조건 · 추론 완료 · 실행 기록 · 봉인 · 실험 고정)
     tag = gate_score(args.split, [args.cond_a, args.cond_b], args.allow_test, ids)
     a, b = per_doc(args.cond_a, args.split, ids), per_doc(args.cond_b, args.split, ids)
@@ -172,13 +208,8 @@ def main():
              f"{'(같은 문서의 표기 변형도 한 그룹으로 함께 뽑힌다)' if args.split == 'val_var' else ''}. "
              "차이는 뒤 조건 − 앞 조건. 부호 검정은 문서 독립을 가정하므로 참고용. "
              "그룹이 적으면 신뢰구간 추정 자체가 불안정하다(문서 수와 그룹 수를 함께 볼 것).", ""]
-    lines += section("전체", a, b, ids, args.cond_a, args.cond_b, rng, group_of)
-    by_form = defaultdict(list)
-    for d in ids:
-        by_form[splits[base_doc(d)]["form"]].append(d)
-    if len(by_form) > 1:
-        for form in sorted(by_form):
-            lines += section(f"서식: {form}", a, b, by_form[form], args.cond_a, args.cond_b, rng, group_of)
+    for title, docs in sections:
+        lines += section(title, a, b, docs, args.cond_a, args.cond_b, rng, group_of)
     text = "\n".join(lines)
     print(text)
     if args.out:
