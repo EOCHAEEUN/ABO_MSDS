@@ -14,21 +14,21 @@
   "supplier": {
     "company_name": "OCI㈜",
     "address": null,
-    "emergency_phone": "063-460-6191"
+    "emergency_phone": "063-460-6321"
   },
   "ingredients": [
     {
       "chemical_name": "수산화나트륨",
       "cas_number": "1310-73-2",
       "ke_number": null,
-      "content": "24~26",
+      "content": "49~51",
       "is_substitute_data": false
     },
     {
       "chemical_name": "물",
       "cas_number": "7732-18-5",
       "ke_number": null,
-      "content": "74~76",
+      "content": "49~51",
       "is_substitute_data": false
     }
   ],
@@ -36,6 +36,10 @@
     {
       "hazard_class": "금속 부식성 물질",
       "category": "구분 1"
+    },
+    {
+      "hazard_class": "급성 독성-경피",
+      "category": "구분 4"
     },
     {
       "hazard_class": "급성 독성-경구",
@@ -62,6 +66,10 @@
     {
       "code": "H302",
       "text": "삼키면 유해함"
+    },
+    {
+      "code": "H312",
+      "text": "피부와 접촉하면 유해함"
     },
     {
       "code": "H314",

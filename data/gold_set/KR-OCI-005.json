@@ -44,7 +44,7 @@
     },
     {
       "hazard_class": "피부 부식성/피부 자극성",
-      "category": "구분 1(1A/1B/1C)"
+      "category": "구분 1"
     },
     {
       "hazard_class": "심한 눈 손상성/눈 자극성",
@@ -52,7 +52,7 @@
     },
     {
       "hazard_class": "특정표적장기 독성(1회 노출)",
-      "category": "구분 3(호흡기 자극)"
+      "category": "구분 3"
     },
     {
       "hazard_class": "특정표적장기 독성(반복 노출)",
