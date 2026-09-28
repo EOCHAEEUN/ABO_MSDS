@@ -72,6 +72,22 @@ Aspiration Toxicity,흡인 유해성,en,EN-WD40-001 EN-WD40-002,
 흡인 유해성,흡인 유해성,ko,KR-CKP-001 KR-HANIL-005 KR-HANIL-006 KR-KUMHO-001 KR-SOIL-001,
 흡인유해성,흡인 유해성,ko,KR-HANIL-004,
 흡인유해성물질,흡인 유해성,ko,KR-NOROO-005,
+급성 독성 (경구),급성 독성(경구),ko,KR-NEOGEN-001 KR-NEOGEN-002,[김건하·Rule Engine 추가] 괄호 앞뒤 공백
+급성 독성 (경피),급성 독성(경피),ko,KR-NEOGEN-001 KR-NEOGEN-002,[김건하·Rule Engine 추가] 괄호 앞뒤 공백
+"급성 독성 (흡입: 분진, 미스트)",급성 독성(흡입),ko,KR-NEOGEN-002,[김건하·Rule Engine 추가] 흡입 물리형태는 정규형에서 합침
+급성 독성 물질 경구,급성 독성(경구),ko,KR-DUKSAN-001,[김건하·Rule Engine 추가]
+급성독성(경구),급성 독성(경구),ko,KR-GSC-003,[김건하·Rule Engine 추가] 공백 없는 표기
+급성 수생 환경유해성,급성 수생환경 유해성,ko,KR-GSC-003,[김건하·Rule Engine 추가] 띄어쓰기 변형
+만성 수생 환경유해성,만성 수생환경 유해성,ko,KR-GSC-003,[김건하·Rule Engine 추가] 띄어쓰기 변형
+수생 환경유해성물질 급성,급성 수생환경 유해성,ko,KR-NOROO-007,[김건하·Rule Engine 추가]
+수생 환경유해성물질 만성,만성 수생환경 유해성,ko,KR-NOROO-007,[김건하·Rule Engine 추가]
+"수생환경 유해성, 만성 유해성",만성 수생환경 유해성,ko,KR-HENKEL-001,[김건하·Rule Engine 추가]
+수유독성,수유독성,ko,KR-NEOGEN-002,[김건하·Rule Engine 추가] 구분 번호 없는 추가 구분. GHS 정식 분류명은 아니나 H362와 짝을 이룸
+심한 눈 손상 또는 자극성 물질,심한 눈 손상성/눈 자극성,ko,KR-DUKSAN-001,[김건하·Rule Engine 추가]
+특정 표적장기 독성 (1 회 노출),특정표적장기 독성(1회 노출),ko,KR-NEOGEN-002,[김건하·Rule Engine 추가] 띄어쓰기 변형
+특정 표적장기 독성 (반복 노출),특정표적장기 독성(반복 노출),ko,KR-NEOGEN-002,[김건하·Rule Engine 추가] 띄어쓰기 변형
+특정표적장기 독성 - 1회노출,특정표적장기 독성(1회 노출),ko,KR-HENKEL-001,[김건하·Rule Engine 추가]
+피부 과민성 물질,피부 과민성,ko,KR-HENKEL-001,[김건하·Rule Engine 추가]
 
 [category 특수값],,,,
 액화가스,액화가스,ko,KR-OCI-005 EN-3M-001,고압가스의 구분(번호 없음). 영문 Liquefied gas도 액화가스로 정규화
