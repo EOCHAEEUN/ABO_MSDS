@@ -20,7 +20,17 @@
 
 test 규칙 (docs/plan.md 3.3 · 9절 단계 7~8)
   test 문서·텍스트는 저장소 밖(test 담당)에 있다. --allow-test + 실험 고정(eval/experiment.json) +
-  저장소 밖 --text-dir이 모두 있어야 돈다. 비교군마다 1회, --overwrite · --limit 불가.
+  저장소 밖 --text-dir · --out-root가 모두 있어야 돈다. 비교군마다 1회, --overwrite · --limit 불가.
+  - 비교군은 base_zs · base_fs · qlora_final만(plan 5절). qlora_r1 · r2는 val에서만 비교한다.
+  - --max-new-tokens를 주면 experiment.json의 값과 같아야 하고, qlora_final의 --adapter는 폴더 해시가
+    experiment.json의 adapter_sha256과 같아야 한다(고정한 뒤 다른 값·다른 어댑터로 도는 것을 막음).
+  - 출력(모델 출력 원문 · _log.jsonl)은 --out-root 아래 {condition}/test/에 생긴다. 저장소 안에 두지 않는다.
+
+eval/experiment.json (단계 7에서 PM이 커밋)
+  {"max_new_tokens": 1268,                       # train·val 정답 최장 토큰 × 1.3 (plan 6절)
+   "adapter": "runs/MMDD_r1/adapter",           # qlora_final로 고른 어댑터(참고용 경로)
+   "adapter_sha256": "..."}                     # python3 -c "from eval.infer import sha256_dir; print(sha256_dir('<폴더>'))"
+  채점기 · 별칭표 해시 등 다른 키를 더 넣어도 된다. 위 두 키(max_new_tokens · adapter_sha256)는 필수.
 """
 import argparse
 import csv
@@ -37,6 +47,7 @@ sys.path.insert(0, str(ROOT))
 from core.prompt import CHAT_TEMPLATE_KWARGS, build_messages  # noqa: E402
 
 CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_final")
+TEST_CONDITIONS = ("base_zs", "base_fs", "qlora_final")  # test는 이 셋만 1회씩(plan 5절 · 9절 단계 8)
 SPLITS = ("val", "train", "val_en", "test")  # train: Base 난이도 진단 전용(few-shot 예시 제외, 보고 금지)
 
 SPLITS_CSV = ROOT / "data" / "splits.csv"
@@ -51,7 +62,7 @@ DEFAULT_MAX_NEW_TOKENS = 2048
 # 실험 고정 전 임시값(2026-09-28, docs/plan.md 6절 "생성 길이 부족" 참고).
 # - 진짜 고정값은 train·val 정답 최장 토큰 × 1.3이다. 새 라벨이 나오면 pipeline/length_stats.py로 재서
 #   eval/experiment.json에 채우고 실험을 고정한다(단계 7). 그 전까지 이 상수는 val·train 진단에만 쓰인다
-#   (test는 이 상수를 쓰지 않는다 — 위 264행).
+#   (test는 이 상수를 쓰지 않는다 — main()에서 experiment.json 값을 쓴다).
 # - 1024는 부족했다: fixture 문서(KR-HENKEL-001, 입력 2,141토큰)가 1024에서 잘려 JSON이 깨졌다. 옛 라벨
 #   기준 정답 최장이 약 975토큰이라 × 1.3 ≈ 1,268이었는데도 1024로는 못 미친 사례라, 여유를 더 둔다.
 # - 4096(=r1.yaml의 max_length)을 그대로 쓰지 않는다. max_length는 학습 때 입력+정답 합계 길이의 상한이고,
@@ -219,6 +230,17 @@ def outside_repo(path):
         return True
 
 
+def load_experiment():
+    """eval/experiment.json(단계 7 고정값). 필수 키가 없으면 거부."""
+    if not EXPERIMENT_JSON.exists():
+        sys.exit("[거부] eval/experiment.json(실험 고정)이 없다. 단계 7(PM 고정 커밋) 뒤에만 test를 돌린다")
+    exp = json.loads(EXPERIMENT_JSON.read_text(encoding="utf-8"))
+    lacking = [k for k in ("max_new_tokens", "adapter_sha256") if not exp.get(k)]
+    if lacking:
+        sys.exit(f"[거부] eval/experiment.json에 {lacking}가 없다")
+    return exp
+
+
 def check_args(args):
     if args.condition.startswith("qlora") and not args.adapter:
         sys.exit(f"{args.condition}에는 --adapter(어댑터 폴더)가 필요함")
@@ -231,12 +253,21 @@ def check_args(args):
     if args.split == "test":
         if not args.allow_test:
             sys.exit("[거부] test 추론은 --allow-test가 있어야 한다(모델·실험 고정 뒤, 비교군마다 1회)")
-        if not EXPERIMENT_JSON.exists():
-            sys.exit("[거부] eval/experiment.json(실험 고정)이 없다. 단계 7(PM 고정 커밋) 뒤에만 test를 돌린다")
+        if args.condition not in TEST_CONDITIONS:
+            sys.exit(f"[거부] test 비교군은 {TEST_CONDITIONS}뿐이다. qlora_r1 · r2는 val에서 비교해 qlora_final로 고른다")
+        exp = load_experiment()
         if not args.text_dir or not outside_repo(args.text_dir):
             sys.exit("[거부] test 텍스트는 저장소 밖에 있어야 한다: --text-dir <test 담당이 넘긴 폴더>")
+        if not outside_repo(args.out_root):
+            sys.exit("[거부] test 출력은 저장소 밖에 둔다: --out-root <저장소 밖 폴더>")
         if args.overwrite or args.limit:
             sys.exit("[거부] test에는 --overwrite · --limit을 쓰지 않는다(비교군마다 전체 문서 1회)")
+        if args.max_new_tokens is not None and args.max_new_tokens != exp["max_new_tokens"]:
+            sys.exit(f"[거부] --max-new-tokens {args.max_new_tokens} ≠ eval/experiment.json의 {exp['max_new_tokens']}. "
+                     "test는 고정값으로만 돈다(생략하면 고정값을 씀)")
+        if args.adapter and sha256_dir(args.adapter) != exp["adapter_sha256"]:
+            sys.exit(f"[거부] --adapter {args.adapter}의 해시가 eval/experiment.json의 adapter_sha256과 다르다"
+                     f"(고정한 어댑터: {exp.get('adapter')})")
 
 
 def select_docs(args, splits, text_dir):
@@ -268,12 +299,11 @@ def main(argv=None):
     ap.add_argument("--splits", default=SPLITS_CSV, help="분할표(코드 점검 때 test/fixtures/splits.csv)")
     ap.add_argument("--text-dir", help="1~3항 텍스트 폴더(기본 data/text, test는 저장소 밖 폴더 필수)")
     ap.add_argument("--label-dir", default=LABEL_DIR, help="few-shot 예시 정답 폴더(base_fs만 씀)")
-    ap.add_argument("--out-root", default=OUTPUT_ROOT, help="출력 루트(기본 outputs/)")
+    ap.add_argument("--out-root", default=OUTPUT_ROOT, help="출력 루트(기본 outputs/, test는 저장소 밖 폴더 필수)")
     args = ap.parse_args(argv)
     check_args(args)
     if args.max_new_tokens is None:
-        args.max_new_tokens = (json.loads(EXPERIMENT_JSON.read_text(encoding="utf-8"))["max_new_tokens"]
-                               if args.split == "test" else DEFAULT_MAX_NEW_TOKENS)
+        args.max_new_tokens = load_experiment()["max_new_tokens"] if args.split == "test" else DEFAULT_MAX_NEW_TOKENS
 
     text_dir = Path(args.text_dir or TEXT_DIR)
     splits = {} if args.split == "test" else read_splits(args.splits)
@@ -320,7 +350,8 @@ def main(argv=None):
             print(f"  ({n}/{len(todo)}) {doc_id}  {sec:.1f}s  in={n_in} out={n_out}{flag}")
         append_log(out_dir, rec)
 
-    print(f"완료 → {out_dir}   다음: python3 eval/score.py --condition {args.condition} --split {args.split}")
+    nxt = " --allow-test --out-root <같은 폴더> --label-dir · --subset-csv · --text-dir <저장소 밖>" if args.split == "test" else ""
+    print(f"완료 → {out_dir}   다음: python3 eval/score.py --condition {args.condition} --split {args.split}{nxt}")
 
 
 if __name__ == "__main__":

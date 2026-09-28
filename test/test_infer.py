@@ -81,6 +81,46 @@ class InferTest(unittest.TestCase):
                 infer.main(argv)
             self.assertIn(msg, str(cm.exception))
 
+    def test_test_split_gates(self):
+        """test: 저장소 밖 --out-root, 비교군 3개, experiment.json의 max_new_tokens · adapter_sha256과 대조"""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            adapter = tmp / "adapter"
+            adapter.mkdir()
+            (adapter / "adapter_config.json").write_text("{}", encoding="utf-8")
+            other = tmp / "other_adapter"
+            other.mkdir()
+            (other / "adapter_config.json").write_text('{"r": 8}', encoding="utf-8")
+            exp = tmp / "experiment.json"
+            exp.write_text(json.dumps({"max_new_tokens": 1300, "adapter": "runs/x/adapter",
+                                       "adapter_sha256": infer.sha256_dir(adapter)}), encoding="utf-8")
+            text_dir = tmp / "text"  # test 텍스트는 저장소 밖이어야 하므로 fixture를 복사
+            text_dir.mkdir()
+            for d in VAL_IDS:
+                (text_dir / f"{d}.txt").write_text((FIX / "text" / f"{d}.txt").read_text(encoding="utf-8"),
+                                                   encoding="utf-8")
+            base = ["--split", "test", "--allow-test", "--text-dir", str(text_dir), "--base", "dummy"]
+            out = ["--out-root", str(tmp / "out")]
+            cases = [
+                (["--condition", "base_zs", *base], "--out-root"),  # 기본 outputs/(저장소 안)
+                (["--condition", "base_zs", *base, "--out-root", str(ROOT / "outputs")], "--out-root"),
+                (["--condition", "qlora_r1", *base, *out, "--adapter", str(adapter)], "비교군"),
+                (["--condition", "base_zs", *base, *out, "--max-new-tokens", "2048"], "experiment.json의 1300"),
+                (["--condition", "qlora_final", *base, *out, "--adapter", str(other)], "adapter_sha256"),
+            ]
+            with mock.patch.object(infer, "EXPERIMENT_JSON", exp):
+                for argv, msg in cases:
+                    with self.subTest(argv=argv), self.assertRaises(SystemExit) as cm:
+                        infer.main(argv)
+                    self.assertIn(msg, str(cm.exception))
+                # 고정값과 같으면 돈다: 저장소 밖 출력, 생성 길이는 experiment.json 값
+                with mock.patch.object(infer, "load_model", return_value=(None, None)), \
+                     mock.patch.object(infer, "generate", side_effect=fake_generate):
+                    infer.main(["--condition", "qlora_final", *base, *out, "--adapter", str(adapter),
+                                "--max-new-tokens", "1300"])
+            run = json.loads((tmp / "out" / "qlora_final" / "test" / "_run.jsonl").read_text(encoding="utf-8"))
+            self.assertEqual(run["max_new_tokens"], 1300)
+
 
 if __name__ == "__main__":
     unittest.main()

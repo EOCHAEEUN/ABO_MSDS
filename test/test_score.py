@@ -8,8 +8,11 @@ self-check(정답 = 예측)는 "다 맞으면 1.0"만 확인하므로, 파일럿
 
   python3 test/test_score.py -v
 """
+import contextlib
 import copy
+import io
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -20,6 +23,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from unittest import mock  # noqa: E402
+
+from eval import score  # noqa: E402
 from eval.score import Acc, doc_exact, score_doc, score_docs  # noqa: E402
 
 FIX = ROOT / "test" / "fixtures"
@@ -190,6 +196,71 @@ class ScoreDocsFileTest(unittest.TestCase):
                            cwd=ROOT, capture_output=True, text=True)
         self.assertNotEqual(r.returncode, 0)
         self.assertIn("거부", r.stderr)
+
+
+class TestSplitTest(unittest.TestCase):
+    """test 채점: 저장소 밖 출력 강제, 별칭표 밖 분류명은 화면 대신 파일, 최초 채점 보존"""
+    UNKNOWN = "별칭표에없는분류명XYZ"
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        for sub in ("labels", "text"):
+            (self.tmp / sub).mkdir()
+        pred_dir = self.tmp / "out" / "base_zs" / "test"
+        pred_dir.mkdir(parents=True)
+        rows = ["doc_id,subset"]
+        for doc_id in (GSC, NOROO):
+            shutil.copy(FIX / "labels" / f"{doc_id}.json", self.tmp / "labels")
+            shutil.copy(FIX / "text" / f"{doc_id}.txt", self.tmp / "text")
+            pred = label(doc_id)
+            pred["ghs_classification"].append({"hazard_class": self.UNKNOWN, "category": "구분 1"})
+            (pred_dir / f"{doc_id}.json").write_text(json.dumps(pred, ensure_ascii=False), encoding="utf-8")
+            rows.append(f"{doc_id},현행")
+        (self.tmp / "subset.csv").write_text("\n".join(rows) + "\n", encoding="utf-8")
+        self.exp = self.tmp / "experiment.json"
+        self.exp.write_text('{"max_new_tokens": 1300, "adapter_sha256": "x"}', encoding="utf-8")
+        self.pred_dir = pred_dir
+
+    def argv(self, out_root=None):
+        return ["--condition", "base_zs", "--split", "test", "--allow-test",
+                "--out-root", str(out_root or self.tmp / "out"), "--label-dir", str(self.tmp / "labels"),
+                "--subset-csv", str(self.tmp / "subset.csv"), "--text-dir", str(self.tmp / "text")]
+
+    def run_score(self, argv):
+        buf = io.StringIO()
+        with mock.patch.object(score, "EXPERIMENT_JSON", self.exp), \
+             mock.patch.object(score, "upsert_scores"), contextlib.redirect_stdout(buf):
+            score.main(argv)
+        return buf.getvalue()
+
+    def test_refuses_out_root_or_text_dir_inside_repo(self):
+        for argv in (self.argv(out_root=ROOT / "outputs"),
+                     [a if a != str(self.tmp / "text") else str(ROOT / "data" / "text") for a in self.argv()],
+                     self.argv() + ["--no-write"]):
+            with self.subTest(argv=argv), self.assertRaises(SystemExit) as cm:
+                self.run_score(argv)
+            self.assertIn("거부", str(cm.exception))
+
+    def test_unknown_classes_go_to_file_not_screen_and_first_score_kept(self):
+        out = self.run_score(self.argv())
+        self.assertNotIn(self.UNKNOWN, out)
+        self.assertNotIn(GSC, out)
+        self.assertIn(self.UNKNOWN, (self.pred_dir / score.UNKNOWN_FILE).read_text(encoding="utf-8"))
+        first = self.pred_dir / score.FIRST_FILE
+        meta = json.loads(first.read_text(encoding="utf-8").splitlines()[0])
+        self.assertEqual(meta["scorer_sha256"], score.sha256_files(score.SCORER_FILES))
+        self.assertTrue((self.pred_dir / score.FIRST_DETAIL_FILE).exists())
+        before = first.read_text(encoding="utf-8")
+
+        # 재채점(예측이 바뀌어도) → 최초 기록은 그대로, 별칭표 밖 목록은 새 결과로
+        for doc_id in (GSC, NOROO):
+            (self.pred_dir / f"{doc_id}.json").write_text(json.dumps(label(doc_id), ensure_ascii=False),
+                                                          encoding="utf-8")
+        out = self.run_score(self.argv())
+        self.assertIn("재채점", out)
+        self.assertEqual(first.read_text(encoding="utf-8"), before)
+        self.assertFalse((self.pred_dir / score.UNKNOWN_FILE).exists())
 
 
 if __name__ == "__main__":

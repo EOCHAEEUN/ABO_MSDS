@@ -8,17 +8,20 @@ subset은 val·val_en은 언어(ko/en), test는 test 담당이 넘긴 서식 목
 
   python3 eval/score.py --condition base_zs --split val
   python3 eval/score.py --split val --self-check                  # 정답을 예측으로 넣어 1.0이 나오는지 점검
-  python3 eval/score.py --condition qlora_final --split test --allow-test --label-dir <저장소 밖> --subset-csv <저장소 밖>
+  python3 eval/score.py --condition qlora_final --split test --allow-test --out-root <저장소 밖> \
+                         --label-dir <저장소 밖> --subset-csv <저장소 밖> --text-dir <저장소 밖>
   # 코드 점검(fixture, 옛 라벨): --splits test/fixtures/splits.csv --label-dir test/fixtures/labels \
   #                              --text-dir test/fixtures/text --split val --self-check
 
 채점 규칙 (docs/plan.md 5절)
 - 파싱률·스키마 준수율: 전체 문서 기준. 출력 파일이 없거나 NOT_FOUND로 건너뛴 문서도 실패로 센다.
 - 파싱에 실패한 문서는 "빈 예측"으로 보고 모든 필드를 채점한다(정답 항목은 전부 FN).
-- 제품명: 공백 제거 후 (상태, 값) 완전 일치.
+- 제품명: (상태, 값) 완전 일치. 값은 비교할 때만 NFKC · 괄호 부기 · 쉼표류 · 공백 제거 · 소문자로 맞춘다
+  (core/normalize.py norm_product_name. 정답에는 원문 괄호를 그대로 둔다).
 - 신호어: 위험/경고 정규화 후 (상태, 값) 완전 일치.
 - GHS 분류: hazard_class_alias.csv로 정규 분류명으로 바꾼 뒤 (정규 분류명, 구분 N) 집합 비교 → micro P/R/F1.
-  별칭표 밖의 분류명은 공백만 무시하고 비교하며, 목록을 따로 출력한다(별칭표 보강용).
+  별칭표 밖의 분류명은 공백만 무시하고 비교하며, 목록을 따로 남긴다(별칭표 보강용). val 등은 화면에 출력하고,
+  test는 화면에 내지 않고 저장소 밖 _unknown_hazard_classes.txt에만 쓴다(test 담당이 보고 별칭표 행 추가, plan 5절).
   "(GHS 외 ...)"로 정규화되는 항목은 기본 제외(--include-non-ghs로 포함, 착수 회의 판정 대기).
 - 분류·문구 목록 상태(기재/자료없음/해당없음): 문서별 일치율. 해당없음 문서는 여기서 채점된다.
 - H코드: code가 있는 문구만, "H302+H332"는 개별 코드로 쪼개 집합 비교 → micro P/R/F1.
@@ -31,15 +34,20 @@ subset은 val·val_en은 언어(ko/en), test는 test 담당이 넘긴 서식 목
 - 무근거 생성: 원문 텍스트에 없는 H코드·CAS, 비어야 할 분류 목록을 채운 문서 → 건수.
 - 문서 완전 정답: 기존 기준(doc_exact_rate)과 확장 기준(doc_exact_ext_rate, + nocas · 오입력 없음)을 따로 낸다.
 - ke_number·chemical_name·supplier 등 참고 필드는 채점하지 않는다.
-- test는 --allow-test · 실험 고정(eval/experiment.json) · 저장소 밖 정답 폴더 · 모든 문서의 출력 존재를 확인한 뒤에만
-  정답을 읽는다.
+- test는 --allow-test · 실험 고정(eval/experiment.json) · 저장소 밖 정답 · 서식 목록 · 텍스트 · 출력 폴더 · 모든 문서의
+  출력 존재를 확인한 뒤에만 정답을 읽는다. 문서별 상세(정답 값 포함)는 출력 폴더(저장소 밖)에만 쓴다.
+- test 최초 채점: 비교군마다 처음 채점한 결과를 _score_first.jsonl(메타 + 지표)과 _score_detail_first.jsonl로
+  따로 남기고 읽기 전용으로 둔다. 다시 채점해도(별칭표 보강 등) 이 두 파일은 바꾸지 않는다.
 """
 import argparse
 import csv
+import hashlib
 import json
 import re
+import shutil
 import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 from statistics import mean
 
@@ -72,6 +80,13 @@ FEWSHOT_JSON = ROOT / "eval" / "fewshot.json"
 TEXT_DIR = ROOT / "data" / "text"
 LOG_FILE = "_log.jsonl"  # eval/infer.py가 쓰는 문서별 시간·토큰 기록
 DETAIL_FILE = "_score_detail.jsonl"  # *.json이 아닌 이름(검사기가 폴더의 *.json을 모두 검사함)
+UNKNOWN_FILE = "_unknown_hazard_classes.txt"  # test 전용: 별칭표 밖 분류명(화면에 내지 않음)
+FIRST_FILE = "_score_first.jsonl"  # test 전용: 최초 채점 메타 + 지표(덮어쓰지 않음)
+FIRST_DETAIL_FILE = "_score_detail_first.jsonl"
+TEST_CONDITIONS = ("base_zs", "base_fs", "qlora_final")  # eval/infer.py와 같음(plan 5절)
+# 채점 결과를 좌우하는 파일 — 최초 채점 기록에 해시를 남긴다(단계 7 고정값과 대조용)
+SCORER_FILES = (ROOT / "eval" / "score.py", ROOT / "core" / "normalize.py", ROOT / "core" / "schema.py")
+ALIAS_CSV = ROOT / "eval" / "hazard_class_alias.csv"
 H_CODE = re.compile(r"H\d{3}")
 KE_FULL = re.compile(r"KE-\d{3,6}")
 CAS_LIKE = re.compile(r"\d{2,7}-\d{2}-\d")
@@ -138,7 +153,7 @@ def ingredients(obj):
 
 
 def nocas_items(obj):
-    """CAS가 null인 성분(영업비밀 포함) → [(is_substitute_data, 함유량 원문)]. plan 4절: 영업비밀은 is_substitute_data와 content로 판정"""
+    """CAS가 null인 성분(영업비밀 포함) → [(is_substitute_data, 함유량 원문)]. plan 5절: 영업비밀은 is_substitute_data와 content로 판정"""
     return [(bool(it.get("is_substitute_data")), it.get("content"))
             for it in _items(obj.get("ingredients")) if not norm_cas(_str(it.get("cas_number")))]
 
@@ -289,7 +304,7 @@ def doc_exact(detail, pred):
     """문서 완전 정답 → (기존 기준, 확장 기준).
 
     기존: 스키마 통과 + 제품명·신호어·목록 상태 + GHS·H코드·H문구·CAS·pair 모두 맞음 (정의를 바꾸지 않는다)
-    확장: 기존 + CAS 없는 성분(nocas) 정답 + 다른 칸 오입력(misplaced) 없음 — plan 4절 영업비밀 판정까지 포함
+    확장: 기존 + CAS 없는 성분(nocas) 정답 + 다른 칸 오입력(misplaced) 없음 — plan 5절 영업비밀 판정까지 포함
     두 기준은 따로 보고한다(report/decisions.md "평가 기준 사전 고정").
     """
     exact = (bool(pred) and check_schema(pred)[0]
@@ -423,13 +438,16 @@ def read_subset_csv(path):
         return {r["doc_id"]: r["subset"] for r in csv.DictReader(f)}
 
 
-def score_docs(doc_ids, subset_of, gold_dir, pred_dir, text_dir, self_check=False, include_non_ghs=False):
+def score_docs(doc_ids, subset_of, gold_dir, pred_dir, text_dir, self_check=False, include_non_ghs=False,
+               quiet=False):
     """문서 목록 전체를 채점 → (subset별 Acc, 별칭표 밖 분류명, 문서별 상세).
-    목록의 모든 문서가 분모에 들어간다. 출력 파일이 없거나 파싱에 실패한 문서는 빈 예측으로 채점한다."""
+    목록의 모든 문서가 분모에 들어간다. 출력 파일이 없거나 파싱에 실패한 문서는 빈 예측으로 채점한다.
+    quiet(test): 문서 ID · 정답 내용을 화면에 내지 않는다(상세 파일에만 남김)."""
     accs = defaultdict(Acc)
     unknown = defaultdict(set)
     details = {}
     log = {} if self_check else read_log(pred_dir)
+    n_bad_gold = 0
     for doc_id in doc_ids:
         gold_path = Path(gold_dir) / f"{doc_id}.json"
         if not gold_path.exists():
@@ -437,7 +455,9 @@ def score_docs(doc_ids, subset_of, gold_dir, pred_dir, text_dir, self_check=Fals
         gold = json.loads(gold_path.read_text(encoding="utf-8"))
         g_ok, g_err = check_schema(gold)
         if not g_ok:
-            print(f"[경고] 정답 {doc_id}가 스키마를 어김: {g_err[:3]}")
+            n_bad_gold += 1
+            if not quiet:
+                print(f"[경고] 정답 {doc_id}가 스키마를 어김: {g_err[:3]}")
 
         if self_check:
             pred, rec, err = gold, None, None
@@ -447,6 +467,8 @@ def score_docs(doc_ids, subset_of, gold_dir, pred_dir, text_dir, self_check=Fals
         acc = accs[subset_of[doc_id]]
         acc.n += 1
         d = {"doc_id": doc_id, "subset": subset_of[doc_id]}
+        if not g_ok:
+            d["gold_schema_errors"] = g_err[:10]
         if not self_check and (err == "출력 파일 없음" or (rec and rec.get("skipped"))):
             acc.missing += 1
         if rec and not rec.get("skipped") and rec.get("gen_time_sec") is not None:
@@ -471,6 +493,8 @@ def score_docs(doc_ids, subset_of, gold_dir, pred_dir, text_dir, self_check=Fals
         acc.exact += d["exact"]
         acc.exact_ext += d["exact_ext"]
         details[doc_id] = d
+    if quiet and n_bad_gold:
+        print(f"[경고] 스키마를 어긴 정답 {n_bad_gold}건 — 문서별 상세의 gold_schema_errors 참고(test 담당 확인)")
     return accs, unknown, details
 
 
@@ -490,10 +514,15 @@ def gate_test(args, pred_dir):
         sys.exit("[거부] eval/experiment.json(실험 고정)이 없다. 단계 7 뒤에만 test를 채점한다")
     if args.self_check:
         sys.exit("[거부] test에는 self-check를 돌리지 않는다(봉인된 정답을 여는 일이라서). 채점기 점검은 val로")
-    for name in ("label_dir", "subset_csv"):
+    if args.no_write:
+        sys.exit("[거부] test에는 --no-write를 쓰지 않는다(최초 채점 기록을 남겨야 함)")
+    if args.condition not in TEST_CONDITIONS:
+        sys.exit(f"[거부] test 비교군은 {TEST_CONDITIONS}뿐이다")
+    for name in ("label_dir", "subset_csv", "text_dir", "out_root"):
         v = getattr(args, name)
         if not v or not outside_repo(v):
-            sys.exit(f"[거부] test는 저장소 밖 --{name.replace('_', '-')}가 필요하다(test 담당이 보관)")
+            sys.exit(f"[거부] test는 저장소 밖 --{name.replace('_', '-')}가 필요하다"
+                     "(정답 · 서식 목록 · 텍스트는 test 담당이 보관, 출력 · 채점 상세도 저장소 밖에 둠)")
     subset_of = read_subset_csv(args.subset_csv)
     log = read_log(pred_dir)
     missing = [d for d in subset_of if not (pred_dir / f"{d}.json").exists() and not log.get(d, {}).get("skipped")]
@@ -512,16 +541,20 @@ def main(argv=None):
     ap.add_argument("--allow-test", action="store_true", help="test 채점 허용(실험 고정 · 전 비교군 생성 뒤)")
     ap.add_argument("--splits", default=SPLITS_CSV, help="분할표(코드 점검 때 test/fixtures/splits.csv)")
     ap.add_argument("--label-dir", help="정답 폴더(기본: val·train은 data/labels, val_en은 eval/val_en, test는 저장소 밖 필수)")
-    ap.add_argument("--text-dir", default=TEXT_DIR, help="무근거 생성 대조용 1~3항 텍스트 폴더(test는 저장소 밖)")
+    ap.add_argument("--text-dir", help="무근거 생성 대조용 1~3항 텍스트 폴더(기본 data/text, test는 저장소 밖 필수)")
     ap.add_argument("--subset-csv", help="test 전용: (doc_id, subset) 목록(test 담당이 넘김)")
-    ap.add_argument("--out-root", default=OUTPUT_ROOT, help="출력 루트(기본 outputs/)")
+    ap.add_argument("--out-root", help="출력 루트(기본 outputs/, test는 저장소 밖 필수 — infer.py와 같은 폴더)")
     args = ap.parse_args(argv)
 
     if not args.self_check and not args.condition:
         ap.error("--condition이 필요함(--self-check일 때만 생략 가능)")
-    pred_dir = Path(args.out_root) / (args.condition or "_self_check") / args.split
+    if args.split != "test":  # test는 기본값 없이 저장소 밖 폴더를 받아야 한다(gate_test)
+        args.text_dir = args.text_dir or TEXT_DIR
+        args.out_root = args.out_root or OUTPUT_ROOT
+    is_test = args.split == "test"
+    pred_dir = Path(args.out_root or OUTPUT_ROOT) / (args.condition or "_self_check") / args.split
 
-    if args.split == "test":
+    if is_test:
         subset_of = gate_test(args, pred_dir)
         doc_ids = sorted(subset_of)
         gold_dir = Path(args.label_dir)
@@ -537,7 +570,7 @@ def main(argv=None):
         sys.exit(f"{args.split} 문서가 0건")
 
     accs, unknown, details = score_docs(doc_ids, subset_of, gold_dir, pred_dir, args.text_dir,
-                                        args.self_check, args.include_non_ghs)
+                                        args.self_check, args.include_non_ghs, quiet=is_test)
     subsets = sorted(accs)
     rows = [(subset, m, v) for subset in subsets for m, v in accs[subset].rows()]
 
@@ -548,10 +581,10 @@ def main(argv=None):
     for metric in table[subsets[0]]:
         print(f"{metric:<24}" + "".join(f"{fmt(table[s][metric]):>10}" for s in subsets))
 
-    if unknown:
+    unknown_lines = [f"  - {raw!r}  ({'/'.join(sorted(unknown[raw]))})" for raw in sorted(unknown)]
+    if unknown and not is_test:
         print("\n[별칭표에 없는 분류명] eval/hazard_class_alias.csv 보강 후보:")
-        for raw in sorted(unknown):
-            print(f"  - {raw!r}  ({'/'.join(sorted(unknown[raw]))})")
+        print("\n".join(unknown_lines))
 
     if args.self_check:
         bad = sorted({m for s in subsets for m, v in table[s].items()
@@ -571,6 +604,49 @@ def main(argv=None):
                 f.write(json.dumps(d, ensure_ascii=False, default=list) + "\n")
         where = "scores.csv에는 안 씀(진단 전용)" if args.split == "train" else f"기록: {SCORES_CSV}"
         print(f"\n{where}  /  문서별 상세: {detail_path}")
+        if is_test:
+            write_test_extras(args, pred_dir, rows, unknown_lines, detail_path)
+
+
+def sha256_files(paths):
+    h = hashlib.sha256()
+    for p in paths:
+        h.update(Path(p).read_bytes())
+    return h.hexdigest()
+
+
+def write_test_extras(args, pred_dir, rows, unknown_lines, detail_path):
+    """test 전용 기록(모두 저장소 밖 pred_dir): 별칭표 밖 분류명 목록, 최초 채점 보존."""
+    unknown_path = pred_dir / UNKNOWN_FILE
+    if unknown_lines:
+        unknown_path.write_text("[별칭표에 없는 분류명] eval/hazard_class_alias.csv 보강 후보(test 담당 확인):\n"
+                                + "\n".join(unknown_lines) + "\n", encoding="utf-8")
+        print(f"별칭표 밖 분류명 있음 → {unknown_path} (화면에 출력하지 않음, test 담당이 확인)")
+    else:
+        unknown_path.unlink(missing_ok=True)  # 별칭표 보강 뒤 재채점하면 이전 목록이 남지 않게
+
+    first_path = pred_dir / FIRST_FILE
+    if first_path.exists():
+        print(f"재채점: 최초 채점 기록은 그대로 둠 → {first_path}")
+        return
+    meta = {
+        "condition": args.condition,
+        "split": args.split,
+        "scored_at": datetime.now().isoformat(timespec="seconds"),
+        "include_non_ghs": args.include_non_ghs,
+        "experiment_sha256": sha256_files([EXPERIMENT_JSON]),
+        "scorer_sha256": sha256_files(SCORER_FILES),
+        "alias_sha256": sha256_files([ALIAS_CSV]),
+    }
+    with open(first_path, "w", encoding="utf-8") as f:
+        f.write(json.dumps(meta, ensure_ascii=False) + "\n")
+        for subset, metric, value in rows:
+            f.write(json.dumps({"subset": subset, "metric": metric, "value": value}, ensure_ascii=False) + "\n")
+    first_detail = pred_dir / FIRST_DETAIL_FILE
+    shutil.copyfile(detail_path, first_detail)
+    for p in (first_path, first_detail):
+        p.chmod(0o444)  # 실수로 덮어쓰지 않게 읽기 전용
+    print(f"최초 채점 보존 → {first_path} · {first_detail}")
 
 
 if __name__ == "__main__":
