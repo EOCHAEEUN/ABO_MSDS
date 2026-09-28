@@ -14,19 +14,16 @@
 
 ```
 data/
-  labels/{doc_id}.json      재시작 정답 45건(train 35 + val 10)
-  splits.csv                문서별 split 배정(train · val만, test는 저장소 밖)
-  sources.csv               문서 목록: 원본 파일명, 언어, 서식, 제조사, split_group
-  labeling_rules.md         라벨링 규칙
-  text/                     전처리 결과 {doc_id}.txt, _cut_log.csv
-  train.jsonl · val.jsonl   증강 학습셋(pipeline/build_jsonl.py), build_report.json
+  labels/{doc_id}.json      Train 24 + Val 4 정답 라벨
+  splits.csv                문서별 split 배정과 사유
+  sources.csv               문서 목록: 원본 파일명, 언어, 서식, 제조사, split_group, 1~3항 쪽수, 건수 요약
   README.md                 이 문서
   raw/                      원본 PDF (git 제외)
 eval/
-  fewshot.json              few-shot 예시 2건(train)
-  hazard_class_alias.csv    분류명 원문 → 고시 기준 정규 분류명
-archive/                    09-23 옛 라벨(labels_0923 · val_en_0923) — 재시작에서 쓰지 않음
-docs/labeling_review_notes.md   판정 결과, 원문 모순 문서, PDF 추출 함정, 문서별 메모
+  test/{doc_id}.json        Real Test 20건 (국문 15 + 영문 5) — 봉인
+  val_en/{doc_id}.json      영문 파이프라인 점검용 2건 — 보고 수치 아님
+  hazard_class_alias.csv    분류명 원문 73종 → 고시 기준 정규 분류명 (영문 매핑표 포함)
+docs/labeling_review_notes.md   판정 결과(확정·잠정), 원문 모순 문서, PDF 추출 함정, 문서별 메모
 src/schema.py                   Pydantic 스키마 (정답 라벨·모델 출력·FastAPI 공용)
 scripts/validate_labels.py      폴더 단위 스키마 검사 (파싱률·스키마 준수율 출력)
 scripts/check_splits.py         splits.csv 분할 규칙 검사
@@ -66,11 +63,20 @@ doc_id는 `KR|EN-제조사약칭-번호` 형식입니다.
 | hazard_statements | 라벨 요소(유해·위험 문구) 목록 기준. H코드가 없으면 code null, 문구만. 문구 끝 마침표와 줄바꿈 공백은 정리 |
 | supplier | 참고 필드. 국내 수입자·공급자가 있으면 그쪽을 우선, 긴급전화가 여러 개면 24시간 번호 |
 
-## 데이터 구성 · 검증
+## 데이터 구성
 
-- 재시작 정답 45건(국문): train 35(현행 24 · 수입품 국문판 5 · 구서식 6) · val 10(현행 5 · 수입품 국문판 5)
-- `python3 scripts/validate_labels.py data/labels` → 45건 스키마 통과
-- 09-23 옛 세트(50건)의 구성 · 검증 기록은 옛 라벨과 함께 보관했습니다(git 이력). 재시작 수치로 쓰지 않습니다.
+- **문서 유형:** 현행 32건, 수입품 국문판 6건, 구서식 5건(노루 계열), 영문 7건
+- **성분:** 178건(영업비밀 13건, KE 번호 기록 31건)
+- **GHS 분류:** 166건
+- **유해·위험 문구:** 182건(이 중 36건은 H코드 없이 문구만)
+- **분류가 해당없음인 문서:** 11건 · 분류가 자료없음인 문서: 3건
+
+## 검증
+
+- **스키마 검사:** `python scripts/validate_labels.py data/labels`, `eval/test`, `eval/val_en` → 50건 모두 통과. 일부러 틀린 파일(CAS 체크디지트 오류, 신호어 미정규화, 상태값 불일치, 깨진 JSON)은 모두 걸러짐을 확인했습니다.
+- **원문 대조:** 모든 CAS·KE·H코드·함유량·분류명·문구·제품명·공급자 값을 PDF 원문 텍스트에서 찾았습니다. 못 찾은 항목은 셀 안 줄바꿈이거나 의도적으로 정리한 표기뿐이며, 이미지로 확인했습니다.
+- **누락 점검:** 1~3항 안의 유효한 CAS 중 라벨에 없는 것은 KR-SOIL-001 세부조성 4건(잠정 A9)과 EN-WD40-002의 추가 CAS 4건(확정 A8)뿐입니다.
+- **행 정렬 점검:** 좌표 기준으로 CAS와 함유량이 같은 행에 있는지 확인했습니다. 어긋난 6건은 이미지로 확인했고 모두 정상입니다.
 
 ## 분할 (splits.csv)
 
