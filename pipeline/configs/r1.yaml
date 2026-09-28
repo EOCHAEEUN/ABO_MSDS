@@ -1,5 +1,6 @@
 # [강덕우] 1차 학습
 model: Qwen/Qwen3-4B
+model_revision: 1cfa9a7208912126459214e8b04321603b3df60c   # report/env_check.md와 같은 HF 스냅샷
 lora_r: 16
 lora_alpha: 32
 lora_dropout: 0.05
