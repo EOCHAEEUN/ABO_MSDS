@@ -8,4 +8,7 @@ learning_rate: 2.0e-4
 num_epochs: 2
 per_device_batch_size: 1
 grad_accum: 8
-max_length: 1536
+# docs/plan.md 6절: 4096에서 시작(1536이면 정답 JSON 끝이 잘림). 새 라벨로 입력+정답 길이를 다시 재고,
+# 초과 샘플은 build_jsonl.py 보고서(tokens.over_limit)에 목록으로 남긴다 — 조용히 버리지 않음
+max_length: 4096
+gradient_checkpointing: true   # 8GB GPU에서 긴 시퀀스를 넣으려면 필요

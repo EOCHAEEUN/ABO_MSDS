@@ -1,0 +1,8 @@
+doc_id,split,lang,form,manufacturer,split_group,note
+KR-NOROO-004,train,ko,현행,노루페인트,NOROO,fixture: 영업비밀 성분
+KR-NOROO-005,train,ko,구서식,노루케미칼,NOROO,fixture: H코드 없는 문구
+KR-KUMHO-002,train,ko,현행,금호석유화학,KUMHO,fixture: KE 번호 · 해당없음
+KR-GSC-001,train,ko,현행,GS칼텍스,GSC,fixture: EC 칸 · 영업비밀
+KR-OCI-005,train,ko,현행,OCI,OCI,fixture: 고압가스 · H문구 다수
+KR-HENKEL-001,val,ko,수입품 국문판,Henkel,HENKEL,fixture: val 경로 시험용
+KR-HANIL-001,val,ko,현행,한일시멘트,HANIL,fixture: val 경로 시험용
