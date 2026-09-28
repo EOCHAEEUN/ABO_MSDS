@@ -49,31 +49,31 @@
   "ghs_classification": [
     {
       "hazard_class": "인화성액체",
-      "category": "3"
+      "category": "구분 3"
     },
     {
       "hazard_class": "급성독성물질 경피",
-      "category": "4"
+      "category": "구분 4"
     },
     {
       "hazard_class": "급성독성물질 흡입",
-      "category": "4(증기)"
+      "category": "구분 4"
     },
     {
       "hazard_class": "발암성물질",
-      "category": "1A"
+      "category": "구분 1A"
     },
     {
       "hazard_class": "심한 눈 손상 또는 자극성물질",
-      "category": "2A"
+      "category": "구분 2A"
     },
     {
       "hazard_class": "특정 표적장기 독성물질(반복노출)",
-      "category": "1"
+      "category": "구분 1"
     },
     {
       "hazard_class": "피부부식성 또는 자극성물질",
-      "category": "2"
+      "category": "구분 2"
     }
   ],
   "signal_word": {

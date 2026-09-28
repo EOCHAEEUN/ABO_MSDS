@@ -21,14 +21,14 @@
       "chemical_name": "수산화나트륨",
       "cas_number": "1310-73-2",
       "ke_number": null,
-      "content": "49~51",
+      "content": "24~26",
       "is_substitute_data": false
     },
     {
       "chemical_name": "물",
       "cas_number": "7732-18-5",
       "ke_number": null,
-      "content": "49~51",
+      "content": "74~76",
       "is_substitute_data": false
     }
   ],
@@ -62,10 +62,6 @@
     {
       "code": "H302",
       "text": "삼키면 유해함"
-    },
-    {
-      "code": "H312",
-      "text": "피부와 접촉하면 유해함"
     },
     {
       "code": "H314",
