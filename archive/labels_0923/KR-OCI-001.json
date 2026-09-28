@@ -1,10 +1,10 @@
 {
   "product_name": {
-    "value": "KTR-602HP",
+    "value": "카본 블랙(Carbon black)",
     "source_status": "기재"
   },
   "recommended_use": {
-    "value": "플라스틱 개질제, 아스팔트 개질제, 방수시트, 신발, 잡화 등의 원료",
+    "value": "타이어, 고무, 잉크 및 도료, 배터리, 전력 케이블 등의 첨가제",
     "source_status": "기재"
   },
   "use_restrictions": {
@@ -12,16 +12,16 @@
     "source_status": "자료없음"
   },
   "supplier": {
-    "company_name": "금호석유화학(주) 여수고무제1공장",
-    "address": "전남 여수시 여수산단3로 118",
-    "emergency_phone": "(061)688-3060~4"
+    "company_name": "OCI주식회사",
+    "address": "전라남도 광양시 산업로 109",
+    "emergency_phone": "061)798-6161"
   },
   "ingredients": [
     {
-      "chemical_name": "스타이렌-부타디엔 고무(STYRENE-BUTADIENE RUBBER)",
-      "cas_number": "9003-55-8",
-      "ke_number": "KE-13258",
-      "content": "97-99",
+      "chemical_name": "카본 블랙 (Carbon black)",
+      "cas_number": "1333-86-4",
+      "ke_number": null,
+      "content": "100",
       "is_substitute_data": false
     }
   ],

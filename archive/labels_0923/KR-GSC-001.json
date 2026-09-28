@@ -1,10 +1,10 @@
 {
   "product_name": {
-    "value": "Kixx PAO 1 SN 0W-30",
+    "value": "Kixx RD HD 46(구 Rando HD 46)",
     "source_status": "기재"
   },
   "recommended_use": {
-    "value": "35. 윤활유 및 첨가제 엔진오일",
+    "value": "35. 윤활유 및 첨가제",
     "source_status": "기재"
   },
   "use_restrictions": {
@@ -18,39 +18,32 @@
   },
   "ingredients": [
     {
-      "chemical_name": "1-Decene, homopolymer, hydrogenated",
-      "cas_number": "68037-01-4",
+      "chemical_name": "Distillates (petroleum), hydrotreated heavy paraffinic",
+      "cas_number": "64742-54-7",
       "ke_number": null,
-      "content": "70~80",
+      "content": "98~100",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Phosphorodithioic acid O,O-dialkyl(C=1-14) esters zinc salts",
+      "cas_number": "68649-42-3",
+      "ke_number": null,
+      "content": "0.1~1",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "2,6-di-tert-butylphenol",
+      "cas_number": "128-39-2",
+      "ke_number": null,
+      "content": "0.1~0.5",
       "is_substitute_data": false
     },
     {
       "chemical_name": "영업비밀1",
       "cas_number": null,
       "ke_number": null,
-      "content": "10~20",
-      "is_substitute_data": true
-    },
-    {
-      "chemical_name": "Fatty acids, (C=8-10), triesters with trimethylolpropane",
-      "cas_number": "91050-89-4",
-      "ke_number": null,
-      "content": "0.1~5",
-      "is_substitute_data": false
-    },
-    {
-      "chemical_name": "ar-Nonyl-N-(nonylphenyl)benzenamine",
-      "cas_number": "36878-20-3",
-      "ke_number": null,
       "content": "0.1~2",
-      "is_substitute_data": false
-    },
-    {
-      "chemical_name": "Phosphorodithioic acid O,O-dialkyl(C=3-14) esters zinc salts",
-      "cas_number": "134759-18-5",
-      "ke_number": null,
-      "content": "1~5",
-      "is_substitute_data": false
+      "is_substitute_data": true
     }
   ],
   "ghs_classification": [],
