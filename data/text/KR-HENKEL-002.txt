@@ -1,0 +1,53 @@
+안전보건자료 (SDS)
+페이지 1 의 15
+LOCTITE 572 Item No.153495
+V001.8
+개정: 14.10.2022
+인쇄일: 10.07.2025
+MSDS 번호:AA00514-0000153495
+1. 화학제품과 회사에 관한 정보
+가. 제품명 : LOCTITE 572
+나. 제품의 권고 용도와
+사용상의 제한 :
+권고 용도 혐기성 접착제
+사용상의 제한 상기 용도 외 사용금지
+다. 공급자 정보
+수입자: 헨켈코리아(유) 서울지점, 서울특별시 마포구 마포대로 4다길 41(마포동) 헨켈타워빌딩 1층, 04177,
+전화 02)3279-1700
+정보제공서비스 또는 긴급 연락 (02) 3279-1700 또는 24시간 긴급 연락처 : (02) 3279-1707
+전화 :
+라. 작성부서/관리자 :
+Product Safety & Regulatory Affairs for South Korea,
+msdsakorea@henkel.com
+2. 유해, 위험성
+가. 유해, 위험성 분류:
+유해, 위험성 분류 유해, 위험성 구분
+심한 눈 손상성/눈 자극성 구분2
+나. 예방조치문구를 포함한 경고표지 항목
+그림문자
+신호어: 경고
+Item No.153495 페이지 2 의 15
+LOCTITE 572
+V001.8
+유해, 위험문구: H319 눈에 심한 자극을 일으킴
+다. 유해성, 위험성 분류기준에 올바로 사용될 경우 없음.
+포함되지 않는 기타 유해성,
+위험성 :
+3. 구성성분의 명칭 및 함유량
+성분에 대한 정보: 혼합물
+화학물질명 관용명 및 이명(異名) CAS 번호 또는 함유량(%)
+식별번호
+Mica Mica-group minerals 12001-26-2 >= 15 - < 20 %
+Octan-1-ol 1-Octanol 111-87-5 >= 10 - < 15 %
+Titanium dioxide < 1% particles with Titanium oxide (TiO2) < 13463-67-7 >= 1 - < 5 %
+diameter ≤ 10 μm 1% particles with
+diameter ≤ 10 μm
+Silica, amorphous, fumed, cryst.-free Silica, amorphous, 112945-52-5 >= 1 - < 5 %
+fumed, cryst.-free
+Cumene hydroperoxide Hydroperoxide, 1- 80-15-9 >= 0.25 - < 1 %
+methyl-1-phenylethyl
+Dimethyl-2,7-Octadien-6-ol, 2,6- 1,6-Octadien-3-ol, 3,7- 78-70-6 < 1 %
+dimethyl-
+Quartz (SiO2), <1% respirable Quartz (SiO2) 14808-60-7 < 1 %
+구성성분의 명칭 및 함유량에 기재되지 않은 물질은 고용노동부 고시에 따라 GHS 분류에 영향을 미치지 않으며
+한계농도 미만임.

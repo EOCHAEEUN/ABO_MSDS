@@ -1,96 +1,97 @@
 # ABO_MSDS
 
-실제 MSDS 1~3항의 핵심 5개 항목을 고정 JSON으로 추출하는 Qwen3-4B QLoRA 모델과, 원문 근거·검토 상태를 붙이는 Rule Engine, 검토 화면을 3일 안에 구현한다. 기준 문서는 기획서 v5(MSDS-PL-2609-05)와 개인별 작업명세서다.
+실제 MSDS 1~3항의 핵심 5개 항목을 고정 JSON으로 추출하는 Qwen3-4B QLoRA 모델, 원문 근거와 검토 상태를 붙이는 Rule Engine, SQLite 적재, 검토 화면을 만드는 4인 팀 과업입니다. 과업 정의는 기획서 v8(MSDS-PL-2609-08)을 따릅니다. 기획서 원본은 팀 드라이브에만 둡니다.
 
-## 현재 상태
-- **정답 라벨 세트 v1 편입·분할 완료 (2026-09-23)** — 50건(국문 43 · 영문 7). Train 24 · Val 4는 `data/labels/`, Test 20은 `eval/test/`, 영문 점검용 2는 `eval/val_en/`에 있다.
-- 검사: `python scripts/validate_labels.py data/labels`(+`eval/test`, `eval/val_en`) 50건 통과, `python scripts/check_splits.py` 규칙 위반 없음. 상세는 `data/README.md`와 `docs/labeling_review_notes.md`.
-- 다음 할 일: tag `split-frozen` → `eval/seal.py --write`로 `eval/test/` 봉인 → tag `test-sealed`.
-- 기획서 v5는 48건(영문 5) 기준이지만 실제 세트는 50건(영문 7)이다. 영문 2건은 test 대신 `val_en`으로 뺐다(사유는 `data/README.md` 분할 절).
+작업 기준은 `docs/plan.md`(재시작판)이고, 작업 규칙은 `CLAUDE.md`입니다. 두 파일은 `docs/restart` PR로 main에 들어옵니다.
 
-## 실행 순서
-1. `pipeline/extract_text.py` — 원본 PDF → `data/text/`
-2. 라벨링 → `data/labels/`, `eval/test/`
-3. `pipeline/build_jsonl.py` — 증강·JSONL
-4. `pipeline/train_qlora.py --config pipeline/configs/r1.yaml`
-5. `eval/infer.py` → `eval/score.py` (Validation으로만 조건 선택)
-6. `eval/seal.py --write` → tag `test-sealed`
-7. Real Test 최초 평가 (Base zero-shot / few-shot / QLoRA 최종, 각 1회)
-8. `app/main.py` 서빙, `web/` 검토 화면
+## 현재 상태 (2026-09-28 재시작)
+
+- **데이터 · 정답 · 평가 절차를 처음부터 다시 합니다.**
+  - PM이 혼자 먼저 진행한 파일럿(`feat/web` 브랜치, 09-23~28)에서 test가 개발 과정에 노출됐습니다.
+  - 파일럿의 라벨 · 모델 출력 · 점수는 재시작의 근거로 쓰지 않습니다.
+  - `feat/web`는 main에 병합하지 않습니다. 필요한 코드는 파일 단위 PR로 가져옵니다.
+- **main의 기존 라벨은 쓰지 않습니다.** `data/labels/` · `eval/test/` · `eval/val_en/`(2026-09-23 작성)은 초안이나 참고로도 쓰지 않습니다. 삭제할지 보관 폴더로 옮길지는 착수 회의에서 정합니다.
+- **test는 새 문서로 만듭니다.** 개발에 참여하지 않는 test 담당이 모으고 라벨링해 저장소 밖에 보관합니다. 파일럿에서 본 문서 87건은 train · val 후보로만 씁니다.
+- **코드는 대부분 뼈대입니다.** `core/` · `pipeline/` · `eval/` · `app/`의 파일은 담당 표기만 있습니다. 동작하는 것은 `src/schema.py`(출력 스키마), `scripts/`(라벨 · 분할 검사), `web/`(검토 화면, 예시 모드)입니다.
+- **다음 할 일:** 착수 회의(`docs/plan.md` 13절) → 라벨 규칙 파일럿 · 동결 → train · val 라벨링 · 분할 확정.
+
+## 진행 단계
+
+날짜는 PM이 기간을 정한 뒤 `docs/plan.md` 9절에 채웁니다.
+
+| # | 단계 | 통과 조건 |
+|---|---|---|
+| 0 | 착수 회의 | 13절 확정, test 담당 지정, `docs/restart` 병합 |
+| 1 | test 수집 시작 (test 담당) | 수집 조건 대조표. 개발 쪽에는 건수만 전달 |
+| 2 | 라벨 규칙 파일럿 · 동결 | tag `label-rules-frozen` |
+| 3 | train · val 라벨링 · 분할 확정 | `validate_labels.py` · `check_splits.py` 통과, tag `split-frozen` |
+| 4 | test 라벨링 · 봉인 (test 담당 + 2차 검수자) | 봉인 해시 커밋, tag `test-sealed` |
+| 5 | 전처리 · 프롬프트 · 채점기 | 추출 실패 기록, 채점기 회귀 테스트 통과 |
+| 6 | Base 진단 · 학습 r1 → r2 | val 채점 · 짝 비교 |
+| 7 | 모델 · 실험 고정 | `qlora_final` · `max_new_tokens` · 채점기 해시 · 결론 문구 커밋 |
+| 8 | test 평가 1회 | 비교군 3개(base_zs · base_fs · qlora_final) 각 1회 |
+| 9 | 보고 | `report/final_table.md` · `report/failures.md` |
+
+제품 트랙(API · DB · Rule Engine · 화면)은 5단계부터 함께 진행합니다.
 
 ## 원칙
-- 전처리·스키마·프롬프트는 `core/` 한 곳에서만 고친다. 수정 시 책임자 리뷰 필수.
-- split의 유일한 기준은 `data/splits.csv`다.
-- Real Test는 모델 고정 전까지 어떤 추론에도 쓰지 않는다.
-- 3일판은 기능을 늘리지 않는다. 여유 시간은 실패 분석과 발표에 쓴다.
+
+- **test 봉인:** test 문서 · 텍스트 · 정답은 저장소 밖에 둡니다. 개발 세션(사람 · AI 모두)은 열지 않습니다. 평가가 끝나기 전에는 test 파일명 · 제조사 · 정답에서 나온 값을 어떤 파일에도 적지 않습니다.
+- **분할:** `data/splits.csv`가 유일한 기준입니다. 학습 · few-shot은 train만, 조건 선택은 val만 씁니다.
+- **공유 코드:** 전처리 · 프롬프트는 학습 · 평가 · 서빙이 `core/` 하나를 같이 씁니다. `core/` 수정은 담당자 리뷰가 필요합니다.
+- **스키마 동결:** 출력 JSON 키, 상태값(기재 · 자료없음 · 해당없음), DB 테이블 · 열 이름을 바꾸지 않습니다. 출력 스키마는 `src/schema.py` 하나입니다.
+- **범위:** 기능을 늘리지 않습니다. 범위는 `docs/plan.md` 1 · 8절입니다.
+- **Git:** main에 직접 push하지 않고 작업 브랜치에서 PR로 병합합니다. `git add .` 대신 경로를 지정합니다. PDF · zip · 가중치 · `.env` · `*.db`는 커밋하지 않습니다.
+
+## 처음 받을 때
+
+```bash
+git clone https://github.com/EOCHAEEUN/ABO_MSDS.git && cd ABO_MSDS
+python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+git switch -c <prefix>/<작업>
+
+# 검사
+python3 scripts/validate_labels.py data/labels
+python3 scripts/check_splits.py
+
+# 검토 화면 (예시 모드)
+npm --prefix web ci && npm --prefix web run dev
+```
+
+- 한 폴더에서는 한 세션(사람 · AI)만 씁니다. 각자 따로 clone합니다.
+- 원본 PDF(`data/raw/`)와 어댑터 가중치는 git에 없습니다. 팀 드라이브로 받습니다.
 
 ## 파일트리와 담당
+
+역할은 `docs/plan.md` 11절 제안 기준입니다. 착수 회의에서 확정합니다.
+**데** 강덕우 · **규** 김건하 · **평** 양세윤 · **프** 어채은(PM)
+
 ```
 ABO_MSDS/
-├── README.md                  # [어채은] 과업 한 줄 정의, 실행 순서, 폴더별 담당자
-├── requirements.txt           # [양세윤] transformers·peft·bitsandbytes·pdfplumber·fastapi 버전 고정
-├── .gitignore                 # [어채은] raw PDF·어댑터 가중치·.env 제외
-├── .gitattributes             # [어채은] *.json text eol=lf — 줄바꿈 차이로 해시가 바뀌는 것 방지
-├── .env.example               # [어채은] KOSHA_API_KEY= (실제 키는 .env, 커밋 금지)
-│
-├── core/                      # [공통] 학습·평가·서빙이 모두 import하는 단 하나의 구현, 수정 시 책임자 리뷰 필수
-│   ├── preprocess.py          # [양세윤 v1 → 강덕우 확정] 추출 → 4항 전 절단 → 2항 안에서만 P문구 블록 제거
-│   ├── schema.py              # [양세윤] + 김건하 — 동결 스키마 정의 + 스키마 준수 검사
-│   ├── prompt.py              # [양세윤] + 강덕우 — 시스템 프롬프트, few-shot 조립, enable_thinking=False
-│   └── normalize.py           # [양세윤 v1] + 김건하 — 신호어·구분 N 정규화, content min/max 파싱, 별칭표 연동
-│
-├── data/                      # [강덕우·김건하]
-│   ├── README.md              # [어채은] doc_id 규칙, split 기준, 봉인·태그 규칙, Gold 수정 절차
-│   ├── raw/                   # [강덕우] 원본 PDF (gitignore)
-│   ├── text/                  # [양세윤 v1 → 강덕우 확정] preprocess 결과 {doc_id}.txt
-│   │   └── _cut_log.csv       # doc_id, status, section4_pattern, p_block_pattern, cut_page, token_count, note
-│   ├── sources.csv            # [강덕우] doc_id, 원본 파일명, 언어, 서식, 제조사, split_group, 건수 요약
-│   ├── splits.csv             # [강덕우] split의 유일한 기준, 확정 후 tag split-frozen
-│   ├── labels/                # [강덕우 14건 · 김건하 14건] Train 24 + Val 4 정답 {doc_id}.json
-│   ├── train.jsonl            # [강덕우] Train 증강 8~10배
-│   └── val.jsonl              # [강덕우] Val 원본 + 건당 변형 5개
-│
-├── pipeline/                  # [강덕우] 데이터 → 학습
-│   ├── extract_text.py        # raw/ → text/ 일괄 변환, _cut_log.csv 기록
-│   ├── augment/
-│   │   ├── renderers.py       # generate_msds.py 렌더러 5종만 이식 (난수 조합 로직 제외)
-│   │   └── check_forbidden.py # 성분·분류·H코드·함유량이 바뀐 변형 검출
-│   ├── build_jsonl.py
-│   ├── length_stats.py        # P50/P90/P95/MAX → report/length_stats.md
-│   ├── train_qlora.py         # + 양세윤(스크립트 지원)
-│   └── configs/
-│       ├── r1.yaml            # rank 16 / alpha 32 / lr 2e-4 / 2 epoch / accum 8
-│       └── r2.yaml            # r1에서 조건 1개만 변경
-│
-├── eval/                      # [양세윤·어채은]
-│   ├── infer.py               # [양세윤] 조건 × split 추론, test는 명시 플래그 필요
-│   ├── score.py               # [양세윤] 파싱률·스키마·필드별·CAS F1·pair F1·H코드 F1
-│   ├── seal.py                # [양세윤 작성 · 어채은 실행] --write / --verify
-│   ├── fewshot.json           # [양세윤] few-shot 예시 2건 doc_id 고정 (Train에서만)
-│   ├── test/                  # [어채은 국문 15 · 양세윤 영문 5] Real Test 정답 20건, 봉인 후 수정 금지
-│   ├── val_en/                # 영문 파이프라인 점검용 2건, 성능 보고에 쓰지 않음
-│   └── hazard_class_alias.csv # 분류명 원문 → 고시 정규 분류명, normalize.py가 참조
-│
-├── outputs/                   # [양세윤] 모델 출력 {조건}/{val|test}/{doc_id}.json
-├── runs/                      # [강덕우] {날짜}_{r1|r2}/ — config.json·loss 로그만 커밋
-│
-├── app/                       # [양세윤·김건하]
-│   ├── main.py                # [양세윤] FastAPI POST /extract, /compare
-│   ├── model.py               # [양세윤] 베이스 + 어댑터 동시 로드, 모델 전환
-│   ├── api_spec.md            # [양세윤] 입출력 명세
-│   └── rules/                 # [김건하] engine.py, checks/ 9개, tables/, tests/
-│
-├── web/                       # [어채은] 3일판 단일 검토 화면, mock/은 김건하 제공
-│
-├── docs/                      # [어채은] labeling_review_notes.md — 판정 결과·원문 모순 문서·PDF 추출 함정
-├── src/                       # schema.py — Pydantic 스키마 (정답 라벨·모델 출력·FastAPI 공용)
-├── scripts/                   # validate_labels.py(스키마 검사), check_splits.py(분할 규칙 검사)
-│
-└── report/                    # decisions[어채은] env_check[양세윤] length_stats[강덕우] scores[양세윤]
-                               # label_audit/[어채은·강덕우·김건하] test_manifest[어채은]
-                               # failures[강덕우+김건하] final_table[양세윤] slides[어채은 편집]
+├── README.md · CLAUDE.md        # [프] 과업 개요 · 작업 규칙
+├── requirements.txt             # [평] 버전 고정
+├── core/                        # [평 · 데] 학습 · 평가 · 서빙 공용 — 전처리 · 스키마 검사 · 프롬프트 · 정규화
+├── data/                        # [데 · 규]
+│   ├── README.md                # 라벨 표기 규칙, doc_id 규칙
+│   ├── raw/                     # 원본 PDF (git 제외)
+│   ├── text/                    # 전처리 결과 {doc_id}.txt, _cut_log.csv
+│   ├── sources.csv              # 출처 (test 행에는 정답 파생값을 적지 않음)
+│   ├── splits.csv               # 분할의 유일한 기준, 확정 후 tag split-frozen
+│   └── labels/                  # train · val 정답 {doc_id}.json
+├── pipeline/                    # [데] 텍스트 추출 · 증강 · JSONL · 길이 측정 · 학습, configs/r1.yaml · r2.yaml
+├── eval/                        # [평] 추론 · 채점 · 봉인, fewshot.json, hazard_class_alias.csv
+├── outputs/                     # [평] 모델 출력 {조건}/{val|test}/{doc_id}.json
+├── runs/                        # [데] {날짜}_{r1|r2}/ — config.json · loss 로그만 커밋
+├── app/                         # [평] FastAPI · 모델 로드 · DB, rules/ [규] Rule Engine
+├── web/                         # [프] 검토 화면 (Vite + React, README.md에 API 연결 계약)
+├── src/schema.py                # 출력 스키마 단일 기준
+├── scripts/                     # validate_labels.py · check_splits.py
+├── docs/                        # [프] plan.md, labeling_review_notes.md, frontend_api_spec.md
+└── report/                      # decisions · scores · length_stats · test_manifest · final_table · failures
 ```
 
 ## Git 태그
-- `split-frozen` — splits.csv 확정 직후
-- `test-sealed` — Test 정답 확정 후 `eval/seal.py --write` 직후
+
+- `label-rules-frozen`: 라벨 규칙 동결
+- `split-frozen`: train · val 분할 확정
+- `test-sealed`: test 정답 확정 · 봉인 해시 커밋 직후

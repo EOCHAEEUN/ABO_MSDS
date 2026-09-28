@@ -5,12 +5,12 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
 
 ## 재시작 전제
 - **`feat/web` 브랜치는 PM이 혼자 먼저 해 본 파일럿이다.** 그 라벨 · 모델 출력 · 점수 · 문서를 재시작의 근거로 쓰지 않는다. `feat/web`를 main에 병합하지 않는다. 파일럿 코드를 가져올 때는 파일 단위 PR로 올리고 리뷰를 받는다.
-- **파일럿에서 본 문서 87건(제조사 44곳)은 모두 노출 문서다.** 목록은 파일럿 `data/sources.csv`에 있다. train · val 후보로만 쓰고 test에는 넣지 않는다.
+- **파일럿에서 본 문서 87건(제조사 44곳)은 모두 노출 문서다.** 목록은 파일럿 `data/sources.csv`에 있다. train · val 후보다. **예외(2026-09-28 결정):** 새 문서를 모을 수 없어 노출 문서 18건을 test로 쓴다. 이 18건은 개발에 쓰지 않고, 결론에 파일럿 노출 이력을 밝힌다(report/decisions.md).
 - **정답은 처음부터 다시 만든다.** main의 기존 라벨(`data/labels/`, `eval/test/`, `eval/val_en/`, 2026-09-23)은 초안이나 참고로 쓰지 않는다.
 
 ## 절대 규칙
 - **test 봉인:**
-  - test 문서 · 텍스트 · 정답은 저장소 밖에서 test 담당(개발 비참여)만 보관한다.
+  - test 문서 · 텍스트 · 정답은 저장소 밖에만 보관한다(현재 PM 로컬). 정답은 파일럿 정답을 열지 않고 원문에서 새로 만든다.
   - 개발 세션(사람 · AI 모두)은 test 자료를 열지 않고, 첨부받지도 않는다. 개발 쪽이 받는 정보는 건수 · 서식별 건수 · 봉인 해시뿐이다.
   - test 추론은 실험 고정 뒤 비교군마다 1회만 한다.
   - test를 학습 · few-shot · 프롬프트 예시 · 화면 샘플 · 조건 선택에 쓰지 않는다.
@@ -53,7 +53,7 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
 
 ## 규약
 - doc_id는 `KR|EN-제조사약칭-번호`, 정답 · 출력 파일명은 `{doc_id}.json`이다.
-- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_final}/{val|test}/{doc_id}.json`
+- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_final}/val/{doc_id}.json`. test는 저장소 밖 `--out-root` 아래 `{base_zs,base_fs,qlora_final}/test/`(infer · score가 강제, `.gitignore`에도 `outputs/*/test/`)
   - 이 파일에는 모델이 낸 JSON만 둔다. 파싱 실패도 모델 출력 그대로 저장해 실패로 집계한다.
   - 시간 · 토큰 · 원문 로그는 `.jsonl`로, 채점 상세는 `*.json`이 아닌 이름으로 둔다. 검사기가 폴더의 `*.json`을 모두 검사한다.
 - 전처리: `data/text/{doc_id}.txt`. 실패 기록은 `data/text/_cut_log.csv` + `data/text/review_required/`
