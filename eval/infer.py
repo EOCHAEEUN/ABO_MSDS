@@ -13,8 +13,9 @@
   - _cut_log.csv에서 NOT_FOUND인 문서는 모델에 넣지 않고 _log.jsonl에 skipped로 남긴다(채점에선 실패로 셈)
   - 이미 출력 파일이 있으면 건너뛴다(중단 후 이어 돌리기). 다시 돌리려면 --overwrite(test는 불가)
   - 이어 돌릴 때 설정이 _run.jsonl과 다르면 거부한다(한 폴더에 두 모델 · 두 입력의 출력이 섞이지 않게)
-  - 베이스는 pipeline/configs/r1.yaml의 model · model_revision(학습과 같은 스냅샷)으로 불러오고, 실제로 불러온
-    스냅샷이 다르면 멈춘다
+  - 베이스는 pipeline/configs/r1.yaml의 model · model_revision(학습과 같은 스냅샷)으로 불러온다. 리비전이 없거나
+    (--base만 주고 --revision을 안 준 경우), 불러온 스냅샷을 확인할 수 없거나, 요청과 다르면 멈춘다.
+    확인한 실제 스냅샷은 _log.jsonl의 문서별 base_commit에 남는다
 
   python3 eval/infer.py --condition base_zs --split val
   python3 eval/infer.py --condition base_fs --split val
@@ -190,10 +191,13 @@ def now():
 
 # ---------------------------------------------------------------- 모델
 def verify_commit(model, revision):
-    """실제로 불러온 베이스 스냅샷(HF 커밋 해시)이 요청한 리비전과 다르면 멈춘다. → 커밋 해시(모르면 None)"""
+    """실제로 불러온 베이스 스냅샷(HF 커밋 해시) → 요청한 리비전과 같을 때만 그 해시를 돌려준다.
+    확인할 수 없거나(None) 다르면 멈춘다."""
     base = model.get_base_model() if hasattr(model, "get_base_model") else model
     commit = getattr(getattr(base, "config", None), "_commit_hash", None)
-    if revision and commit and commit != revision:
+    if not commit:
+        sys.exit("[거부] 불러온 베이스 스냅샷(커밋 해시)을 확인할 수 없다")
+    if commit != revision:
         sys.exit(f"[거부] 불러온 베이스 스냅샷 {commit}이 요청한 리비전 {revision}과 다르다")
     return commit
 
@@ -212,7 +216,6 @@ def load_model(base_name, adapter, revision=None):
     model = AutoModelForCausalLM.from_pretrained(
         base_name, revision=revision, quantization_config=bnb, device_map="auto", dtype=torch.bfloat16
     )
-    print(f"베이스 스냅샷: {verify_commit(model, revision)}")
     if adapter:
         from peft import PeftModel
 
@@ -346,6 +349,8 @@ def main(argv=None):
                                          args.label_dir)
                             if args.condition == "base_fs" else ([], []))
     base_name, revision = base_model_spec(args.base, args.revision)
+    if not revision:
+        sys.exit("[거부] 베이스 리비전이 없다. --base를 줄 때는 --revision도 준다(기본은 r1.yaml의 model_revision)")
     out_dir = Path(args.out_root) / args.condition / args.split
 
     # 모델을 올리기 전에 입력부터 전부 확인(모델 로딩에 1분 넘게 걸림)
@@ -363,11 +368,13 @@ def main(argv=None):
 
     print(f"[{args.condition} / {args.split}] {len(todo)}/{len(doc_ids)}건, base={base_name}@{revision}, adapter={args.adapter}")
     tok, model = load_model(base_name, args.adapter, revision)
+    commit = verify_commit(model, revision)
+    print(f"베이스 스냅샷: {commit}")
     generate(tok, model, [{"role": "user", "content": "warm-up"}], 8)  # CUDA 초기화 시간이 첫 문서 속도에 섞이지 않게
 
     for n, doc_id in enumerate(todo, 1):
         rec = {"doc_id": doc_id, "skipped": None, "gen_time_sec": None, "input_tokens": None,
-               "output_tokens": None, "hit_max_new_tokens": False, "created_at": now()}
+               "output_tokens": None, "hit_max_new_tokens": False, "base_commit": commit, "created_at": now()}
         if cut.get(doc_id) == "NOT_FOUND":
             rec["skipped"] = "NOT_FOUND"
             (out_dir / f"{doc_id}.json").unlink(missing_ok=True)  # --overwrite 때 이전 출력이 남지 않게
