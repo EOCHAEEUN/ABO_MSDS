@@ -49,14 +49,14 @@ export default function DocumentsPage() {
       </div></div>
       <div className="table-scroll"><table className="document-table">
         <thead><tr><th className="checkbox-cell"><input type="checkbox" id="check-all" aria-label="검색 결과 전체 선택" checked={allChecked} disabled={!docs.length} ref={element => { if (element) element.indeterminate = !allChecked && docs.some(doc => state.checked.has(doc.id)); }} onChange={event => { const checked = event.target.checked; update(next => { docs.forEach(doc => checked ? next.checked.add(doc.id) : next.checked.delete(doc.id)); }); }} /></th>
-          <th>No.</th><th>문서명</th><th>제품명</th><th>공급자</th>{state.columns.submission && <th>제출번호</th>}{state.columns.language && <th>언어</th>}{state.columns.pages && <th>페이지</th>}<th>상태</th><th>검토 진행</th><th>최근 수정일</th>{state.columns.owner && <th>담당자</th>}
+          <th>No.</th><th>문서명</th><th>제품명</th><th>모델</th><th>공급자</th>{state.columns.submission && <th>제출번호</th>}{state.columns.language && <th>언어</th>}{state.columns.pages && <th>페이지</th>}<th>상태</th><th>검토 진행</th><th>최근 수정일</th>{state.columns.owner && <th>담당자</th>}
         </tr></thead>
         <tbody>{docs.map(doc => {
           const data = effective(doc);
           return <tr key={doc.id} data-document={doc.id} className={selected?.id === doc.id ? "selected" : ""} onClick={event => { if (!event.target.closest("input, button, a")) selectDocument(doc.id); }}>
             <td className="checkbox-cell"><input type="checkbox" data-select={doc.id} aria-label={`${doc.file_name} 선택`} checked={state.checked.has(doc.id)} onChange={event => { const checked = event.target.checked; update(next => { checked ? next.checked.add(doc.id) : next.checked.delete(doc.id); }); }} /></td>
             <td>{doc.number ?? "—"}</td><td><Button action="select-document" className="document-link" data-id={doc.id}><span className="tiny-document">{Array.from({ length: 6 }, (_, i) => <i key={i} />)}</span>{doc.file_name}</Button></td>
-            <td title={data.product_name.value || ""}>{data.product_name.value || "추출 대기"}</td><td>{data.supplier.company_name || "—"}</td>
+            <td title={data.product_name.value || ""}>{data.product_name.value || "추출 대기"}</td><td>{doc.model_name || "—"}</td><td>{data.supplier.company_name || "—"}</td>
             {state.columns.submission && <td>{doc.submission_number || "—"}</td>}{state.columns.language && <td>{doc.language}</td>}{state.columns.pages && <td className="numeric">{doc.page_count || "—"}</td>}
             <td className="center"><Badge doc={doc} /></td><td className="numeric"><b>{count(doc)}</b> / 5</td><td>{doc.updated_at?.split(" ")[0] || "—"}</td>{state.columns.owner && <td>{doc.owner}</td>}
           </tr>;

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { api, API_MODE } from "./api.js";
+import { api, API_MODE, source } from "./api.js";
 import { FIELD_DEFS } from "./data.js";
 import { ROUTES, applyReview, count, current, download, downloadDocuments, effective, filteredDocuments, unverifiedHazard } from "./model.js";
 
@@ -80,6 +80,9 @@ export function useWorkspaceController() {
         next.compareAt = "";
         next.page = 1;
       });
+      if (source.mode === "results" && source.skipped.length) {
+        notify(`파싱 실패 등으로 목록에서 뺀 결과 ${source.skipped.length}건: ${source.skipped.map(item => `${item.condition} · ${item.doc_id}`).join(", ")}`);
+      }
     } catch (error) {
       if (request === docsRequest.current && alive.current) { patch({ error: error.message }); notify(error.message, true); }
     } finally {

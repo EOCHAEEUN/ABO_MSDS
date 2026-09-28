@@ -3,6 +3,18 @@ import { demoDocuments, DEMO_EXPERIMENTS, emptyExtraction } from './data.js';
 const params = new URLSearchParams(location.search);
 export const API_MODE = params.get('mode') === 'api';
 const STORAGE_KEY = 'msds-lab-demo-v1';
+const RESULTS_KEY = 'msds-lab-results-v1';
+const RESULTS_URL = './results/';
+
+// 데이터 출처: api(서버) · results(저장된 val 실험 결과, python3 -m app.web_results로 생성) · demo(가상 예시)
+export const source = { mode: API_MODE ? 'api' : 'demo', skipped: [], note: '', stamp: '', docs: [] };
+
+async function readJson(name) {
+  const response = await fetch(`${RESULTS_URL}${name}`, { cache: 'no-store' });
+  const type = response.headers.get('content-type') || '';
+  if (!response.ok || !type.includes('json')) return null;  // 결과 파일이 없으면 예시 데이터로
+  return response.json();
+}
 
 async function request(path, options = {}) {
   const response = await fetch(path, { ...options, signal: AbortSignal.timeout(120000) });
@@ -25,6 +37,23 @@ function prepareDocument(document) {
   return { ...document, id: String(document.id), number: document.number ?? document.id, reviews: document.reviews || {}, confirmed_fields: document.confirmed_fields || [], rule_results: document.rule_results || {}, source: document.source || null };
 }
 
+async function readResults() {
+  let data;
+  try { data = await readJson('documents.json'); } catch { return null; }
+  if (!Array.isArray(data?.documents) || !data.documents.length) return null;
+  const docs = data.documents.map(prepareDocument);
+  source.mode = 'results';
+  source.skipped = data.skipped || [];
+  // 브라우저에 저장한 검토값은 같은 결과 파일에서 만든 것일 때만 다시 쓴다
+  source.stamp = data.stamp || docs.map(doc => doc.id).join('|');  // 결과 파일 내용이 바뀌면 저장본을 버림
+  source.docs = docs;
+  try {
+    const saved = JSON.parse(localStorage.getItem(RESULTS_KEY));
+    if (saved?.stamp === source.stamp && Array.isArray(saved.documents)) source.docs = saved.documents.map(prepareDocument);
+  } catch { /* 저장소를 쓸 수 없으면 결과 파일 그대로 */ }
+  return source.docs;
+}
+
 function readDemo() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -35,7 +64,12 @@ function readDemo() {
 
 export const api = {
   async documents() {
-    if (!API_MODE) return readDemo();
+    if (!API_MODE) {
+      const results = await readResults();
+      if (results) return results;
+      source.mode = 'demo';
+      return readDemo();
+    }
     const result = await request('/documents');
     if (!Array.isArray(result.documents)) throw new Error('문서 목록 응답에 documents 배열이 필요합니다. web/README.md의 연동 명세를 확인해 주세요.');
     return result.documents.map(prepareDocument);
@@ -51,6 +85,11 @@ export const api = {
     if (API_MODE) return;
     // Browser PDF object URLs expire on reload. Store only built-in demo documents.
     if (document.local_upload) return;
+    if (source.mode === 'results') {
+      source.docs = source.docs.map(doc => doc.id === document.id ? document : doc);
+      try { localStorage.setItem(RESULTS_KEY, JSON.stringify({ stamp: source.stamp, documents: source.docs })); } catch { /* 저장 실패는 화면 동작에 영향 없음 */ }
+      return;
+    }
     const saved = readDemo().map(doc => doc.id === document.id ? document : doc);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
   },
@@ -71,7 +110,12 @@ export const api = {
     };
   },
   async compare(documentId, split = 'val', subset = 'all') {
-    if (!API_MODE) return { experiments: structuredClone(DEMO_EXPERIMENTS), split: '예시', subset: '예시', executed_at: '2025.08.12 10:24' };
+    if (!API_MODE) {
+      let result = null;
+      try { result = await readJson('compare.json'); } catch { /* 결과 파일 없음 → 예시 */ }
+      if (Array.isArray(result?.experiments) && result.experiments.length) { source.note = result.note || ''; return result; }
+      return { experiments: structuredClone(DEMO_EXPERIMENTS), split: '예시', subset: '예시', executed_at: '2025.08.12 10:24' };
+    }
     return request('/compare', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ document_id: documentId, split, subset }),
