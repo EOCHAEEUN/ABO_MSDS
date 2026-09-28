@@ -1,0 +1,173 @@
+"""
+[김건하] Rule Engine 통합 테스트. fixtures.py의 가짜 라벨/가짜 원문만 쓴다.
+실행: `cd` 저장소 루트 → `python -m unittest discover -s app/rules/tests -v`
+"""
+from __future__ import annotations
+
+import unittest
+
+from app.rules.engine import run_rules
+from app.rules.tests.fixtures import BASE_SOURCE_TEXT, clean_label
+
+
+def _codes(result: dict) -> set[str]:
+    return {f["code"] for f in result["findings"]}
+
+
+class TestOutputShape(unittest.TestCase):
+    def test_top_level_keys_match_spec(self):
+        result = run_rules(clean_label(), BASE_SOURCE_TEXT, doc_id="FIXTURE-001")
+        expected_keys = {
+            "doc_id", "review_status", "schema_valid", "source_text_available",
+            "checks_run", "findings", "evidence", "summary",
+        }
+        self.assertEqual(set(result.keys()), expected_keys)
+        self.assertEqual(result["doc_id"], "FIXTURE-001")
+        self.assertEqual(len(result["checks_run"]), 9)
+        self.assertEqual(set(result["summary"].keys()), {"n_errors", "n_warnings", "n_info"})
+
+    def test_finding_and_evidence_shape(self):
+        label = clean_label()
+        label["ingredients"][0]["cas_number"] = "64-17-6"  # 체크디지트 오류 유발
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertTrue(result["findings"])
+        finding = result["findings"][0]
+        self.assertEqual(
+            set(finding.keys()), {"check", "severity", "code", "field", "message", "detail"}
+        )
+        self.assertTrue(result["evidence"])
+        ev = result["evidence"][0]
+        self.assertEqual(set(ev.keys()), {"field", "value", "found", "match_type", "snippet"})
+
+
+class TestCleanBaseline(unittest.TestCase):
+    def test_ok_status_no_findings(self):
+        result = run_rules(clean_label(), BASE_SOURCE_TEXT, doc_id="FIXTURE-OK")
+        self.assertEqual(result["review_status"], "OK")
+        self.assertEqual(result["findings"], [])
+        self.assertTrue(result["schema_valid"])
+        self.assertTrue(result["source_text_available"])
+
+
+class TestNoSourceText(unittest.TestCase):
+    def test_evidence_and_not_found_skip_gracefully(self):
+        result = run_rules(clean_label(), None, doc_id="FIXTURE-NOSRC")
+        self.assertFalse(result["source_text_available"])
+        self.assertEqual(result["evidence"], [])
+        self.assertIn("EVIDENCE_SKIPPED_NO_SOURCE", _codes(result))
+        # 정보성 1건만 있으므로 review_status는 여전히 OK
+        self.assertEqual(result["review_status"], "OK")
+        self.assertEqual(result["summary"], {"n_errors": 0, "n_warnings": 0, "n_info": 1})
+
+
+class TestSchemaCheck(unittest.TestCase):
+    def test_missing_required_field_is_schema_error(self):
+        label = clean_label()
+        del label["list_status"]
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertEqual(result["review_status"], "SCHEMA_ERROR")
+        self.assertFalse(result["schema_valid"])
+        self.assertIn("SCHEMA_FIELD_INVALID", _codes(result))
+
+
+class TestEmptyValueCheck(unittest.TestCase):
+    def test_flagged_when_value_is_sentinel_but_status_is_filled(self):
+        label = clean_label()
+        label["use_restrictions"] = {"value": "자료없음", "source_status": "기재"}
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("EMPTY_VALUE_SUSPECT", _codes(result))
+        self.assertEqual(result["review_status"], "NEEDS_REVIEW")
+
+
+class TestNotFoundCheck(unittest.TestCase):
+    def test_flagged_when_value_absent_from_source(self):
+        label = clean_label()
+        label["product_name"]["value"] = "원문에없는이름"
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("VALUE_NOT_FOUND_IN_SOURCE", _codes(result))
+        self.assertEqual(result["review_status"], "NEEDS_REVIEW")
+
+
+class TestCasCheck(unittest.TestCase):
+    def test_bad_checksum(self):
+        label = clean_label()
+        label["ingredients"][0]["cas_number"] = "64-17-6"
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("CAS_CHECKSUM_INVALID", _codes(result))
+
+    def test_bad_format_flags_cas_and_schema(self):
+        label = clean_label()
+        label["ingredients"][0]["cas_number"] = "abcde"
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("CAS_FORMAT_INVALID", _codes(result))
+        self.assertIn("SCHEMA_FIELD_INVALID", _codes(result))  # src/schema.py도 형식을 검사함
+        self.assertEqual(result["review_status"], "SCHEMA_ERROR")
+
+
+class TestHcodeCheck(unittest.TestCase):
+    def test_unknown_code_not_in_table(self):
+        label = clean_label()
+        label["hazard_statements"] = [{"code": "H999", "text": "표에 없는 임의의 문구"}]
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("HCODE_UNKNOWN_CODE", _codes(result))
+
+
+class TestPhraseToHcodeCheck(unittest.TestCase):
+    def test_mismatched_phrase(self):
+        label = clean_label()
+        label["hazard_statements"] = [{"code": "H225", "text": "전혀 다른 문구입니다"}]
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("HCODE_PHRASE_MISMATCH", _codes(result))
+
+    def test_null_code_is_not_checked(self):
+        label = clean_label()
+        label["hazard_statements"] = [{"code": None, "text": "코드 없이 문구만 있는 정상 케이스"}]
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertNotIn("HCODE_PHRASE_MISMATCH", _codes(result))
+
+
+class TestGhsConsistencyCheck(unittest.TestCase):
+    def test_hcode_does_not_match_classification_is_inconsistent(self):
+        label = clean_label()
+        # 인화성 액체 구분2는 H225가 기대값인데 H226만 있음 -> 모순
+        label["hazard_statements"] = [{"code": "H226", "text": "인화성 액체 또는 증기"}]
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("HCODE_MISSING_FOR_CLASSIFICATION", _codes(result))
+        self.assertEqual(result["review_status"], "INCONSISTENT")
+
+    def test_signal_word_mismatch(self):
+        label = clean_label()
+        label["ghs_classification"] = [{"hazard_class": "인화성 액체", "category": "구분 1"}]  # 위험 기대
+        label["hazard_statements"] = [{"code": "H224", "text": "극인화성 액체 및 증기"}]
+        label["signal_word"]["value"] = "경고"  # 실제는 경고로 어긋남
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("SIGNAL_WORD_MISMATCH", _codes(result))
+        self.assertEqual(result["review_status"], "INCONSISTENT")
+
+    def test_classification_not_in_table_is_info_only(self):
+        label = clean_label()
+        label["ghs_classification"] = [{"hazard_class": "표에없는분류", "category": "구분 9"}]
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("CLASSIFICATION_NOT_IN_TABLE", _codes(result))
+        info_findings = [f for f in result["findings"] if f["code"] == "CLASSIFICATION_NOT_IN_TABLE"]
+        self.assertEqual(info_findings[0]["severity"], "info")
+
+
+class TestContentSumCheck(unittest.TestCase):
+    def test_lower_bound_sum_exceeds_100(self):
+        label = clean_label()
+        label["ingredients"][0]["content"] = "60~70"
+        label["ingredients"][1]["content"] = "50~60"  # 60 + 50 = 110 > 100
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("CONTENT_SUM_EXCEEDS_100", _codes(result))
+
+    def test_unparseable_content_is_excluded_not_summed_as_zero_error(self):
+        label = clean_label()
+        label["ingredients"][0]["content"] = "확인불가"
+        result = run_rules(label, BASE_SOURCE_TEXT)
+        self.assertIn("CONTENT_SUM_UNPARSEABLE", _codes(result))
+        self.assertNotIn("CONTENT_SUM_EXCEEDS_100", _codes(result))
+
+
+if __name__ == "__main__":
+    unittest.main()
