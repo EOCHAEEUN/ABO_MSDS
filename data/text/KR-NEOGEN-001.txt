@@ -1,0 +1,140 @@
+LESS Medium
+물질안전보건자료
+고용노동부고시 2020-130에 따름
+MSDS 번호: 자료없음
+최초 작성일자: 2025-08-22 버전: 1.0
+1. 화학제품과 회사에 관한 정보
+가. 제품명
+제품 형태 : 혼합물
+제품명 : LESS Medium
+제품 코드 : 9790
+제품 유형 : Food Safety -- [Food Safety]
+파트 번호 : 9790|9792E|9798|400000055|400000056|400000648|700002820|700002821|700002822
+나. 제품의 권고 용도와 사용상의 제한
+O 제품의 권고 용도
+제품의 권고 용도 : 실험실 화학물질. 과학 연구 및 개발.
+O 제품의 사용상의 제한
+자료없음
+다. 공급자 정보
+- 공급업체
+O 회사명 : Neogen Corporation
+O 주소 : (48912) United States of America Michigan Lansing 620 Lesher Place
+O 전화 : 800.234.5333
+O 응급 정보 : 24 hours:
+Medical: 1-800-498-5743 (U.S. and Canada) or 1-651-523-0318 (international)
+Spill/CHEMTREC: 1-800-424-9300 (U.S. and Canada) or 1-703-527-3887 (international)
+O 전자우편 : sds@neogen.com
+O 웹사이트 : https://www.neogen.com/
+2. 유해성·위험성
+가. 유해성·위험성 분류
+급성 독성 (경구), 구분 5 H303
+급성 독성 (경피), 구분 5 H313
+피부 부식성/피부 자극성, 분류되지 않음
+심한 눈 손상성/눈 자극성, 구분 2 H319
+피부 과민성, 구분 1 H317
+급성 수생환경, 구분 1 H400
+만성 수생환경, 구분 1 H410
+2025-08-22 (최초 작성일자) KR - ko 1/19
+LESS Medium
+물질안전보건자료
+고용노동부고시 2020-130에 따름
+나. 예방조치문구를 포함한 경고표지 항목
+O 그림문자 (GHS KR)
+O 신호어 (GHS KR)
+경고.
+O 유해∙위험 문구 (GHS KR)
+H303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음
+H317 - 알레르기성 피부 반응을 일으킬 수 있음
+H319 - 눈에 심한 자극을 일으킴
+H400 - 수생생물에 매우 유독함
+H410 - 장기적인 영향에 의해 수생생물에게 매우 유독함
+다. 유해성•위험성 분류기준에 포함되지 않는 기타 유해성•위험성
+해당없음
+2025-08-22 (최초 작성일자) KR - ko 2/19
+LESS Medium
+물질안전보건자료
+고용노동부고시 2020-130에 따름
+3. 구성성분의 명칭 및 함유량
+제품 형태 : 혼합물
+화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)
+Peptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25
+MOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25
+Sodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 10 – < 15
+acetylformic acid, sodium salt / 기존화학물질 번호: KE-27653
+propanoic acid, 2-oxo-, sodium salt /
+pyruvic acid sodium salt / sodium
+pyruvate
+3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15
+acid / 3-(N- 기존화학물질 번호: 2010-3-4223
+morpholino)propanesulphonic acid /
+3-morpholinopropanesulphonic acid
+/ 4-morpholinepropanesulfonic acid /
+MOPS / MOPS, DNase, RNase,
+protease free /
+morpholinepropanesulfonic acid / N-
+(3-sulfopropyl)morpholine / WAS 15
+Sodium chloride AKZO, BROXO 6/15 / AXAL / BRINE / CAS 번호: 7647-14-5 ≥ 5 – < 10
+BROXO 6/15 / common salt / 기존화학물질 번호: KE-31387
+dendritis / evaporated salt / extra
+fine 200 salt / extra fine 325 salt /
+halite / HG blending / iron-fighter
+salt / purex / purified brine / road
+salt / rock salt / saline / salt / sea
+salt / sodium chloride / sodium
+chloride (NaCl) / solar salt / solsel /
+sterling (=sodium chloride) / table
+salt / top flake / USP sodiumchloride
+/ vacuum salt / white crystal
+2025-08-22 (최초 작성일자) KR - ko 3/19
+LESS Medium
+물질안전보건자료
+고용노동부고시 2020-130에 따름
+화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)
+Magnesium sulfate anhydrous E518 / epsom salts / magnesium CAS 번호: 7487-88-9 ≥ 5 – < 10
+sulfate / magnesium sulphate / 기존화학물질 번호: KE-22752
+magnesium sulphate (1:1) /
+magnesium sulphate, anhydrous /
+magnesium sulphate, anhydrous,
+crystalline / magnesium sulphate,
+dried, pure / magnesiumsulphate,
+dried / PST13510 / sal angalis / sal
+de sedlitz / sulfuric acid magnesium
+salt (1:1) / sulphuric acid magnesium
+salt
+2025-08-22 (최초 작성일자) KR - ko 4/19
+LESS Medium
+물질안전보건자료
+고용노동부고시 2020-130에 따름
+화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)
+Potassium phosphate dibasic dibasic potassium phosphate, CAS 번호: 7758-11-4 ≥ 1 – < 5
+anhydrous anhydrous / dikalium phosphate, 기존화학물질 번호: KE-12167
+anhydrous / dipotassium
+hydrogenorthophosphate /
+dipotassium monohydrogen
+phosphate, anhydrous / dipotassium
+monophosphate, anhydrous /
+dipotassium orthophosphate,
+anhydrous / dipotassium phosphate,
+anhydrous / dipotassium-o-
+phosphate, anhydrous / DKP,
+anhydrous / hydrogen dipotassium
+phosphate, anhydrous /
+orthophosphate dipotassium,
+anhydrous / phosphoric acid,
+dipotassium salt / phosphoric acid,
+dipotassium salt, anhydrous /
+potassium biphosphate, anhydrous /
+potassium dibasic phosphate,
+anhydrous / potassium hydrogen
+phosphate(=di potassium hydrogen
+phosphate) / potassium
+hydrogenphosphate, anhydrous /
+potassium monohydrogen
+orthophosphate, anhydrous /
+potassium monohydrogen
+phosphate, anhydrous / potassium
+orthophosphate, mono-H, anhydrous
+/ potassium phosphate dibasic,
+anhydrous / sec-potassium
+phosphate, anhydrous / secundary
+potassium phosphate, anhydrous
