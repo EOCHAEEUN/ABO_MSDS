@@ -29,5 +29,8 @@ node_modules/
 # 프런트엔드 빌드 결과
 web/dist/
 
-# test 출력 · 채점 상세(정답 값 포함)는 저장소 밖(--out-root)에만 둔다 — infer.py · score.py가 강제, 여기는 이중 안전장치
-outputs/*/test/
+
+# PDF → SQLite 적재 결과물 (app/pipeline_run.py)
+data/db/
+outputs/exports/
+
