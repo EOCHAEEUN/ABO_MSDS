@@ -70,13 +70,11 @@
       "category": "구분 3"
     },
     {
-
-      "hazard_class": "급성독성물질 흡입",
+      "hazard_class": "급성독성물질 흡입(증기)",
       "category": "구분 3"
     },
     {
-      "hazard_class": "급성독성물질 흡입",
-
+      "hazard_class": "급성독성물질 흡입(분진)",
       "category": "구분 4"
     },
     {
