@@ -53,7 +53,7 @@ class InferTest(unittest.TestCase):
             d = Path(tmp) / "base_zs" / "val"
             self.assertEqual(len((d / "_log.jsonl").read_text(encoding="utf-8").splitlines()), 2)
             with self.assertRaises(SystemExit) as cm:
-                self.run_infer(tmp, "--max-new-tokens", "2048", "--overwrite")
+                self.run_infer(tmp, "--max-new-tokens", str(infer.DEFAULT_MAX_NEW_TOKENS + 1000), "--overwrite")
             self.assertIn("설정이 다름", str(cm.exception))
 
     def test_not_found_is_logged_not_generated(self):

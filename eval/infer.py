@@ -47,7 +47,17 @@ EXPERIMENT_JSON = ROOT / "eval" / "experiment.json"  # 단계 7(모델·실험 �
 DEFAULT_CONFIG = ROOT / "pipeline" / "configs" / "r1.yaml"
 OUTPUT_ROOT = ROOT / "outputs"
 PROMPT_FILE = ROOT / "core" / "prompt.py"
-DEFAULT_MAX_NEW_TOKENS = 1024  # 실험 고정 전 임시값. 고정값은 train·val 정답 최장 토큰 × 1.3 (plan 6절)
+DEFAULT_MAX_NEW_TOKENS = 2048
+# 실험 고정 전 임시값(2026-09-28, docs/plan.md 6절 "생성 길이 부족" 참고).
+# - 진짜 고정값은 train·val 정답 최장 토큰 × 1.3이다. 새 라벨이 나오면 pipeline/length_stats.py로 재서
+#   eval/experiment.json에 채우고 실험을 고정한다(단계 7). 그 전까지 이 상수는 val·train 진단에만 쓰인다
+#   (test는 이 상수를 쓰지 않는다 — 위 264행).
+# - 1024는 부족했다: fixture 문서(KR-HENKEL-001, 입력 2,141토큰)가 1024에서 잘려 JSON이 깨졌다. 옛 라벨
+#   기준 정답 최장이 약 975토큰이라 × 1.3 ≈ 1,268이었는데도 1024로는 못 미친 사례라, 여유를 더 둔다.
+# - 4096(=r1.yaml의 max_length)을 그대로 쓰지 않는다. max_length는 학습 때 입력+정답 합계 길이의 상한이고,
+#   max_new_tokens는 추론 때 새로 생성하는 토큰 수만의 상한이라 용도가 다르다. EOS 없이 도는 실패 사례가
+#   나오면 이 값까지 다 채우고서야 멈추므로, 진단 단계(실패가 잦을 수 있는 구간)에서 4096은 문서당 생성
+#   시간을 크게 늘릴 위험이 있다. 2048은 1024보다 넉넉하면서 그 위험을 줄인 절충값이다.
 
 LOG_FILE = "_log.jsonl"
 RUN_FILE = "_run.jsonl"
