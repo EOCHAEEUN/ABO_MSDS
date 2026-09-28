@@ -415,6 +415,6 @@ DB 파일(`*.db`)은 커밋하지 않습니다.
 - [ ] 출력 스키마 · DB 스키마 동결 재확인
 - [ ] 주지표와 5절 채점 규칙, 10절 목표 수치 · 결론 문구
 - [ ] 파일럿 코드 중 가져올 파일 목록(파일 단위 PR)
-- [ ] main의 기존 라벨(`data/labels/` · `eval/test/` · `eval/val_en/`)과 `docs/labeling_review_notes.md` 처리(삭제 또는 보관 폴더로 이동)
+- [x] main의 기존 라벨 처리(2026-09-28): `data/labels/` → `archive/labels_0923/`, `eval/val_en/` → `archive/val_en_0923/`, `eval/test/` 삭제(지금 test 문서의 옛 정답). 재시작 정답은 `data/labels/`. `docs/labeling_review_notes.md` 정리는 남음
 - [ ] `.github/workflows/validate.yml`(PR #1) 병합 여부 — 병합하면 test를 저장소에서 검사하지 않도록 고침
 - [ ] 공개 저장소에 남은 파일럿 이력(`feat/web`, PR #2) 처리

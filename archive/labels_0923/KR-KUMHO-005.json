@@ -1,6 +1,6 @@
 {
   "product_name": {
-    "value": "PPG 450, PPG 1000, PPG 2070, PPG 2100, PPG 2300, PPG 3022, PPG 3544, PPG 3546, PPG 4000, PPG 5000",
+    "value": "300A, 300H, 310TR, 310CTR, 320A, 326A, 330EF, 340EF, 330I, 335T, 335N, 350, 350A, 350F, 350HM, 350HW, 350CHW, 326PI, 340PI",
     "source_status": "기재"
   },
   "recommended_use": {
@@ -14,21 +14,14 @@
   "supplier": {
     "company_name": "금호석유화학(주) 울산수지공장",
     "address": "울산광역시 남구 처용로 260-257(성암동)",
-    "emergency_phone": "052-279-8565"
+    "emergency_phone": "052-279-8725"
   },
   "ingredients": [
     {
-      "chemical_name": "α,α',α''-1,2,3-Propanetriyltris[ω-hydroxypoly[oxy(methyl-1,2-ethanediyl)]]; Polyoxypropylene glycerol triether",
-      "cas_number": "25791-96-2",
-      "ke_number": "KE-29338",
+      "chemical_name": "'2-Propenenitrile polymer with ethenylbenzene; Acrylonitrile-styrene copolymer",
+      "cas_number": "9003-54-7",
+      "ke_number": "KE-29423",
       "content": "99–100",
-      "is_substitute_data": false
-    },
-    {
-      "chemical_name": "Octadecyl 3-(3,5-di-tert-butyl-4-hydroxyphenyl)propionate",
-      "cas_number": "2082-79-3",
-      "ke_number": "KE-03070",
-      "content": "0–1",
       "is_substitute_data": false
     }
   ],
