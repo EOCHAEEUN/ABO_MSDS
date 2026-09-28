@@ -1,0 +1,93 @@
+{
+  "product_name": {
+    "value": "HDPE 공정 미반응 탄화수소 혼합물",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "1. 원료 및 중간체",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": null,
+    "source_status": "자료없음"
+  },
+  "supplier": {
+    "company_name": "S-OIL㈜ 온산공장",
+    "address": "울산광역시 울주군 온산읍 당월리 520",
+    "emergency_phone": "052-280-4449"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Distillates (petroleum), polymd. steam-cracked petroleum distillates, (C=5-12) fraction",
+      "cas_number": "68477-50-9",
+      "ke_number": "KE-12597",
+      "content": "100",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "인화성 액체",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "피부 부식성/피부 자극성",
+      "category": "구분 2"
+    },
+    {
+      "hazard_class": "특정표적장기 독성(1 회 노출)",
+      "category": "구분 3"
+    },
+    {
+      "hazard_class": "흡인 유해성",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "급성 수생환경 유해성",
+      "category": "구분 1"
+    },
+    {
+      "hazard_class": "만성 수생환경 유해성",
+      "category": "구분 1"
+    }
+  ],
+  "signal_word": {
+    "value": "위험",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H224",
+      "text": "극인화성 액체 및 증기"
+    },
+    {
+      "code": "H304",
+      "text": "삼켜서 기도로 유입되면 치명적일 수 있음"
+    },
+    {
+      "code": "H315",
+      "text": "피부에 자극을 일으킴"
+    },
+    {
+      "code": "H335",
+      "text": "호흡기 자극을 일으킬 수 있음"
+    },
+    {
+      "code": "H336",
+      "text": "졸음 또는 현기증을 일으킬 수 있음"
+    },
+    {
+      "code": "H400",
+      "text": "수생생물에 매우 유독함"
+    },
+    {
+      "code": "H410",
+      "text": "장기적인 영향에 의해 수생생물에게 매우 유독함"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "product_name": {
+    "value": "KSM 6010-1종 2급 적색(신) / WPD300",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "수성도료 합성수지 에멀전도료(KSM 6010-1종 2급)(콘크리트,석고등 건축물외부미장도료), 수성 페인트",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": "권고 용도 외에는 사용하지 마시오.",
+    "source_status": "기재"
+  },
+  "supplier": {
+    "company_name": "조광페인트(주)",
+    "address": "46909) 부산광역시 사상구 삼덕로 5번길 148(삼락동)",
+    "emergency_phone": "051)304-7701/9"
+  },
+  "ingredients": [
+    {
+      "chemical_name": "Propanoic acid, 2-methyl-, monoester with 2,2,4-trimethyl-1,3",
+      "cas_number": "25265-77-4",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Talc(NON ASBESTOS)",
+      "cas_number": "14807-96-6",
+      "ke_number": null,
+      "content": "20~30",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "Limestone",
+      "cas_number": "1317-65-3",
+      "ke_number": null,
+      "content": "20~30",
+      "is_substitute_data": false
+    },
+    {
+      "chemical_name": "C.I. pigment red 112",
+      "cas_number": "6535-46-2",
+      "ke_number": null,
+      "content": "1~10",
+      "is_substitute_data": false
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_class": "급성 독성(흡입:증기)",
+      "category": "구분 5"
+    }
+  ],
+  "signal_word": {
+    "value": "경고",
+    "source_status": "기재"
+  },
+  "hazard_statements": [
+    {
+      "code": "H333",
+      "text": "흡입하면 유해할 수 있음"
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}
