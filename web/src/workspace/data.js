@@ -89,5 +89,7 @@ export const METRICS = [
   { key: 'cas', label: 'CAS F1', unit: '%' },
   { key: 'pair', label: 'pair F1', unit: '%' },
   { key: 'hcode', label: 'H-code F1', unit: '%' },
+  { key: 'ghs', label: 'GHS 분류 F1', unit: '%', optional: true },
+  { key: 'exact', label: '문서 완전 정답', unit: '%', optional: true },
   { key: 'seconds', label: '생성 시간', unit: '초' },
 ];

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import msdsLabMark from "./workspace/msds-lab-mark.svg";
 import capybaraMsds from "./workspace/capybara-msds.png";
 import "./landing-page.css";
@@ -50,7 +51,28 @@ function DocumentVisual() {
   );
 }
 
+// 저장된 val 실험 결과(web/public/results/compare.json, python3 -m app.web_results로 생성). 없으면 "—"로 둔다.
+function useExperiments() {
+  const [experiments, setExperiments] = useState([]);
+  useEffect(() => {
+    fetch("./results/compare.json", { cache: "no-store" })
+      .then(response => (response.ok && (response.headers.get("content-type") || "").includes("json") ? response.json() : null))
+      .then(data => { if (Array.isArray(data?.experiments)) setExperiments(data.experiments); })
+      .catch(() => {});
+  }, []);
+  return experiments;
+}
+
+const f1 = value => (Number.isFinite(value) ? (value / 100).toFixed(3) : "—");
+const percent = value => (Number.isFinite(value) ? `${value.toFixed(0)}%` : "—");
+
 export default function LandingPage() {
+  const experiments = useExperiments();
+  const find = id => experiments.find(item => item.id === id);
+  const qlora = [...experiments].reverse().find(item => item.id.startsWith("qlora"));
+  const modelRows = [["Base (Zero-shot)", find("base_zs")], ["Base (Few-shot, k=2)", find("base_fs")], [qlora ? qlora.name : "QLoRA", qlora]];
+  const bars = modelRows.filter(([, item]) => item && Number.isFinite(item.ghs));
+  const nDocs = experiments[0]?.n_docs;
   return (
     <>
       <a className="skip-link" href="#intro">본문 바로가기</a>
@@ -145,13 +167,11 @@ export default function LandingPage() {
                 <table className="model-table">
                   <thead><tr><th scope="col">모델</th><th scope="col">GHS F1 ↑</th><th scope="col">문서 정답률 ↑</th><th scope="col">스키마 준수율 ↑</th></tr></thead>
                   <tbody>
-                    <tr><th scope="row">Base (Zero-shot)</th><td>—</td><td>—</td><td>—</td></tr>
-                    <tr><th scope="row">Base (Few-shot, k=2)</th><td>—</td><td>—</td><td>—</td></tr>
-                    <tr><th scope="row">QLoRA</th><td>—</td><td>—</td><td>—</td></tr>
+                    {modelRows.map(([label, item]) => <tr key={label}><th scope="row">{label}</th><td>{f1(item?.ghs)}</td><td>{percent(item?.exact)}</td><td>{percent(item?.schema)}</td></tr>)}
                   </tbody>
                 </table>
               </div>
-              <p className="result-note">평가 전입니다. 결과가 나오면 갱신합니다.</p>
+              <p className="result-note">{experiments.length ? `val ${nDocs ?? ""}건(조건 선택용) 결과입니다. 문서 정답률은 확장 기준이며, 최종 판정은 test 평가로 합니다.` : "평가 전입니다. 결과가 나오면 갱신합니다."}</p>
               <a className="text-link" href="./workspace.html#compare">실험 비교 화면 보기 <span aria-hidden="true">→</span></a>
             </section>
             <section className="panel" aria-labelledby="boundary-title">
@@ -165,8 +185,10 @@ export default function LandingPage() {
             </section>
             <section className="panel" aria-labelledby="visual-title">
               <div className="num">RESULT VISUAL</div><h2 className="small-title" id="visual-title">비교 지표</h2>
-              <p>GHS 분류 F1 · val</p>
-              <p className="result-note">평가 전입니다. 결과가 나오면 막대그래프로 표시합니다.</p>
+              <p>GHS 분류 F1 · val{nDocs ? ` ${nDocs}건` : ""}</p>
+              {bars.length ? <div className="small-bars" role="img" aria-label={`GHS F1: ${bars.map(([label, item]) => `${label} ${f1(item.ghs)}`).join(", ")}`}>
+                {bars.map(([, item]) => <div className="bar-column" aria-hidden="true" key={item.id}><b>{f1(item.ghs)}</b><i style={{ "--score": item.ghs / 100 }}></i><span>{item.short || item.name}</span></div>)}
+              </div> : <p className="result-note">평가 전입니다. 결과가 나오면 막대그래프로 표시합니다.</p>}
             </section>
           </div>
         </div>
