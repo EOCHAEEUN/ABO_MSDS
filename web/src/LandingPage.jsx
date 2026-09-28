@@ -1,3 +1,5 @@
+import msdsLabMark from "./workspace/msds-lab-mark.svg";
+import capybaraMsds from "./workspace/capybara-msds.png";
 import "./landing-page.css";
 
 const rows = [
@@ -9,21 +11,7 @@ const rows = [
 ];
 
 function Logo() {
-  return (
-    <svg className="logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <line x1="16" y1="16" x2="6" y2="7" />
-      <line x1="16" y1="16" x2="25" y2="7" />
-      <line x1="16" y1="16" x2="27" y2="19" />
-      <line x1="16" y1="16" x2="8" y2="25" />
-      <line x1="16" y1="16" x2="16" y2="3" />
-      <circle cx="16" cy="16" r="3.2" />
-      <circle cx="6" cy="7" r="2.5" />
-      <circle cx="25" cy="7" r="2.5" />
-      <circle cx="27" cy="19" r="2.5" />
-      <circle cx="8" cy="25" r="2.5" className="accent" />
-      <circle cx="16" cy="3" r="2.5" />
-    </svg>
-  );
+  return <img className="logo" src={msdsLabMark} width="32" height="32" alt="" />;
 }
 
 function DocumentVisual() {
@@ -70,7 +58,7 @@ export default function LandingPage() {
         <div className="wrap nav-inner">
           <a className="brand" href="#top" aria-label="MSDS Lab 홈">
             <Logo />
-            MSDS Lab <small>analyze · build · operate</small>
+            <span className="brand-copy"><span className="brand-name">MSDS Lab</span><small>Materials for a safer tomorrow</small></span>
           </a>
           <div className="nav-links"><a href="#intro">프로젝트 소개</a><a href="#review">문서 검토</a><a href="#experiment">실험 비교</a></div>
           <a className="top-cta" href="./workspace.html#review">검토 화면 보기 <span aria-hidden="true">→</span></a>
@@ -81,7 +69,10 @@ export default function LandingPage() {
         <div className="wrap">
           <div className="hero-grid">
             <div className="hero-copy">
-              <div className="kicker">MSDS DOCUMENT ANALYSIS</div>
+              <div className="hero-eyebrow">
+                <div className="kicker">MSDS DOCUMENT ANALYSIS</div>
+                <img className="landing-mascot" src={capybaraMsds} width="100" height="100" alt="" aria-hidden="true" />
+              </div>
               <h1>MSDS를 읽는 데서<br />끝내지 않습니다.<br /><span>원문과 함께 검토 가능한<br />데이터로 만듭니다.</span></h1>
               <p>제조사마다 다른 형식의 MSDS 1~3항에서 핵심 정보를 구조화하고, 추출값의 원문 근거와 검토 상태를 함께 제공합니다.</p>
               <div className="actions">
@@ -187,7 +178,7 @@ export default function LandingPage() {
           <a className="btn" href="./workspace.html#review">문서 검토 화면 보기 <span aria-hidden="true">→</span></a>
         </div>
       </section>
-      <footer><div className="wrap foot"><strong>MSDS Lab · ABO</strong><span>Analyze · Build · Operate</span></div></footer>
+      <footer><div className="wrap foot"><a className="footer-brand" href="#top" aria-label="MSDS Lab 페이지 맨 위로"><Logo /><span>MSDS Lab</span></a><span>Materials for a safer tomorrow · ABO</span></div></footer>
     </>
   );
 }
