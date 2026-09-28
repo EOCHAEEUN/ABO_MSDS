@@ -31,3 +31,8 @@ node_modules/
 
 # Frontend build output
 web/dist/
+
+# NPU 트랙 — 병합 체크포인트·OpenVINO IR·컴파일 캐시 (merge.json·export_*.json만 커밋)
+runs/**/merged/
+runs/**/ov_*/
+runs/_ov_cache/
