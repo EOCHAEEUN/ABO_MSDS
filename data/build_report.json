@@ -1,0 +1,348 @@
+{
+  "created_at": "2026-09-28T06:22:36+00:00",
+  "args": {
+    "seed": 42,
+    "secret": 1,
+    "renderers": 6,
+    "ecnum": false,
+    "splits": "/mnt/d/Claude_Code/gam_project/MSDS/ABO_MSDS/data/splits.csv",
+    "label_dir": "data/gold_set",
+    "text_dir": "/mnt/d/Claude_Code/gam_project/MSDS/ABO_MSDS/data/text",
+    "out_dir": "/mnt/d/Claude_Code/gam_project/MSDS/ABO_MSDS/data",
+    "train_out": "train.jsonl",
+    "val_out": "val.jsonl",
+    "report": null,
+    "tokenizer": "Qwen/Qwen3-4B",
+    "max_length": 4096,
+    "no_tokens": false,
+    "dry_run": false
+  },
+  "inputs": {
+    "splits_sha256": "f86db18d4d64bd3d7c7bf4ec6a3af1f93b364dc5ed39378259678c564c2b290f",
+    "train_labels_sha256": "b4aa0e2bcb6910a6e01c1c7c0cad307e48a4bd654a2b15dca430e5fbff301779",
+    "val_labels_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "code_sha256": {
+    "core/prompt.py": "f69f229829e4199aebad4e0aa0d0ee228b3575a2d8bcd54eb076bb78f2e7bb19",
+    "core/schema.py": "72e754657bcc858445d1d4ec889b82940cabe89892470f384199a7be5e5679f3",
+    "src/schema.py": "b77b118b3b9164e8da3ed432976bed3aed53f0482cd8b81d7409a67f8099a51b",
+    "pipeline/build_jsonl.py": "70ead05a982856cddae8562cf0dd2ef75d5b1f8a291815209418e3ff0dd6859e",
+    "pipeline/guard.py": "36a8d7dcf2d0337de9b4b5763ac7adab0774b6008453c8d3ca5abb95530e7b95",
+    "pipeline/augment/renderers.py": "00a377ea8ddcd6c587a5e2bac74ba00addd75897973a460876b62814611313a2",
+    "pipeline/augment/mutators.py": "7b8e3f80b7b776ef84f3f253d64682e90a755542a518a59f629adb370e3de6b2",
+    "pipeline/augment/check_forbidden.py": "379cf8ecc96f5e76f167422d5d669f135afe9c0938025e97e29028ca05572de3"
+  },
+  "splits": {
+    "train": {
+      "docs": 43,
+      "examples": 345,
+      "multiplier_incl_orig": 8.02,
+      "augmented_only": 302,
+      "variants": {
+        "bullet": 29,
+        "caslabel": 42,
+        "colon": 42,
+        "nohcode": 27,
+        "orig": 43,
+        "pagehdr": 42,
+        "secret": 36,
+        "section": 42,
+        "subnum": 42
+      },
+      "by_form": {
+        "구서식": {
+          "docs": 6,
+          "examples": 44
+        },
+        "수입품 국문판": {
+          "docs": 8,
+          "examples": 56
+        },
+        "현행": {
+          "docs": 29,
+          "examples": 245
+        }
+      },
+      "docs_with": {
+        "영업비밀": 7,
+        "H코드없음": 4
+      },
+      "examples_with": {
+        "영업비밀": 85,
+        "H코드없음": 56
+      },
+      "skipped": [],
+      "rejected": [
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "section",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "colon",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "pagehdr",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-ASIACEM-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HANIL-005",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HANIL-006",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HENKEL-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HENKEL-002",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-KNAUF-001",
+          "variant": "caslabel",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-002",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-003",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-005",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-006",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-007",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-OCI-006",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-THERMO-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-THERMO-001",
+          "variant": "subnum",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        }
+      ],
+      "not_applicable": {
+        "secret1": 7,
+        "nohcode": 16
+      },
+      "not_applicable_docs": [
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-DUKSAN-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-GSC-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-GSC-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KCCSIL-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KNAUF-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-KNAUF-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KNAUF-002",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-KNAUF-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-003",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-004",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-005",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-NOROO-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-NOROO-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-NOROO-003",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-NOROO-005",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-OCI-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-OCI-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-OCI-005",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-SOTL-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-THERMO-001",
+          "variant": "secret1"
+        }
+      ],
+      "tokens": {
+        "max_length": 4096,
+        "p50": 2171,
+        "p90": 2833,
+        "p95": 3709,
+        "max": 3961,
+        "mean": 2276.7,
+        "longest": "KR-NEOGEN-002:pagehdr",
+        "over_limit": []
+      },
+      "jsonl": {
+        "path": "/mnt/d/Claude_Code/gam_project/MSDS/ABO_MSDS/data/train.jsonl",
+        "lines": 345,
+        "sha256": "39b0dd03573da194a527a93df63754e11c33119dd183536d97aa21fcd2027b4f"
+      }
+    },
+    "val": {
+      "docs": 0,
+      "examples": 0,
+      "multiplier_incl_orig": 0.0,
+      "augmented_only": 0,
+      "variants": {},
+      "by_form": {},
+      "docs_with": {},
+      "examples_with": {},
+      "skipped": [],
+      "rejected": [],
+      "not_applicable": {},
+      "not_applicable_docs": [],
+      "jsonl": {
+        "path": "/mnt/d/Claude_Code/gam_project/MSDS/ABO_MSDS/data/val.jsonl",
+        "lines": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "checks": {
+    "train_val_doc_overlap": [],
+    "val_variants_in_train": 0
+  }
+}
