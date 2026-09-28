@@ -215,7 +215,7 @@
 | batch / accum / epoch | 1 / 8 / 2 | effective batch · 총 step · 학습 시간을 run 설정에 기록 |
 | 2차 학습 | r1에서 조건 1개만 변경(epoch / 증강 배수 / 학습률 중 하나) | `pipeline/configs/r2.yaml`. 증강 배수를 바꾸면 step 수도 함께 바뀜 — 보고에 밝힘 |
 | 학습 상한 | **2회** (r1 · r2) | 추가 학습은 PM 결정 + 사유 기록 |
-| 디코딩 | greedy, seed 고정, `max_new_tokens` = train · val 정답 JSON 최장 토큰 × 1.3 | 비교군 전부 동일. 새 라벨로 실측해 실험 고정 전에 정함 |
+| 디코딩 | greedy, seed 고정, `max_new_tokens` = train · val 정답 JSON 최장 토큰 × 1.3 | 비교군 전부 동일. 새 라벨로 실측해 실험 고정 전에 정함. **실험 고정 전 임시 기본값(2026-09-28): 2048**(`eval/infer.py`의 `DEFAULT_MAX_NEW_TOKENS`, test에는 미적용). 옛 라벨 기준 최장 975토큰 × 1.3 ≈ 1,268인데도 임시값 1024에서 fixture 문서가 잘려 2048로 올림. 학습 `max_length`(4096, 입력+정답 합계용)를 그대로 쓰지 않은 이유는 EOS 없이 도는 실패 사례가 그 값까지 다 채워 진단 단계 생성 시간을 크게 늘릴 수 있어서임 |
 | 입력 전처리 | pdfplumber → 4항 제목 이전까지 절단 → 2항 P문구 블록 제거 | 학습 · 평가 · 서빙이 `core/`의 같은 추출기를 씀 |
 | 서빙 | FastAPI + transformers + peft, 베이스 · 어댑터 동시 보유 | `/extract` `/compare` `/confirm` `/documents` |
 | 기록 | SQLite 적재(필수) + JSONL 실행 로그 | 입력 해시 · 출력 · 소요 시간 · 토큰 수 |
