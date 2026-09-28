@@ -17,6 +17,9 @@
   정답     = format_target(label) + "<|im_end|>"
   loss는 정답 토큰에만 건다(프롬프트는 -100).
 
+모델을 올리기 전에 멈추는 경우(precheck): train · val JSONL이 없거나 빔, 데이터 용도 위반, 증강 보고서 없음,
+보고서와 지금의 train · val JSONL · 라벨 · 분할표가 다름. --memcheck는 여유 5% 미만이면 실패로 끝난다(종료 코드 1).
+
 스모크(--smoke)는 동작 · 메모리 · 속도 확인용이다. runs/에 쓰지 않고 r1 · r2 이름을 쓰지 않으며, 결과를 조건 선택에 쓰지 않는다.
 """
 import argparse
@@ -43,7 +46,7 @@ BASE_CONFIG = ROOT / "pipeline" / "configs" / "r1.yaml"
 TRAIN_JSONL = ROOT / "data" / "train.jsonl"   # 설정의 train_jsonl로 바꿀 수 있다(r2: 증강 배수 축소)
 VAL_JSONL = ROOT / "data" / "val.jsonl"
 SPLITS_CSV = ROOT / "data" / "splits.csv"
-BUILD_REPORT = ROOT / "data" / "build_report.json"
+BUILD_REPORT = ROOT / "data" / "build_report.json"   # 설정의 build_report로 바꿀 수 있다(train_jsonl을 바꿀 때 같이)
 SMOKE_ROOT = Path("/tmp/msds_smoke")
 RESERVED_NAMES = {"r1", "r2", "final"}        # 스모크 · 부분 실행에 쓰면 안 되는 이름
 DEFAULTS = {"warmup_ratio": 0.03, "weight_decay": 0.0, "max_grad_norm": 1.0, "seed": 42, "gradient_checkpointing": True}
@@ -85,24 +88,39 @@ def env_info():
             "gpu_mem_gib": round(torch.cuda.get_device_properties(0).total_memory / 2**30, 2) if torch.cuda.is_available() else None}
 
 
-def build_report_summary(train_path):
-    """증강 보고서(build_jsonl.py)에서 r1 설정에 남길 항목(① 배수 ② 유형별 ③ val 섞임 ④ 초과 길이 · 거부 · 해시)."""
-    if not BUILD_REPORT.exists():
+def _labels_sha(label_dir, jsonl_path):
+    """build_jsonl.py와 같은 방식: JSONL에 든 문서의 라벨을 doc_id 순으로 이어 붙여 해시. 라벨이 없으면 None."""
+    docs = sorted({json.loads(l)["doc_id"] for l in Path(jsonl_path).read_text(encoding="utf-8").splitlines() if l.strip()})
+    try:
+        return hashlib.sha256(b"".join((label_dir / f"{d}.json").read_bytes() for d in docs)).hexdigest()
+    except FileNotFoundError:
         return None
-    rep = json.loads(BUILD_REPORT.read_text(encoding="utf-8"))
+
+
+def build_report_summary(train_path, val_path=None, report_path=None):
+    """증강 보고서(build_jsonl.py)에서 r1 설정에 남길 항목(① 배수 ② 유형별 ③ val 섞임 ④ 초과 길이 · 거부 · 해시).
+    보고서가 없으면 None."""
+    report_path = Path(report_path or BUILD_REPORT)
+    if not report_path.exists():
+        return None
+    rep = json.loads(report_path.read_text(encoding="utf-8"))
     t = rep["splits"]["train"]
     jsonl_sha = (t.get("jsonl") or {}).get("sha256")
-    # 보고서를 만든 뒤 라벨이 바뀌었는지: build_jsonl.py와 같은 방식(train 문서 라벨을 doc_id 순으로 이어 붙여 해시)
+    # 보고서를 만든 뒤 라벨 · 분할표가 바뀌었는지
     label_dir = Path(rep["args"]["label_dir"])
     label_dir = label_dir if label_dir.is_absolute() else ROOT / label_dir
-    docs = sorted({json.loads(l)["doc_id"] for l in Path(train_path).read_text(encoding="utf-8").splitlines() if l.strip()})
-    try:
-        now_labels = hashlib.sha256(b"".join((label_dir / f"{d}.json").read_bytes() for d in docs)).hexdigest()
-    except FileNotFoundError:
-        now_labels = None
-    return {
+    out = {
         "matches_train_jsonl": jsonl_sha == sha256(train_path),   # False면 보고서와 학습 데이터가 다름
-        "labels_unchanged_since_build": now_labels == rep["inputs"].get("train_labels_sha256"),  # False면 증강 재생성 필요
+        "labels_unchanged_since_build": _labels_sha(label_dir, train_path) == rep["inputs"].get("train_labels_sha256"),
+        "splits_unchanged_since_build": sha256(SPLITS_CSV) == rep["inputs"].get("splits_sha256"),
+    }
+    if val_path is not None and Path(val_path).exists():
+        v = rep["splits"].get("val") or {}
+        out["matches_val_jsonl"] = (v.get("jsonl") or {}).get("sha256") == sha256(val_path)
+        out["val_labels_unchanged_since_build"] = (_labels_sha(label_dir, val_path)
+                                                   == rep["inputs"].get("val_labels_sha256"))
+    return {
+        **out,
         "build_args": {k: rep["args"].get(k) for k in ("seed", "secret", "renderers", "ecnum", "max_length")},
         "docs": t["docs"], "examples": t["examples"], "multiplier_incl_orig": t["multiplier_incl_orig"],
         "variants": t["variants"], "by_form": t["by_form"], "docs_with": t["docs_with"], "examples_with": t["examples_with"],
@@ -122,6 +140,34 @@ def check_data(train_path, val_path):
         if Path(path).exists() and Path(path).stat().st_size:
             ids = {json.loads(l)["doc_id"] for l in Path(path).read_text(encoding="utf-8").splitlines() if l.strip()}
             require_splits(ids, allowed, splits, who=Path(path).name)
+
+
+PRECHECK_KEYS = ("matches_train_jsonl", "labels_unchanged_since_build", "splits_unchanged_since_build",
+                 "matches_val_jsonl", "val_labels_unchanged_since_build")
+
+
+def precheck(train_path, val_path, report_path=None):
+    """GPU에 모델을 올리기 전에 멈출 것들 → 증강 보고서 요약(config.json에 남긴다).
+    - train · val JSONL이 없거나 비었다
+    - 데이터 용도 위반(check_data)
+    - 증강 보고서(data/build_report.json)가 없다
+    - 보고서와 지금의 train · val JSONL · 라벨 · 분할표가 다르다(보고서를 만든 뒤 무언가 바뀜)"""
+    for p in (train_path, val_path):
+        if not Path(p).exists() or not Path(p).stat().st_size:
+            sys.exit(f"[중단] {p}가 없거나 비었다 — pipeline/build_jsonl.py로 만들 것")
+    check_data(train_path, val_path)
+    aug = build_report_summary(train_path, val_path, report_path)
+    if aug is None:
+        sys.exit(f"[중단] 증강 보고서가 없다({report_path or BUILD_REPORT}) — pipeline/build_jsonl.py로 다시 만들 것")
+    bad = [k for k in PRECHECK_KEYS if not aug.get(k)]
+    if bad:
+        sys.exit(f"[중단] 증강 보고서와 지금의 데이터가 다르다: {bad} — pipeline/build_jsonl.py로 다시 만들 것")
+    return aug
+
+
+def mem_verdict(reserved_gib, total_gib):
+    """memcheck 판정. 여유 5% 미만이면 실패."""
+    return reserved_gib < total_gib * 0.95
 
 
 # ---------------------------------------------------------------- 데이터
@@ -245,7 +291,7 @@ def memcheck(cfg):
     import torch
 
     train_path = ROOT / cfg.get("train_jsonl", TRAIN_JSONL)
-    check_data(train_path, ROOT / cfg.get("val_jsonl", VAL_JSONL))
+    precheck(train_path, ROOT / cfg.get("val_jsonl", VAL_JSONL), ROOT / cfg.get("build_report", BUILD_REPORT))
     tok, model = load_model(cfg)
     rows, _ = load_split(tok, train_path, cfg["max_length"])
     longest = max(rows, key=lambda r: len(r[0]))
@@ -263,8 +309,11 @@ def memcheck(cfg):
     m = peak_mem()
     total = torch.cuda.get_device_properties(0).total_memory / 2**30
     print(f"loss {loss.item():.4f} · 1 step {time.perf_counter() - t0:.1f}s")
+    ok = mem_verdict(m["reserved_gib"], total)
     print(f"최대 메모리 allocated {m['allocated_gib']:.2f} GiB / reserved {m['reserved_gib']:.2f} GiB / GPU {total:.2f} GiB "
-          f"→ {'통과' if m['reserved_gib'] < total * 0.95 else '위험: 여유 5% 미만'}")
+          f"→ {'통과' if ok else '위험: 여유 5% 미만'}")
+    if not ok:
+        sys.exit(1)
 
 
 def evaluate(model, rows, pad_id):
@@ -285,7 +334,7 @@ def train(cfg, name, run_dir, max_steps=None, smoke=False):
 
     train_path = ROOT / cfg.get("train_jsonl", TRAIN_JSONL)
     val_path = ROOT / cfg.get("val_jsonl", VAL_JSONL)
-    check_data(train_path, val_path)
+    aug = precheck(train_path, val_path, ROOT / cfg.get("build_report", BUILD_REPORT))
     if (run_dir / "adapter").exists():
         sys.exit(f"이미 있음: {run_dir} — 지우거나 이름을 바꿀 것(--name)")
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -309,19 +358,13 @@ def train(cfg, name, run_dir, max_steps=None, smoke=False):
                  "val_jsonl_sha256": sha256(val_path) if val_path.exists() else None,
                  "splits_sha256": sha256(SPLITS_CSV), "n_train": len(train_rows), "n_val": len(val_rows),
                  "dropped_over_max_length": {"train": train_dropped, "val": val_dropped}},
-        "augmentation": build_report_summary(train_path),
+        "augmentation": aug,
         "schedule": {"batch": bs, "grad_accum": accum, "effective_batch": bs * accum, "steps_per_epoch": steps_per_epoch,
                      "optimizer_steps": total, "tail_microbatches_dropped_per_epoch": len(train_rows) % (bs * accum)},
     }
     write_meta(run_dir, meta)
-    aug = meta["augmentation"]
-    if aug and not (aug["matches_train_jsonl"] and aug["labels_unchanged_since_build"]):
-        print("[경고] 증강 보고서 · 학습 데이터 · 현재 라벨이 서로 맞지 않음 — pipeline/build_jsonl.py로 다시 생성할 것"
-              f" (report↔jsonl {aug['matches_train_jsonl']}, 라벨 변경 없음 {aug['labels_unchanged_since_build']})")
     print(f"[{name}] train {len(train_rows)} · val {len(val_rows)} · batch {bs}×accum {accum} · "
           f"{cfg['num_epochs']} epoch = optimizer step {total} → {run_dir}")
-    if not val_rows:
-        print("  (val 예시 없음 — val loss는 기록하지 않음)")
 
     opt = make_optimizer(model, cfg)
     torch.cuda.reset_peak_memory_stats()

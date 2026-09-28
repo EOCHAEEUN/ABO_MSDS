@@ -90,6 +90,76 @@ class DataGuardTest(unittest.TestCase):
             tq.check_data(Path("data/sealed/train.jsonl"), Path("data/val.jsonl"))
 
 
+class PrecheckTest(unittest.TestCase):
+    """모델을 올리기 전에 멈춘다: JSONL 없음 · 빈 파일 · 보고서 없음 · 보고서와 데이터 · 라벨 · 분할표 불일치."""
+
+    def setUp(self):
+        self.orig = tq.SPLITS_CSV
+        tq.SPLITS_CSV = FIX / "splits.csv"
+        self.tmp = tempfile.TemporaryDirectory()
+        d = Path(self.tmp.name)
+        self.train = DataGuardTest.write(None, d, "train.jsonl", ["KR-NOROO-004", "KR-OCI-005"])
+        self.val = DataGuardTest.write(None, d, "val.jsonl", ["KR-HANIL-001"])
+        self.report = d / "build_report.json"
+        self.write_report()
+
+    def tearDown(self):
+        tq.SPLITS_CSV = self.orig
+        self.tmp.cleanup()
+
+    def write_report(self):
+        labels = FIX / "labels"
+        rep = {"args": {"label_dir": str(labels)},
+               "inputs": {"splits_sha256": tq.sha256(tq.SPLITS_CSV),
+                          "train_labels_sha256": tq._labels_sha(labels, self.train),
+                          "val_labels_sha256": tq._labels_sha(labels, self.val)},
+               "splits": {"train": {"jsonl": {"sha256": tq.sha256(self.train)}, "docs": 2, "examples": 2,
+                                    "multiplier_incl_orig": 1, "variants": {}, "by_form": {}, "docs_with": {},
+                                    "examples_with": {}},
+                          "val": {"jsonl": {"sha256": tq.sha256(self.val)}}}}
+        self.report.write_text(json.dumps(rep), encoding="utf-8")
+
+    def stops(self, msg):
+        with self.assertRaises(SystemExit) as cm:
+            tq.precheck(self.train, self.val, self.report)
+        self.assertIn(msg, str(cm.exception))
+
+    def test_matching_report_passes(self):
+        aug = tq.precheck(self.train, self.val, self.report)
+        self.assertTrue(all(aug[k] for k in tq.PRECHECK_KEYS))
+
+    def test_missing_or_empty_jsonl_stops(self):
+        self.val.write_text("", encoding="utf-8")
+        self.stops("비었다")
+        self.val.unlink()
+        self.stops("비었다")
+
+    def test_missing_report_stops(self):
+        self.report.unlink()
+        self.stops("보고서가 없다")
+
+    def test_changed_train_jsonl_stops(self):
+        self.train.write_text(self.train.read_text(encoding="utf-8") + self.train.read_text(encoding="utf-8"),
+                              encoding="utf-8")
+        self.stops("matches_train_jsonl")
+
+    def test_changed_splits_stops(self):
+        rep = json.loads(self.report.read_text(encoding="utf-8"))
+        rep["inputs"]["splits_sha256"] = "0" * 64
+        self.report.write_text(json.dumps(rep), encoding="utf-8")
+        self.stops("splits_unchanged_since_build")
+
+    def test_current_repo_data_passes(self):
+        tq.SPLITS_CSV = self.orig
+        if not tq.TRAIN_JSONL.exists():
+            self.skipTest("data/train.jsonl 없음")
+        tq.precheck(tq.TRAIN_JSONL, tq.VAL_JSONL)
+
+    def test_mem_verdict(self):
+        self.assertTrue(tq.mem_verdict(7.01, 7.96))
+        self.assertFalse(tq.mem_verdict(7.60, 7.96))    # 여유 5% 미만 → memcheck 실패 종료
+
+
 class EncodeTest(unittest.TestCase):
     """정답 구간만 학습하고, 프롬프트는 eval/infer.py의 추론 입력과 같아야 한다."""
 

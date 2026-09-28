@@ -8,10 +8,14 @@
 출력 (CLAUDE.md 규약)
   outputs/{condition}/{split}/{doc_id}.json   모델이 낸 문자열 그대로. 파싱에 실패해도 그대로 저장해 실패로 센다
   outputs/{condition}/{split}/_log.jsonl      문서별 시간·입출력 토큰·max_new_tokens 도달 여부·건너뛴 사유
-  outputs/{condition}/{split}/_run.jsonl      첫 실행 설정(베이스·어댑터·few-shot·생성 길이·프롬프트 해시)
+  outputs/{condition}/{split}/_run.jsonl      첫 실행 설정(베이스 · 리비전 · 어댑터 · few-shot · 생성 길이 · 프롬프트 해시 ·
+                                              입력 해시 = 문서 목록 + 1~3항 텍스트 + _cut_log 상태)
   - _cut_log.csv에서 NOT_FOUND인 문서는 모델에 넣지 않고 _log.jsonl에 skipped로 남긴다(채점에선 실패로 셈)
   - 이미 출력 파일이 있으면 건너뛴다(중단 후 이어 돌리기). 다시 돌리려면 --overwrite(test는 불가)
-  - 이어 돌릴 때 설정이 _run.jsonl과 다르면 거부한다(한 폴더에 두 모델의 출력이 섞이지 않게)
+  - 이어 돌릴 때 설정이 _run.jsonl과 다르면 거부한다(한 폴더에 두 모델 · 두 입력의 출력이 섞이지 않게)
+  - 베이스는 pipeline/configs/r1.yaml의 model · model_revision(학습과 같은 스냅샷)으로 불러온다. 리비전이 없거나
+    (--base만 주고 --revision을 안 준 경우), 불러온 스냅샷을 확인할 수 없거나, 요청과 다르면 멈춘다.
+    확인한 실제 스냅샷은 _log.jsonl의 문서별 base_commit에 남는다
 
   python3 eval/infer.py --condition base_zs --split val
   python3 eval/infer.py --condition base_fs --split val
@@ -111,12 +115,26 @@ def load_fewshot(splits, text_dir, label_dir):
     return ids, pairs
 
 
-def base_model_name(arg):
-    if arg:
-        return arg
+def base_model_spec(base, revision):
+    """→ (베이스 모델 이름, 리비전). --base가 없으면 학습과 같은 r1.yaml의 model · model_revision."""
+    if base:
+        return base, revision
     import yaml
 
-    return yaml.safe_load(DEFAULT_CONFIG.read_text(encoding="utf-8"))["model"]
+    cfg = yaml.safe_load(DEFAULT_CONFIG.read_text(encoding="utf-8"))
+    return cfg["model"], revision or cfg.get("model_revision")
+
+
+def inputs_digest(doc_ids, text_dir, cut):
+    """이 폴더의 출력을 만든 입력 전체의 해시: 문서 목록 + 문서별 _cut_log 상태 + 1~3항 텍스트.
+    --limit과 상관없이 split 전체 문서로 계산한다(나눠 돌려도 같은 값)."""
+    h = hashlib.sha256()
+    for d in sorted(doc_ids):
+        p = Path(text_dir) / f"{d}.txt"
+        h.update(f"{d}\0{cut.get(d, '')}\0".encode())
+        h.update(p.read_bytes() if p.exists() else b"<no text>")
+        h.update(b"\0")
+    return h.hexdigest()
 
 
 def sha256_file(path):
@@ -133,12 +151,13 @@ def sha256_dir(path):
     return h.hexdigest()
 
 
-def run_record(args, base_name, fewshot_ids, fewshot_pairs):
+def run_record(args, base_name, revision, fewshot_ids, fewshot_pairs, n_docs, inputs_sha256):
     """출력 폴더 하나를 만든 설정(시간 제외). 이어 돌릴 때 이 값이 같아야 한다."""
     return {
         "condition": args.condition,
         "split": args.split,
         "base_model": base_name,
+        "base_revision": revision,
         "adapter": args.adapter,
         "adapter_sha256": sha256_dir(args.adapter) if args.adapter else None,
         "fewshot_doc_ids": fewshot_ids,
@@ -146,6 +165,8 @@ def run_record(args, base_name, fewshot_ids, fewshot_pairs):
         if fewshot_pairs else None,
         "max_new_tokens": args.max_new_tokens,
         "prompt_sha256": sha256_file(PROMPT_FILE),
+        "n_docs": n_docs,
+        "inputs_sha256": inputs_sha256,
     }
 
 
@@ -169,7 +190,19 @@ def now():
 
 
 # ---------------------------------------------------------------- 모델
-def load_model(base_name, adapter):
+def verify_commit(model, revision):
+    """실제로 불러온 베이스 스냅샷(HF 커밋 해시) → 요청한 리비전과 같을 때만 그 해시를 돌려준다.
+    확인할 수 없거나(None) 다르면 멈춘다."""
+    base = model.get_base_model() if hasattr(model, "get_base_model") else model
+    commit = getattr(getattr(base, "config", None), "_commit_hash", None)
+    if not commit:
+        sys.exit("[거부] 불러온 베이스 스냅샷(커밋 해시)을 확인할 수 없다")
+    if commit != revision:
+        sys.exit(f"[거부] 불러온 베이스 스냅샷 {commit}이 요청한 리비전 {revision}과 다르다")
+    return commit
+
+
+def load_model(base_name, adapter, revision=None):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
@@ -179,9 +212,9 @@ def load_model(base_name, adapter):
         bnb_4bit_use_double_quant=True,
         bnb_4bit_compute_dtype=torch.bfloat16,
     )
-    tok = AutoTokenizer.from_pretrained(base_name)
+    tok = AutoTokenizer.from_pretrained(base_name, revision=revision)
     model = AutoModelForCausalLM.from_pretrained(
-        base_name, quantization_config=bnb, device_map="auto", dtype=torch.bfloat16
+        base_name, revision=revision, quantization_config=bnb, device_map="auto", dtype=torch.bfloat16
     )
     if adapter:
         from peft import PeftModel
@@ -271,13 +304,12 @@ def check_args(args):
 
 
 def select_docs(args, splits, text_dir):
+    """split 전체 문서(--limit 적용 전)."""
     if args.split == "test":  # test 문서는 splits.csv에 없다. 넘겨받은 폴더의 텍스트 전체가 대상
         return sorted(p.stem for p in Path(text_dir).glob("*.txt"))
     doc_ids = sorted(d for d, r in splits.items() if r["split"] == args.split)
     if args.split == "train":  # few-shot 예시는 base_fs가 정답을 보고 푸는 셈이라 두 조건 모두에서 뺀다
         doc_ids = [d for d in doc_ids if d not in set(fewshot_ids_in_file())]
-    if args.limit:
-        doc_ids = doc_ids[: args.limit]
     return doc_ids
 
 
@@ -292,6 +324,7 @@ def main(argv=None):
     ap.add_argument("--split", required=True, choices=SPLITS)
     ap.add_argument("--adapter", help="qlora_* 조건의 LoRA 어댑터 폴더")
     ap.add_argument("--base", help="베이스 모델 이름(기본: pipeline/configs/r1.yaml의 model)")
+    ap.add_argument("--revision", help="베이스 리비전(기본: --base가 없으면 r1.yaml의 model_revision)")
     ap.add_argument("--max-new-tokens", type=int, help=f"기본: test는 eval/experiment.json 고정값, 그 밖은 {DEFAULT_MAX_NEW_TOKENS}")
     ap.add_argument("--allow-test", action="store_true", help="test 추론 허용(실험 고정 뒤에만)")
     ap.add_argument("--overwrite", action="store_true", help="이미 있는 출력도 다시 생성(test 불가)")
@@ -307,21 +340,25 @@ def main(argv=None):
 
     text_dir = Path(args.text_dir or TEXT_DIR)
     splits = {} if args.split == "test" else read_splits(args.splits)
-    doc_ids = select_docs(args, splits, text_dir)
+    all_ids = select_docs(args, splits, text_dir)
+    doc_ids = all_ids[: args.limit] if args.limit else all_ids
     if not doc_ids:
         sys.exit(f"{args.split} 문서가 0건({args.splits})")
     cut = read_cut_status(text_dir)
     fewshot_ids, fewshot = (load_fewshot(read_splits(args.splits), TEXT_DIR if args.split == "test" else text_dir,
                                          args.label_dir)
                             if args.condition == "base_fs" else ([], []))
-    base_name = base_model_name(args.base)
+    base_name, revision = base_model_spec(args.base, args.revision)
+    if not revision:
+        sys.exit("[거부] 베이스 리비전이 없다. --base를 줄 때는 --revision도 준다(기본은 r1.yaml의 model_revision)")
     out_dir = Path(args.out_root) / args.condition / args.split
 
     # 모델을 올리기 전에 입력부터 전부 확인(모델 로딩에 1분 넘게 걸림)
     missing = [d for d in doc_ids if cut.get(d) != "NOT_FOUND" and not (text_dir / f"{d}.txt").exists()]
     if missing:
         sys.exit(f"전처리 텍스트 없음 {len(missing)}건: {missing}\n→ pipeline/extract_text.py를 먼저 돌릴 것")
-    check_resume(out_dir, run_record(args, base_name, fewshot_ids, fewshot))
+    check_resume(out_dir, run_record(args, base_name, revision, fewshot_ids, fewshot,
+                                     len(all_ids), inputs_digest(all_ids, text_dir, cut)))
     if args.split == "test" and any(out_dir.glob("*.json")):
         sys.exit(f"[거부] {out_dir}에 이미 출력이 있다. test는 비교군마다 1회만 생성한다")
     todo = [d for d in doc_ids if args.overwrite or not (out_dir / f"{d}.json").exists()]
@@ -329,13 +366,15 @@ def main(argv=None):
         print(f"할 일 없음: {out_dir}에 {len(doc_ids)}건 모두 있음(다시 돌리려면 --overwrite)")
         return
 
-    print(f"[{args.condition} / {args.split}] {len(todo)}/{len(doc_ids)}건, base={base_name}, adapter={args.adapter}")
-    tok, model = load_model(base_name, args.adapter)
+    print(f"[{args.condition} / {args.split}] {len(todo)}/{len(doc_ids)}건, base={base_name}@{revision}, adapter={args.adapter}")
+    tok, model = load_model(base_name, args.adapter, revision)
+    commit = verify_commit(model, revision)
+    print(f"베이스 스냅샷: {commit}")
     generate(tok, model, [{"role": "user", "content": "warm-up"}], 8)  # CUDA 초기화 시간이 첫 문서 속도에 섞이지 않게
 
     for n, doc_id in enumerate(todo, 1):
         rec = {"doc_id": doc_id, "skipped": None, "gen_time_sec": None, "input_tokens": None,
-               "output_tokens": None, "hit_max_new_tokens": False, "created_at": now()}
+               "output_tokens": None, "hit_max_new_tokens": False, "base_commit": commit, "created_at": now()}
         if cut.get(doc_id) == "NOT_FOUND":
             rec["skipped"] = "NOT_FOUND"
             (out_dir / f"{doc_id}.json").unlink(missing_ok=True)  # --overwrite 때 이전 출력이 남지 않게
