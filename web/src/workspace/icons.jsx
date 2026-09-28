@@ -1,4 +1,8 @@
 export const iconPaths = {
+  list: <><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></>,
+  chart: <><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></>,
+  help: <><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.3 2.3 0 0 1 4.4 1c0 2-2.2 2.1-2.2 4M12 17h.01"/></>,
+  expand: <><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></>,
   search: <><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></>,
   refresh: <><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 7a7 7 0 0 1 12-1l2 6M4 12l2 6a7 7 0 0 0 12-1"/></>,
   plus: <><path d="M12 5v14M5 12h14"/></>,

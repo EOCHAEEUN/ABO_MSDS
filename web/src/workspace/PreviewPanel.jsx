@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { FIELD_DEFS, sourceText } from "./data.js";
 import { safePdfUrl } from "./model.js";
 import { useWorkspace } from "./WorkspaceContext.jsx";
@@ -38,18 +39,16 @@ function Paper({ doc }) {
 
 export default function PreviewPanel({ doc, compact = false }) {
   const { state } = useWorkspace();
+  const panelRef = useRef(null);
   const pdf = doc.pdf_url && (compact || state.sourceTab === "original") ? safePdfUrl(doc.pdf_url) : null;
-  return <section className={`panel preview-panel ${compact ? "compact" : ""}`}>
+  const toggleFullscreen = () => document.fullscreenElement === panelRef.current ? document.exitFullscreen() : panelRef.current?.requestFullscreen?.();
+  return <section ref={panelRef} className={`panel preview-panel ${compact ? "compact" : ""}`}>
     <div className="panel-toolbar">
       {compact ? <h2>문서 미리보기</h2> : <div className="tabs" role="tablist" aria-label="원문 보기 방식">{["original", "text"].map((tab, i) => <Button action="source-tab" data-tab={tab} key={tab} role="tab" aria-selected={state.sourceTab === tab} className={`tab ${state.sourceTab === tab ? "active" : ""}`}>{["원문 보기", "추출 텍스트"][i]}</Button>)}</div>}
       <div className="preview-controls">
-        <Button action="zoom-out" className="icon-button" aria-label="축소" disabled={state.zoom <= 70}><Icon name="minus" /></Button>
-        <Button action="zoom-reset" className="zoom-label" aria-label="확대 비율 초기화">{state.zoom}%</Button>
-        <Button action="zoom-in" className="icon-button" aria-label="확대" disabled={state.zoom >= 150}><Icon name="plus" /></Button>
-        <span className="control-divider" />
-        <Button action="prev-page" className="icon-button" aria-label="이전 페이지" disabled={state.page <= 1}><Icon name="left" /></Button>
-        <span className="page-count">{state.page} / {doc.page_count || "—"}</span>
-        <Button action="next-page" className="icon-button" aria-label="다음 페이지" disabled={state.page >= (doc.page_count || 1)}><Icon name="right" /></Button>
+        <div className="preview-page-control"><Button action="prev-page" className="icon-button" aria-label="이전 페이지" disabled={state.page <= 1}><Icon name="left" /></Button><span className="page-count">{state.page} / {doc.page_count || "—"}</span><Button action="next-page" className="icon-button" aria-label="다음 페이지" disabled={state.page >= (doc.page_count || 1)}><Icon name="right" /></Button></div>
+        <div className="preview-zoom-control"><Button action="zoom-out" className="icon-button" aria-label="축소" disabled={state.zoom <= 70}><Icon name="minus" /></Button><Button action="zoom-reset" className="zoom-label" aria-label="확대 비율 초기화">{state.zoom}%</Button><Button action="zoom-in" className="icon-button" aria-label="확대" disabled={state.zoom >= 150}><Icon name="plus" /></Button></div>
+        <button type="button" className="preview-expand" aria-label="원문 화면 확대" onClick={toggleFullscreen}><Icon name="expand" /></button>
       </div>
     </div>
     {doc.pdf_url && (compact || state.sourceTab === "original") ? (pdf ? <iframe className="pdf-frame" src={`${pdf}#page=${state.page}&zoom=${state.zoom}`} title={`${doc.file_name} 원본 PDF`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :

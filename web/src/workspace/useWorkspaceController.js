@@ -212,6 +212,18 @@ export function useWorkspaceController() {
           patch({ page: Math.min(target?.page_count || 1, snapshot.page + 1) }); break;
         }
         case "show-all": patch({ onlyPending: false }); break;
+        case "confirm-matched": {
+          if (!doc || snapshot.busy || doc.pending_extraction) break;
+          const keys = FIELD_DEFS.filter(field => !doc.confirmed_fields.includes(field.key) && !doc.reviews?.[field.key] && doc.rule_results?.[field.key]?.review_status === "OK").map(field => field.key);
+          if (!keys.length) { notify("새로 확정할 일치 항목이 없습니다."); break; }
+          update(next => {
+            const target = next.documents.find(item => item.id === doc.id);
+            const values = effective(target);
+            for (const key of keys) applyReview(next, doc.id, key, values[key], Array.isArray(values[key]) ? { list_status: values.list_status[key] } : {});
+          });
+          notify(`원문과 일치하는 ${keys.length}개 필드를 확정했습니다.`);
+          break;
+        }
         case "delete-hazard": {
           if (snapshot.busy) break;
           const values = effective(doc).hazard_statements;
