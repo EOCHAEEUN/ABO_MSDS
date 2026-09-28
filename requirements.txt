@@ -1,10 +1,17 @@
-# [양세윤] 환경 점검 후 실제 설치된 버전으로 == 고정
-torch
-transformers
-peft
-bitsandbytes
-accelerate
-pdfplumber
-fastapi
-uvicorn
-pyyaml
+# [양세윤] 환경 점검(2026-09-28, report/env_check.md) 때 실제 설치된 버전으로 고정
+# torch는 CUDA 13.0 빌드(2.14.0+cu130). 기본 PyPI 휠이 다른 CUDA를 가리키면:
+#   pip install torch==2.14.0 --index-url https://download.pytorch.org/whl/cu130
+torch==2.14.0
+transformers==5.17.0
+tokenizers==0.23.2
+safetensors==0.8.0
+huggingface_hub==1.32.0
+peft==0.21.0
+bitsandbytes==0.50.2
+accelerate==1.15.0
+pdfplumber==0.11.10
+pydantic==2.13.5
+fastapi==0.141.1
+uvicorn==0.53.0
+PyYAML==6.0.3
+numpy==2.5.3
