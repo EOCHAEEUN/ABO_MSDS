@@ -28,3 +28,7 @@ node_modules/
 
 # 프런트엔드 빌드 결과
 web/dist/
+
+# PDF → SQLite 적재 결과물 (app/pipeline_run.py)
+data/db/
+outputs/exports/
