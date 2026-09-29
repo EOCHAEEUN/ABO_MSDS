@@ -4,6 +4,7 @@
 
   python3 test/test_infer.py -v
 """
+import contextlib
 import json
 import sys
 import tempfile
@@ -135,12 +136,16 @@ class InferTest(unittest.TestCase):
     def test_refusals(self):
         cases = [
             (["--condition", "base_zs", "--split", "test"], "--allow-test"),
-            (["--condition", "base_zs", "--split", "test", "--allow-test"], "experiment.json"),
+            # experiment.json이 없을 때의 거부. 09-29 단계 7 고정 뒤로 저장소의 실제 eval/experiment.json이
+            # 있으므로, 이 케이스만 없는 경로로 바꿔 끼워 재현한다(다른 케이스는 EXPERIMENT_JSON을 안 씀).
+            (["--condition", "base_zs", "--split", "test", "--allow-test"], "experiment.json", "/tmp/msds_test_no_such/experiment.json"),
             (["--condition", "qlora_r1", "--split", "val"], "--adapter"),
             (["--condition", "base_zs", "--split", "val", "--adapter", "x"], "베이스 모델 조건"),
         ]
-        for argv, msg in cases:
-            with self.subTest(argv=argv), self.assertRaises(SystemExit) as cm:
+        for case in cases:
+            argv, msg, *exp_path = case
+            ctx = mock.patch.object(infer, "EXPERIMENT_JSON", Path(exp_path[0])) if exp_path else contextlib.nullcontext()
+            with self.subTest(argv=argv), ctx, self.assertRaises(SystemExit) as cm:
                 infer.main(argv)
             self.assertIn(msg, str(cm.exception))
 

@@ -1,0 +1,9 @@
+{
+  "max_new_tokens": 2048,
+  "adapter": "runs/0928_r1/adapter",
+  "adapter_sha256": "a9a323416bc2548f44852458bd0afc2882be7b214b7c39205529a7a08c937547",
+  "prompt_version": "v1",
+  "decided_at": "2026-09-29",
+  "decided_by": "어채은(PM)",
+  "note": "max_new_tokens: train·val 정답 최장 969토큰 x1.3=1260이지만, val에서 base_fs 실제 출력이 KR-NEOGEN-002에서 1372토큰까지 나와(report/decisions.md 참고) 1260으로는 비교군 출력이 잘릴 위험이 있어 임시값 2048을 그대로 쓴다(예외, 근거 기록)."
+}

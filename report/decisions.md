@@ -101,3 +101,12 @@
 - **이후:** r2(epoch 1) · r3(프롬프트 v2_1) 모두 후보에서 빠졌으므로 qlora_final 후보는 r1(프롬프트 v1)이다. 모델 고정(plan 9절 단계 7)은 PM이 정한다.
 
 ## 모델 고정 + Test 정답 확정
+
+### 2026-09-29 · 단계 7: qlora_final = r1, eval/experiment.json 커밋 (PM 결정)
+
+- **모델:** r2(epoch 1) · r3(프롬프트 v2_1) 모두 채택 기준 미달로 후보에서 제외됨(위 결정 항목). **qlora_final = r1(runs/0928_r1/adapter, 프롬프트 v1)**로 고정한다.
+- **max_new_tokens = 2048(임시값 유지, 근거 기록):**
+  - r1 토크나이저로 train · val 정답을 다시 재니 최장 969토큰, plan 6절 규칙(×1.3)으로는 1,260토큰.
+  - 그런데 val에서 Base few-shot 실제 출력이 KR-NEOGEN-002에서 1,372토큰까지 나왔다(`outputs/base_fs/val/_log.jsonl`). 1,260으로 낮추면 비교군 출력이 test에서 잘릴 위험이 있어, 계획대로 규칙값을 쓰지 않고 임시값 2,048을 그대로 예외로 유지한다.
+- **`eval/experiment.json` 커밋:** `max_new_tokens: 2048`, `adapter_sha256: a9a323416bc2548f44852458bd0afc2882be7b214b7c39205529a7a08c937547`(runs/0928_r1/adapter와 일치 확인), `prompt_version: "v1"`.
+- 이걸로 test 추론(`eval/infer.py --split test`)이 코드적으로 가능해진다. 아직 test 담당의 텍스트 인계 · 별칭표 보강 · 서식 목록 확정은 남아 있다.
