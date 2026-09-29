@@ -34,12 +34,13 @@ function ReviewDocumentHeader({ doc }) {
     patch({ query: new FormData(event.currentTarget).get("query")?.trim() || "", page: 1 });
     navigate("documents");
   }
-  return <header className="review-document-header">
-    <div className="review-document-heading">
-      <div className="review-context-label"><span>{source.mode === "results" ? "저장된 실험 결과" : API_MODE ? "문서 검토" : "예시 문서"}</span>{doc.model_name && <b>{doc.model_name}</b>}</div><div className="review-title-row"><h1>{values.product_name.value || doc.file_name}</h1><span className="pdf-badge">{doc.pdf_url || doc.source ? "PDF" : "TEXT"}</span></div>
-      <div className="review-document-meta">{meta.map((item, index) => <span key={index}>{index === 0 && <Icon name="document" />}{item}</span>)}</div>
+  return <header className="review-document-header workspace-page-header">
+    <div className="review-document-heading workspace-page-heading">
+      <div className="review-context-label workspace-page-eyebrow"><span>문서 검토</span>{source.mode === "results" && <b>저장된 실험 결과</b>}{!API_MODE && source.mode !== "results" && <b>예시 문서</b>}{doc.model_name && <b>{doc.model_name}</b>}</div>
+      <div className="review-title-row"><h1 className="workspace-page-title">{values.product_name.value || doc.file_name}</h1><span className="pdf-badge">{doc.pdf_url || doc.source ? "PDF" : "TEXT"}</span></div>
+      <div className="review-document-meta workspace-page-support">{meta.map((item, index) => <span key={index}>{index === 0 && <Icon name="document" />}{item}</span>)}</div>
     </div>
-    <div className="review-header-tools">
+    <div className="review-header-tools workspace-page-actions">
       <form className="review-search" role="search" onSubmit={search}><Icon name="search" /><input name="query" type="search" defaultValue={state.query} aria-label="문서 검색" placeholder="문서명, 공급자, CAS 번호 검색" /></form>
       <div className="review-progress"><span>검토 완료율</span><Progress doc={doc} /><strong>{count(doc) * 20}%</strong></div>
     </div>

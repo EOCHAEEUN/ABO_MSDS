@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { API_MODE, source } from "./api.js";
 import { METRICS } from "./data.js";
 import { useWorkspace } from "./WorkspaceContext.jsx";
-import { Button, DocumentHeader, Icon } from "./ui.jsx";
+import { Button, Icon } from "./ui.jsx";
 
 // 명세의 기본 지표 + 값이 모든 실험에 있을 때만 쓰는 추가 지표(GHS F1 · 문서 완전 정답)
 function availableMetrics(experiments) {
@@ -47,16 +47,16 @@ function LineChart() {
   </svg>;
 }
 
-export default function ComparePage({ doc }) {
+export default function ComparePage() {
   const { state, patch } = useWorkspace();
   const selected = state.experiments.find(item => item.id === state.selectedExperiment);
   const isDemo = !API_MODE && state.compareSplit === "예시";
   const metrics = availableMetrics(state.experiments);
   const extraCols = metrics.filter(metric => metric.optional);
   const cols = ["parsing", "schema", "cas", "pair", "hcode", ...extraCols.map(metric => metric.key), "seconds", "tokens"];
-  return <><DocumentHeader doc={doc} /><main id="main" className="comparison-content">
-    <section className="comparison-heading"><div><h1>모델 비교 결과</h1><p>Base Zero-shot, Base Few-shot(k=2), QLoRA 모델의 추출 성능을 비교합니다.</p></div><div><span className="comparison-date">{isDemo ? "예시 실행일" : "평가 실행일"} &nbsp;{state.compareAt || "—"}</span><Button action="compare-options" disabled={state.busy}><Icon name="refresh" /> {state.busy ? "비교 중…" : "다른 실험 비교하기"}</Button></div></section>
-    <div className="comparison-notice">{isDemo ? "예시 데이터 · 아래 수치는 첨부 화면을 재현한 값이며 실제 평가 결과가 아닙니다." : `평가셋: ${state.compareSplit} · ${state.compareSubset}${state.experiments[0]?.n_docs ? ` (${state.experiments[0].n_docs}건)` : ""} · 평가셋별 결과를 분리하여 표시합니다.${source.note ? ` ${source.note}` : ""}`}</div>
+  return <main id="main" className="comparison-page">
+    <header className="comparison-heading workspace-page-header"><div className="workspace-page-heading"><span className="workspace-page-eyebrow">실험 비교</span><h1 className="workspace-page-title">모델 비교 결과</h1><p className="workspace-page-support">Base Zero-shot, Base Few-shot(k=2), QLoRA 모델의 추출 성능을 비교합니다.</p></div><div className="comparison-actions workspace-page-actions"><span className="comparison-date">{isDemo ? "예시 실행일" : "평가 실행일"} &nbsp;{state.compareAt || "—"}</span><Button action="compare-options" disabled={state.busy}><Icon name="refresh" /> {state.busy ? "비교 중…" : "다른 실험 비교하기"}</Button></div></header>
+    <div className="comparison-content"><div className="comparison-notice">{isDemo ? "예시 데이터 · 아래 수치는 첨부 화면을 재현한 값이며 실제 평가 결과가 아닙니다." : `평가셋: ${state.compareSplit} · ${state.compareSubset}${state.experiments[0]?.n_docs ? ` (${state.experiments[0].n_docs}건)` : ""} · 평가셋별 결과를 분리하여 표시합니다.${source.note ? ` ${source.note}` : ""}`}</div>
     {!state.experiments.length ? <section className="panel empty-state"><h2>{state.busy ? "실험 결과를 불러오는 중입니다." : "표시할 실험 결과가 없습니다."}</h2><Button action="load-compare" disabled={state.busy}>실험 결과 불러오기</Button></section> : <>
       <MetricCards />
       <div className="comparison-top-grid">
@@ -73,5 +73,6 @@ export default function ComparePage({ doc }) {
         </section>
       </div>
     </>}
-  </main></>;
+    </div>
+  </main>;
 }

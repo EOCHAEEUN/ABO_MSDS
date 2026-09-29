@@ -37,12 +37,12 @@ export default function DocumentsPage() {
   ];
   const allChecked = Boolean(docs.length && docs.every(doc => state.checked.has(doc.id)));
   return <main id="main">
-    <section className="list-heading"><div><h1>문서 목록</h1><p>등록된 MSDS 문서를 조회하고 관리할 수 있습니다.</p></div>
-      <div className="list-filters">{filters.map(([key, label, values, placeholder]) => <select key={key} data-filter={key} aria-label={label} value={state.filters[key]} onChange={event => { const value = event.target.value; update(next => { next.filters[key] = value; next.page = 1; }); }}><Options values={values} placeholder={placeholder} /></select>)}
+    <header className="list-heading workspace-page-header"><div className="workspace-page-heading"><span className="workspace-page-eyebrow">등록 문서</span><h1 className="workspace-page-title">문서 목록</h1><p className="workspace-page-support">등록된 MSDS 문서를 조회하고 관리할 수 있습니다.</p></div>
+      <div className="list-filters workspace-page-actions">{filters.map(([key, label, values, placeholder]) => <select key={key} data-filter={key} aria-label={label} value={state.filters[key]} onChange={event => { const value = event.target.value; update(next => { next.filters[key] = value; next.page = 1; }); }}><Options values={values} placeholder={placeholder} /></select>)}
         <label className="search-input"><Icon name="search" /><input id="list-search" aria-label="문서 목록 검색" placeholder="문서명, 제품명, 공급자, CAS 번호 검색" value={state.query} onChange={event => patch({ query: event.target.value, page: 1 })} /></label>
         <Button action="upload" className="primary" disabled={state.busy}><Icon name="plus" /> 문서 업로드</Button>
       </div>
-    </section>
+    </header>
     <div className="documents-content"><section className="panel documents-table-panel">
       <div className="panel-toolbar"><div className="panel-title"><h2>문서 목록</h2><span>총 {docs.length}건{state.checked.size ? ` · ${state.checked.size}건 선택` : ""}</span></div><div className="toolbar-actions">
         <Button action="refresh" disabled={state.busy}><Icon name="refresh" /> 새로고침</Button><Button action="download-list"><Icon name="download" /> 목록 다운로드 (CSV)</Button><Button action="columns">표시 항목 설정 <Icon name="chevron" /></Button>

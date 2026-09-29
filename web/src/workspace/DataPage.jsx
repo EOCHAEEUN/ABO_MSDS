@@ -57,10 +57,11 @@ export default function DataPage() {
   const chooseTable = name => { setTable(name); setOffset(0); setSelected(null); };
 
   return <main id="main" className="db-page">
-    <header className="db-heading">
-      <div className="db-heading-copy"><div className="db-heading-title"><span className="db-eyebrow">저장된 데이터</span><h1>데이터</h1></div><p>문서 추출과 검토 결과가 DB에 적재된 상태를 확인합니다.</p></div>
-      <div className="db-heading-actions"><span className="db-readonly">읽기 전용 · SQLite</span><button type="button" onClick={() => setReload(value => value + 1)} disabled={loading}><Icon name="refresh" /> 새로고침</button></div>
+    <header className="db-heading workspace-page-header">
+      <div className="db-heading-copy workspace-page-heading"><span className="db-eyebrow workspace-page-eyebrow">저장된 데이터</span><h1 className="workspace-page-title">데이터</h1><p className="workspace-page-support">문서 추출과 검토 결과가 DB에 적재된 상태를 확인합니다.</p></div>
+      <div className="db-heading-actions workspace-page-actions"><span className="db-readonly">읽기 전용 · SQLite</span><button type="button" onClick={() => setReload(value => value + 1)} disabled={loading}><Icon name="refresh" /> 새로고침</button></div>
     </header>
+    <div className="db-content">
     {error && <div className="db-error" role="alert"><strong>DB를 불러오지 못했습니다.</strong><span>{error}</span><span>API 서버를 실행한 뒤 새로고침해 주세요.</span></div>}
     <div className="db-stats" aria-label="적재 현황">
       <div><span className="db-stat-icon"><Icon name="document" /></span><div className="db-stat-copy"><span>문서</span><small>msds_documents</small></div><strong>{result?.tables.find(item => item.name === "msds_documents")?.count ?? "—"}</strong></div>
@@ -84,6 +85,7 @@ export default function DataPage() {
         <div className="db-panel-heading"><span>행 상세</span>{selected && <b>#{selected.id}</b>}</div>
         {selected && result ? <dl>{result.columns.map(column => <div key={column.name}><dt>{column.name}<small>{column.type}</small></dt><dd><pre>{detailValue(selected[column.name])}</pre></dd></div>)}</dl> : <p className="db-inspector-empty">행을 선택하면 저장된 값을 볼 수 있습니다.</p>}
       </aside>
+    </div>
     </div>
   </main>;
 }

@@ -1,0 +1,163 @@
+/* One title, context, and actions rhythm across the four workspace views. */
+.app-shell .workspace-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 28px;
+  min-height: 136px;
+  padding: 20px 26px;
+  background: rgba(255, 255, 255, .68);
+  border-bottom: 1px solid rgba(210, 225, 234, .85);
+  backdrop-filter: blur(8px);
+}
+.workspace-page-heading {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+}
+.workspace-page-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  color: #4b7898;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+.workspace-page-header h1.workspace-page-title {
+  margin: 0;
+  color: #102a4c;
+  font-size: 27px;
+  font-weight: 720;
+  letter-spacing: -.035em;
+  line-height: 1.3;
+}
+.app-shell .workspace-page-header .workspace-page-support {
+  margin: 0;
+  color: #627a93;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.workspace-page-actions {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* The document title uses the same hierarchy and keeps its source metadata. */
+.view-review .review-document-header {
+  flex: 0 0 136px;
+  min-height: 136px;
+  padding: 20px 26px;
+  align-items: center;
+}
+.view-review .review-document-heading {
+  align-items: flex-start;
+  margin: 0;
+  text-align: left;
+}
+.view-review .review-context-label { margin-bottom: 0; }
+.view-review .review-title-row,
+.view-review .review-document-meta { justify-content: flex-start; }
+.view-review .review-title-row { width: 100%; gap: 11px; }
+.view-review .review-title-row h1.workspace-page-title { max-width: min(760px, 54vw); }
+.view-review .pdf-badge { width: 34px; height: 34px; }
+.view-review .review-document-meta { margin-top: 5px; gap: 5px 0; font-size: 12px; }
+.view-review .review-document-meta > span { padding-inline: 10px; }
+.view-review .review-document-meta > span:first-child { padding-left: 0; }
+.view-review .review-header-tools {
+  flex: 0 0 clamp(280px, 24vw, 380px);
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  align-self: stretch;
+  gap: 11px;
+  height: auto;
+  margin-left: auto;
+  padding: 0;
+}
+.view-review .review-search { height: 40px; }
+
+/* Filters and page actions occupy the same right-side area. */
+.view-documents .list-heading { min-height: 136px; }
+.view-documents .list-filters { flex-wrap: wrap; justify-content: flex-end; }
+.view-documents .list-filters select,
+.view-documents .list-filters button { height: 38px; }
+
+/* Comparison metrics belong below the page header, not under a second document header. */
+.view-compare .comparison-heading { min-height: 136px; }
+.view-compare .comparison-heading > div.workspace-page-heading:first-child {
+  display: flex;
+  flex: 1 1 400px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+}
+.view-compare .comparison-heading p { padding: 0; border: 0; }
+.view-compare .comparison-heading > div.comparison-actions:last-child { gap: 14px; margin-left: auto; }
+.view-compare .comparison-heading button { min-height: 38px; padding: 7px 12px; font-size: 13px; }
+
+/* The data heading spans the viewport; the tables keep their readable max width. */
+.view-data .db-page { max-width: none; padding: 0; }
+.view-data .db-content { width: 100%; max-width: 1700px; margin-inline: auto; padding: 16px 26px 36px; }
+.view-data .db-heading { min-height: 136px; margin: 0; }
+.view-data .db-heading .db-heading-copy {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+}
+.view-data .db-heading-copy p { padding: 0; border: 0; }
+.view-data .db-heading-actions { margin-left: auto; }
+
+@media (max-width: 1500px) {
+  .view-documents .list-heading { flex-wrap: wrap; }
+  .view-documents .workspace-page-heading { flex: 1 1 100%; }
+  .view-documents .list-filters { flex-basis: 100%; justify-content: flex-start; }
+}
+@media (max-width: 1100px) {
+  .view-documents .list-heading { align-items: stretch; }
+  .view-documents .workspace-page-heading,
+  .view-documents .list-filters { flex-basis: auto; }
+  .view-review .review-document-header { flex-wrap: wrap; height: auto; flex-basis: auto; }
+  .view-review .review-header-tools { flex: 1 1 100%; flex-direction: row; align-items: center; margin-left: 0; }
+  .view-review .review-search { flex: 1 1 280px; }
+  .view-review .review-progress { flex: 0 0 auto; }
+}
+@media (max-width: 800px) {
+  .app-shell .workspace-page-header { min-height: 0; padding: 16px 14px; flex-direction: column; align-items: stretch; gap: 12px; }
+  .workspace-page-heading { flex-basis: auto; }
+  .workspace-page-header h1.workspace-page-title { font-size: 23px; }
+  .workspace-page-actions { justify-content: flex-start; flex-wrap: wrap; width: 100%; }
+  .view-review .review-document-header { min-height: 0; flex-direction: column; align-items: stretch; padding: 16px 14px; }
+  .view-review .review-title-row h1.workspace-page-title { max-width: calc(100vw - 100px); white-space: normal; }
+  .view-review .review-header-tools { flex-basis: auto; flex-direction: column; align-items: stretch; width: 100%; }
+  .view-review .review-search { flex: none; width: 100%; }
+  .view-review .review-progress { justify-content: flex-start; }
+  .view-documents .list-filters { width: 100%; }
+  .view-compare .comparison-heading,
+  .view-data .db-heading { flex-direction: column; align-items: stretch; }
+  .view-compare .comparison-heading > div.workspace-page-heading:first-child { flex-basis: auto; }
+  .view-compare .comparison-heading > div.comparison-actions:last-child { justify-content: flex-start; margin-left: 0; }
+  .view-data .db-heading .db-heading-copy { flex-basis: auto; }
+  .view-data .db-heading-actions { justify-content: flex-start; margin-left: 0; }
+  .view-data .db-content { padding: 14px 12px 28px; }
+}
+@media (max-width: 520px) {
+  .view-review .review-progress .progress-track { width: min(35vw, 140px); }
+  .view-review .review-document-meta > span { padding-inline: 7px; }
+  .view-compare .comparison-heading > div.comparison-actions:last-child { gap: 8px; }
+}
