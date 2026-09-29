@@ -1,10 +1,16 @@
 """
 [김건하] PDF 1건 -> 텍스트 추출 -> 모델 출력 -> 스키마 검사 -> Rule Engine -> DB 적재 -> JSON 출력.
 
-실행: python3 -m app.pipeline_run --pdf data/raw/<파일>.pdf --model mock --doc-id KR-KUMHO-002
+실행:
+  python3 -m app.pipeline_run --pdf data/raw/KR-NHCHEM-001.pdf --model mock --doc-id KR-NHCHEM-001
+  python3 -m app.pipeline_run --pdf data/raw/KR-NHCHEM-001.pdf --model qlora --saved --doc-id KR-NHCHEM-001
+  python3 -m app.pipeline_run --pdf data/raw/KR-NHCHEM-001.pdf --model qlora   # 실시간 추론(GPU, 어댑터 필요)
 
-실제 모델(app/model.py의 predict())은 아직 없어서 --model mock으로 data/labels/{doc-id}.json을
-"모델 출력인 척" 문자열로 쓴다(작업지시서 "하지 않는 것").
+모델 단계(predict):
+  - mock   : data/labels/{doc-id}.json을 "모델 출력인 척" 씀
+  - --saved: 이미 돌린 실제 모델 출력 재사용(qlora→outputs/qlora_r1, base→outputs/base_fs), GPU 불필요
+  - 그 외  : app/model.py(양세윤)의 predict(). 어댑터·프롬프트·max_new_tokens는 eval/experiment.json 고정값.
+model_name(qlora·base·mock)이 DB msds_documents.model_name에 들어간다.
 
 core/preprocess.py의 preprocess()는 이제 구현돼 있어 그대로 가져다 쓴다(새로 만들지 않음).
 다만 preprocess()는 "굵은 글씨 겹침 복원(undouble)은 pipeline/extract_text.py가 preprocess()
@@ -84,6 +90,13 @@ def get_text(pdf_path: Path, doc_id: Optional[str]) -> tuple[Optional[str], Opti
     return result["text"], None
 
 
+# app/model.py의 MODELS("qlora", "base")와 같은 이름 + mock. DB model_name에도 이 이름이 들어간다.
+MODEL_CHOICES = ("mock", "qlora", "base")
+# --saved로 저장 출력을 쓸 때 app/model.py 조건과 같은 eval 출력 폴더:
+# qlora = eval/experiment.json의 어댑터(r1), base = Base few-shot(k=2).
+SAVED_CONDITION = {"qlora": "qlora_r1", "base": "base_fs"}
+
+
 def _mock_predict(doc_id: str) -> str:
     label_path = _REPO_ROOT / "data" / "labels" / f"{doc_id}.json"
     if not label_path.exists():
@@ -94,14 +107,31 @@ def _mock_predict(doc_id: str) -> str:
     return label_path.read_text(encoding="utf-8")
 
 
-def predict(text: str, model_name: str, doc_id: Optional[str]) -> str:
+def _saved_predict(model_name: str, doc_id: str) -> str:
+    """eval/infer.py가 이미 만들어 둔 모델 출력(outputs/{조건}/val/{doc_id}.json)을 그대로 쓴다.
+    GPU·모델 가중치 없이 실제 모델 출력으로 파이프라인 뒷단(스키마·Rule Engine·DB·JSON)을 돌릴 때 쓴다."""
+    path = _REPO_ROOT / "outputs" / SAVED_CONDITION[model_name] / "val" / f"{doc_id}.json"
+    if not path.exists():
+        raise FileNotFoundError(f"저장된 모델 출력이 없습니다: {path} (val 문서만 있음)")
+    return path.read_text(encoding="utf-8")
+
+
+def predict(text: str, model_name: str, doc_id: Optional[str], saved: bool = False) -> str:
+    """모델 출력 문자열을 돌려준다.
+    - mock : data/labels/{doc_id}.json을 모델 출력인 척
+    - saved: 이미 돌린 실제 모델 출력(outputs/{qlora_r1|base_fs}/val/{doc_id}.json)
+    - 그 외: app/model.py(양세윤)의 실시간 추론 — 어댑터·프롬프트·max_new_tokens는 eval/experiment.json 고정값"""
     if model_name == "mock":
         if not doc_id:
             raise ValueError("--model mock은 --doc-id가 있어야 합니다")
         return _mock_predict(doc_id)
-    from app.model import predict as real_predict  # 아직 미구현일 수 있음(양세윤 담당)
+    if saved:
+        if not doc_id:
+            raise ValueError("--saved는 --doc-id가 있어야 합니다")
+        return _saved_predict(model_name, doc_id)
+    from app.model import predict as model_predict  # torch·transformers는 실시간 추론 때만 올린다
 
-    return real_predict(text, model_name)
+    return model_predict(text, model_name)
 
 
 def _log_failure(reason: str, pdf_path: Path, model_name: str, out_dir: Path, detail: str = "") -> None:
@@ -121,6 +151,7 @@ def run_pdf(
     doc_id: Optional[str] = None,
     db_path: str | Path = "data/db/msds.sqlite",
     out_dir: str | Path = "outputs/exports",
+    saved: bool = False,
 ) -> tuple[Optional[int], Optional[str], Optional[str]]:
     """PDF 1건을 끝까지 처리한다. (document_id, export_path, failure_reason)을 반환한다.
 
@@ -138,7 +169,11 @@ def run_pdf(
         _log_failure(reason or "TEXT_EXTRACTION_FAILED", pdf_path, model_name, out_dir)
         return None, None, reason or "TEXT_EXTRACTION_FAILED"
 
-    raw_output = predict(text, model_name, doc_id)
+    try:
+        raw_output = predict(text, model_name, doc_id, saved=saved)
+    except (FileNotFoundError, ValueError, RuntimeError, SystemExit) as e:  # app/model.py는 모델 없음을 RuntimeError·SystemExit로 알림
+        _log_failure("MODEL_UNAVAILABLE", pdf_path, model_name, out_dir, str(e))
+        return None, None, f"MODEL_UNAVAILABLE: {e}"
 
     parsed_obj, parse_err = extract_json(raw_output)
     if parsed_obj is None:
@@ -167,14 +202,19 @@ def run_pdf(
 def _cli() -> None:
     parser = argparse.ArgumentParser(description="PDF 1건 -> SQLite 적재 -> JSON 출력")
     parser.add_argument("--pdf", required=True, help="원본 PDF 경로 (예: data/raw/foo.pdf)")
-    parser.add_argument("--model", required=True, choices=["mock", "base", "qlora"])
-    parser.add_argument("--doc-id", default=None, help="mock 모드는 필수. data/labels/{doc-id}.json을 모델 출력으로 씀")
+    parser.add_argument("--model", required=True, choices=MODEL_CHOICES,
+                        help="mock=정답 라벨을 모델 출력인 척 / qlora·base=app/model.py 실시간 추론")
+    parser.add_argument("--saved", action="store_true",
+                        help="실시간 추론 대신 이미 돌린 모델 출력(qlora→outputs/qlora_r1, base→outputs/base_fs) 사용. GPU 불필요")
+    parser.add_argument("--doc-id", default=None,
+                        help="mock·--saved는 필수. 주면 data/text/{doc-id}.txt 전처리 텍스트를 우선 씀(학습·평가 입력과 동일)")
     parser.add_argument("--db", default="data/db/msds.sqlite")
     parser.add_argument("--out-dir", default="outputs/exports")
     args = parser.parse_args()
 
     document_id, export_path, failure_reason = run_pdf(
-        args.pdf, args.model, doc_id=args.doc_id, db_path=args.db, out_dir=args.out_dir
+        args.pdf, args.model, doc_id=args.doc_id, db_path=args.db, out_dir=args.out_dir,
+        saved=args.saved,
     )
     if failure_reason:
         print(f"실패: {failure_reason} ({args.out_dir}/_failures.csv에 기록)", file=sys.stderr)
