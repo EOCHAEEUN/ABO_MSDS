@@ -65,9 +65,36 @@ def _top_field(path: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> dict:
+def _squash(s: str) -> str:
+    return re.sub(r"\s+", "", s or "")
+
+
+def _collapse(s: str) -> str:
+    """굵은 글씨가 같은 글자로 여러 번 추출된 원본 PDF("제제제제제품품품품품명")도 찾을 수 있게
+    반복 글자를 하나로 줄인다. data/text(전처리 텍스트)는 이미 정리돼 있어 _squash만으로 되지만,
+    pdfplumber로 직접 읽는 원본 PDF 쪽 텍스트는 이 정리를 거치지 않는다."""
+    return re.sub(r"(.)\1+", r"\1", _squash(s))
+
+
+def _find_page(pdf_pages: Optional[list[str]], text: Optional[str]) -> Optional[int]:
+    """근거 줄(text)이 처음 나오는 원본 PDF 쪽(1부터). 줄이 여럿이면 첫 줄로 찾는다.
+    쪽 텍스트가 없거나 못 찾으면 None."""
+    if not pdf_pages or not text:
+        return None
+    key = _collapse(text.splitlines()[0])
+    if not key:
+        return None
+    for i, page in enumerate(pdf_pages):
+        if key in _collapse(page):
+            return i + 1
+    return None
+
+
+def field_rule_results(label: dict, source_text: Optional[str], doc_id: str,
+                       pdf_pages: Optional[list[str]] = None) -> dict:
     """run_rules() 결과를 핵심 5필드별 {review_status, reason_code, page, section, source_text}로 바꾼다.
-    source_text는 값이 들어 있는 원문 줄 전체(값이 없으면 항목 제목 줄과 다음 줄), page는 원본 PDF에서 찾은 쪽."""
+    source_text는 값이 들어 있는 원문 줄 전체(app/rules/checks/evidence.py가 찾음), page는 원본 PDF에서 찾은 쪽
+    (pdf_pages가 없으면 None — 전처리 텍스트만으로는 쪽 경계를 모른다)."""
     rules = run_rules(label, source_text, doc_id)
     per: dict[str, list[dict]] = {f: [] for f in CORE_FIELDS}
     for f in rules["findings"]:
@@ -96,8 +123,8 @@ def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> 
         # snippets[field]로 다 들어온다. 개수 상한은 성분이 많은 문서(10건 이상)에서 뒤쪽 성분의
         # CAS·함유량 근거가 잘리지 않도록 넉넉히 잡는다.
         text = "\n".join(snippets[field][:20]) or None
-        out[field] = {"review_status": status, "reason_code": reason, "page": None, "section": SECTION[field],
-                      "source_text": text, "messages": [f["message"] for f in found][:5]}
+        out[field] = {"review_status": status, "reason_code": reason, "page": _find_page(pdf_pages, text),
+                      "section": SECTION[field], "source_text": text, "messages": [f["message"] for f in found][:5]}
     return out
 
 
