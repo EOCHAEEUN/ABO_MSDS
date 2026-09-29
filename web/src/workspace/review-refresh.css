@@ -145,6 +145,7 @@ body {
 .preview-zoom-control .zoom-label { padding: 3px 9px; border-left: 1px solid #e7edf2; border-right: 1px solid #e7edf2; font-size: 13px; }
 .preview-expand { width: 30px; min-height: 30px; padding: 5px; background: transparent; border: 0; color: #426888; }
 .preview-expand .icon { width: 18px; height: 18px; }
+.preview-open-tab { display: inline-flex; align-items: center; justify-content: center; }
 .preview-panel:fullscreen { border-radius: 0; background: #fff; }
 .view-review .pdf-workspace { min-height: 0; background: #edf1f4; }
 .view-review .thumbnails { width: 101px; padding: 10px 8px; background: linear-gradient(90deg, #e9eef2, #f6f8f9); border-right-color: #d8e2e8; }

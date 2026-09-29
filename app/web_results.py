@@ -64,26 +64,103 @@ def _top_field(path: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _lines_with(text: str, needles: list[str], prefer: Optional[str] = None) -> Optional[str]:
-    """원문에서 값이 들어 있는 줄들(근거 표시용). prefer가 들어 있는 줄을 먼저 고른다."""
+_SQUASH = re.compile(r"\s+")
+# 목록이 비었을 때 보여 줄 항목 제목(그 줄과 다음 줄을 근거로 보여 줘 "칸이 비었는지"를 원문에서 바로 확인하게 한다)
+HEADERS = {
+    "product_name": re.compile(r"제\s*품\s*명|상\s*품\s*명|물\s*질\s*명|제품\s*설명|Product\s*name", re.I),
+    "ingredients": re.compile(r"구\s*성\s*성\s*분|Composition", re.I),
+    "ghs_classification": re.compile(r"(?:유\s*해|위\s*험)\s*성?.{0,3}(?:위\s*험|유\s*해)\s*성?\s*분\s*류|Classification", re.I),
+    "signal_word": re.compile(r"신\s*호\s*어|Signal\s*word|경\s*고\s*표\s*지", re.I),
+    "hazard_statements": re.compile(r"유\s*해\s*[·ㆍ/∙•\s]?\s*위\s*험\s*문\s*구|Hazard\s*statement", re.I),
+}
+
+
+def _squash(s: str) -> str:
+    return _SQUASH.sub("", s or "")
+
+
+def _collapse(s: str) -> str:
+    """굵은 글씨가 같은 글자로 여러 번 추출된 PDF("가가가가가.")도 찾을 수 있게 반복 글자를 하나로 줄인다."""
+    return re.sub(r"(.)\1+", r"\1", _squash(s))
+
+
+def _needles(label: dict, field: str) -> list[tuple[str, Optional[str]]]:
+    """그 필드의 값 가운데 원문에서 찾을 (문자열, 우선 단서). 단서가 함께 든 줄 · 쪽을 먼저 고른다."""
+    v = label.get(field)
+    if field in ("product_name", "signal_word"):
+        return [(v["value"], None)] if isinstance(v, dict) and v.get("value") else []
+    items = [i for i in v if isinstance(i, dict)] if isinstance(v, list) else []
+    if field == "ingredients":
+        return [(i.get("cas_number") or i.get("chemical_name") or "", None) for i in items][:8]
+    if field == "ghs_classification":
+        return [(i.get("hazard_class") or "", None) for i in items][:8]
+    # hazard_statements: 분류 표에도 H코드가 있으므로 코드와 문구가 함께 든 줄을 먼저 고른다
+    return [(i.get("code") or i.get("text") or "", (i.get("text") or "")[:8] if i.get("code") else None) for i in items][:8]
+
+
+_SUBHEADING = re.compile(r"^\s*(?:[가-하]\s*[.)]|\d+(?:\.\d+)*\s*[.:)]|[○◦▶▷•o]\s)\s*\S")
+
+
+def _lines_with(text: str, needles: list[tuple[str, Optional[str]]], prefer: Optional[str] = None,
+                heading: bool = False) -> Optional[str]:
+    """원문에서 값이 들어 있는 줄 전체(근거 표시용, 잘린 조각 대신). prefer가 들어 있는 줄을 먼저 고른다.
+    heading이면 그 줄 바로 위(8줄 안)의 소항목 제목을 앞에 붙인다 — 값이 어느 칸에서 왔는지 보이게."""
     lines = [l.strip() for l in text.splitlines() if l.strip()]
-    squash = lambda s: re.sub(r"\s+", "", s)  # noqa: E731
     picked: list[str] = []
-    for n in needles:
-        key = squash(n)
+    for n, hint in needles:
+        key = _squash(n)
         if not key:
             continue
-        hits = [l for l in lines if key in squash(l)]
+        hits = [i for i, l in enumerate(lines) if key in _squash(l)]
+        if hint:
+            hits.sort(key=lambda i: _squash(hint) not in _squash(lines[i]))
         if prefer:
-            hits.sort(key=lambda l: prefer not in l)
-        if hits and hits[0] not in picked:
-            picked.append(hits[0])
+            hits.sort(key=lambda i: prefer not in lines[i])
+        if not hits:
+            continue
+        i = hits[0]
+        if heading and not _SUBHEADING.match(lines[i]):
+            head = next((lines[j] for j in range(i - 1, max(-1, i - 9), -1) if _SUBHEADING.match(lines[j])), None)
+            if head and head not in picked:
+                picked.append(head)
+        if lines[i] not in picked:
+            picked.append(lines[i])
     return "\n".join(picked) or None
 
 
-def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> dict:
+def _header_lines(text: str, field: str, after: int = 2) -> Optional[str]:
+    """항목 제목 줄과 그 다음 줄들. 값이 없는(자료없음 · 해당없음) 필드의 근거로 쓴다."""
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    for i, line in enumerate(lines):
+        if HEADERS[field].search(line):
+            return "\n".join(lines[i:i + 1 + after])
+    return None
+
+
+def _find_page(pages: Optional[list[str]], field: str, needles: list[tuple[str, Optional[str]]]) -> Optional[int]:
+    """원본 PDF에서 값(없으면 항목 제목)이 처음 나오는 쪽(1부터). 못 찾으면 None."""
+    if not pages:
+        return None
+    flat = [_collapse(p) for p in pages]
+    for n, hint in needles:
+        key = _collapse(n)
+        if len(key) < 2:
+            continue
+        found = [i for i, p in enumerate(flat) if key in p]
+        if hint:
+            found.sort(key=lambda i: _collapse(hint) not in flat[i])
+        if found:
+            return found[0] + 1
+    for i, p in enumerate(pages):
+        if HEADERS[field].search(p) or HEADERS[field].search(re.sub(r"(.)\1+", r"\1", p)):
+            return i + 1
+    return None
+
+
+def field_rule_results(label: dict, source_text: Optional[str], doc_id: str,
+                       pdf_pages: Optional[list[str]] = None) -> dict:
     """run_rules() 결과를 핵심 5필드별 {review_status, reason_code, page, section, source_text}로 바꾼다.
-    page는 전처리 텍스트에 쪽 경계가 없어 null로 둔다."""
+    source_text는 값이 들어 있는 원문 줄 전체(값이 없으면 항목 제목 줄과 다음 줄), page는 원본 PDF에서 찾은 쪽."""
     rules = run_rules(label, source_text, doc_id)
     per: dict[str, list[dict]] = {f: [] for f in CORE_FIELDS}
     for f in rules["findings"]:
@@ -108,25 +185,28 @@ def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> 
             status, reason = "SOURCE_CHECK_REQUIRED", None
         else:
             status, reason = "OK", None
-        text = "\n".join(snippets[field][:4]) or None
-        if text is None and source_text:  # 근거 대상이 아닌 필드(분류 · 신호어)는 값이 든 줄을 찾아 보여 준다
-            if field == "ghs_classification":
-                text = _lines_with(source_text, [c.get("hazard_class") or "" for c in label.get(field) or []][:6])
-            elif field == "signal_word" and (label.get(field) or {}).get("value"):
-                text = _lines_with(source_text, [label[field]["value"]], prefer="신호어")
-        out[field] = {"review_status": status, "reason_code": reason, "page": None, "section": SECTION[field],
-                      "source_text": text, "messages": [f["message"] for f in found][:5]}
+        needles = _needles(label, field)
+        text = None
+        if source_text:
+            text = (_lines_with(source_text, needles, prefer="신호어" if field == "signal_word" else None,
+                                heading=field in ("ghs_classification", "hazard_statements"))
+                    if needles else None) or _header_lines(source_text, field)
+        if text is None and snippets[field]:  # 줄을 못 찾으면 Rule Engine 조각이라도 보여 준다
+            text = "\n".join(snippets[field][:4])
+        out[field] = {"review_status": status, "reason_code": reason, "page": _find_page(pdf_pages, field, needles),
+                      "section": SECTION[field], "source_text": text, "messages": [f["message"] for f in found][:5]}
     return out
 
 
-def _page_count(pdf: Path) -> Optional[int]:
+def _pdf_pages(pdf: Path) -> Optional[list[str]]:
+    """원본 PDF 쪽별 텍스트(쪽수 · 근거 쪽 찾기용). 로컬에 없거나 읽지 못하면 None."""
     if not pdf.is_file():
         return None
     try:
         import pdfplumber
         with pdfplumber.open(pdf) as doc:
-            return len(doc.pages)
-    except Exception:  # noqa: BLE001 — 쪽수는 표시용이라 실패해도 결과 생성은 계속한다
+            return [page.extract_text() or "" for page in doc.pages]
+    except Exception:  # noqa: BLE001 — 표시용이라 실패해도 결과 생성은 계속한다
         return None
 
 
@@ -144,7 +224,7 @@ def build_documents(root: Path = ROOT) -> dict:
         sources = {r["doc_id"]: r for r in csv.DictReader(open(root / "data/sources.csv", encoding="utf-8-sig"))}
     val_ids = sorted(d for d, r in splits.items() if r["split"] == "val")
     docs, skipped, n = [], [], 0
-    pages: dict[str, Optional[int]] = {}
+    pages: dict[str, Optional[list[str]]] = {}
     for cond in DOC_ORDER:
         out_dir = root / "outputs" / cond / "val"
         if not (out_dir / "_run.jsonl").exists():
@@ -169,18 +249,18 @@ def build_documents(root: Path = ROOT) -> dict:
             when = _fmt_time(rec.get("created_at"))
             source_file = sources.get(doc_id, {}).get("source_file")
             if source_file and doc_id not in pages:
-                pages[doc_id] = _page_count(root / "data" / "raw" / source_file)
+                pages[doc_id] = _pdf_pages(root / "data" / "raw" / source_file)
             docs.append({
                 "id": f"{doc_id}__{cond}", "number": n, "doc_id": doc_id, "condition": cond,
                 "file_name": source_file or f"{doc_id}.pdf",
                 "language": "한국어" if splits[doc_id].get("lang") == "ko" else "영어",
-                "page_count": pages.get(doc_id), "submission_number": doc_id, "revision_date": None,
+                "page_count": len(pages[doc_id]) if pages.get(doc_id) else None, "submission_number": doc_id, "revision_date": None,
                 "extracted_at": when, "updated_at": when, "owner": "미지정",
                 "split": f"val · {name}", "form": splits[doc_id].get("form"), "model_name": name,
                 "generation_seconds": rec.get("gen_time_sec"), "output_tokens": rec.get("output_tokens"),
                 "pdf_url": f"./pdfs/{doc_id}.pdf" if source_file else None, "source": None, "source_text": text,
                 "extraction": obj, "reviews": {}, "confirmed_fields": [],
-                "rule_results": field_rule_results(obj, text, doc_id),
+                "rule_results": field_rule_results(obj, text, doc_id, pages.get(doc_id)),
             })
     stamp = hashlib.sha256(json.dumps(docs, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
     return {"generated_from": "outputs/*/val · data/text · app/rules", "split": "val", "stamp": stamp,
