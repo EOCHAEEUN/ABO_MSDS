@@ -38,9 +38,5 @@ Slurry Oil
 Slurry Oil 0 2 0
 3. 구성성분의 명칭 및 함유량
 화학물질명 관용명 및 이명(異名) CAS No. KE No. 함유량(%)
-Clarified oils (petroleum), CATALYTIC CRACKED
-64741-62-4 KE-06047 96
-catalytic cracked CLARIFIED OIL
-Sulfur, precipitated,
-유황;콜로이드 유황 7704-34-9 KE-32688 4
-sublimed or colloidal
+Clarified oils (petroleum), catalytic cracked CATALYTIC CRACKED CLARIFIED OIL 64741-62-4 KE-06047 96
+Sulfur, precipitated, sublimed or colloidal 유황;콜로이드 유황 7704-34-9 KE-32688 4

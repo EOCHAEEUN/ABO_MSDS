@@ -59,82 +59,18 @@ LESS Medium
 화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)
 Peptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25
 MOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25
-Sodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 10 – < 15
-acetylformic acid, sodium salt / 기존화학물질 번호: KE-27653
-propanoic acid, 2-oxo-, sodium salt /
-pyruvic acid sodium salt / sodium
-pyruvate
-3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15
-acid / 3-(N- 기존화학물질 번호: 2010-3-4223
-morpholino)propanesulphonic acid /
-3-morpholinopropanesulphonic acid
-/ 4-morpholinepropanesulfonic acid /
-MOPS / MOPS, DNase, RNase,
-protease free /
-morpholinepropanesulfonic acid / N-
-(3-sulfopropyl)morpholine / WAS 15
-Sodium chloride AKZO, BROXO 6/15 / AXAL / BRINE / CAS 번호: 7647-14-5 ≥ 5 – < 10
-BROXO 6/15 / common salt / 기존화학물질 번호: KE-31387
-dendritis / evaporated salt / extra
-fine 200 salt / extra fine 325 salt /
-halite / HG blending / iron-fighter
-salt / purex / purified brine / road
-salt / rock salt / saline / salt / sea
-salt / sodium chloride / sodium
-chloride (NaCl) / solar salt / solsel /
-sterling (=sodium chloride) / table
-salt / top flake / USP sodiumchloride
-/ vacuum salt / white crystal
+Sodium pyruvate 2-oxo-propanoic acid, sodium salt / acetylformic acid, sodium salt / propanoic acid, 2-oxo-, sodium salt / pyruvic acid sodium salt / sodium pyruvate CAS 번호: 113-24-6 기존화학물질 번호: KE-27653 ≥ 10 – < 15
+3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic acid / 3-(N-morpholino)propanesulphonic acid / 3-morpholinopropanesulphonic acid / 4-morpholinepropanesulfonic acid / MOPS / MOPS, DNase, RNase, protease free / morpholinepropanesulfonic acid / N-(3-sulfopropyl)morpholine / WAS 15 CAS 번호: 1132-61-2 기존화학물질 번호: 2010-3-4223 ≥ 10 – < 15
+Sodium chloride AKZO, BROXO 6/15 / AXAL / BRINE / BROXO 6/15 / common salt / dendritis / evaporated salt / extra fine 200 salt / extra fine 325 salt / halite / HG blending / iron-fighter salt / purex / purified brine / road salt / rock salt / saline / salt / sea salt / sodium chloride / sodium chloride (NaCl) / solar salt / solsel / sterling (=sodium chloride) / table salt / top flake / USP sodiumchloride / vacuum salt / white crystal CAS 번호: 7647-14-5 기존화학물질 번호: KE-31387 ≥ 5 – < 10
 2025-08-22 (최초 작성일자) KR - ko 3/19
 LESS Medium
 물질안전보건자료
 고용노동부고시 2020-130에 따름
 화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)
-Magnesium sulfate anhydrous E518 / epsom salts / magnesium CAS 번호: 7487-88-9 ≥ 5 – < 10
-sulfate / magnesium sulphate / 기존화학물질 번호: KE-22752
-magnesium sulphate (1:1) /
-magnesium sulphate, anhydrous /
-magnesium sulphate, anhydrous,
-crystalline / magnesium sulphate,
-dried, pure / magnesiumsulphate,
-dried / PST13510 / sal angalis / sal
-de sedlitz / sulfuric acid magnesium
-salt (1:1) / sulphuric acid magnesium
-salt
+Magnesium sulfate anhydrous E518 / epsom salts / magnesium sulfate / magnesium sulphate / magnesium sulphate (1:1) / magnesium sulphate, anhydrous / magnesium sulphate, anhydrous, crystalline / magnesium sulphate, dried, pure / magnesiumsulphate, dried / PST13510 / sal angalis / sal de sedlitz / sulfuric acid magnesium salt (1:1) / sulphuric acid magnesium salt CAS 번호: 7487-88-9 기존화학물질 번호: KE-22752 ≥ 5 – < 10
 2025-08-22 (최초 작성일자) KR - ko 4/19
 LESS Medium
 물질안전보건자료
 고용노동부고시 2020-130에 따름
 화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)
-Potassium phosphate dibasic dibasic potassium phosphate, CAS 번호: 7758-11-4 ≥ 1 – < 5
-anhydrous anhydrous / dikalium phosphate, 기존화학물질 번호: KE-12167
-anhydrous / dipotassium
-hydrogenorthophosphate /
-dipotassium monohydrogen
-phosphate, anhydrous / dipotassium
-monophosphate, anhydrous /
-dipotassium orthophosphate,
-anhydrous / dipotassium phosphate,
-anhydrous / dipotassium-o-
-phosphate, anhydrous / DKP,
-anhydrous / hydrogen dipotassium
-phosphate, anhydrous /
-orthophosphate dipotassium,
-anhydrous / phosphoric acid,
-dipotassium salt / phosphoric acid,
-dipotassium salt, anhydrous /
-potassium biphosphate, anhydrous /
-potassium dibasic phosphate,
-anhydrous / potassium hydrogen
-phosphate(=di potassium hydrogen
-phosphate) / potassium
-hydrogenphosphate, anhydrous /
-potassium monohydrogen
-orthophosphate, anhydrous /
-potassium monohydrogen
-phosphate, anhydrous / potassium
-orthophosphate, mono-H, anhydrous
-/ potassium phosphate dibasic,
-anhydrous / sec-potassium
-phosphate, anhydrous / secundary
-potassium phosphate, anhydrous
+Potassium phosphate dibasic anhydrous dibasic potassium phosphate, anhydrous / dikalium phosphate, anhydrous / dipotassium hydrogenorthophosphate / dipotassium monohydrogen phosphate, anhydrous / dipotassium monophosphate, anhydrous / dipotassium orthophosphate, anhydrous / dipotassium phosphate, anhydrous / dipotassium-o-phosphate, anhydrous / DKP, anhydrous / hydrogen dipotassium phosphate, anhydrous / orthophosphate dipotassium, anhydrous / phosphoric acid, dipotassium salt / phosphoric acid, dipotassium salt, anhydrous / potassium biphosphate, anhydrous / potassium dibasic phosphate, anhydrous / potassium hydrogen phosphate(=di potassium hydrogen phosphate) / potassium hydrogenphosphate, anhydrous / potassium monohydrogen orthophosphate, anhydrous / potassium monohydrogen phosphate, anhydrous / potassium orthophosphate, mono-H, anhydrous / potassium phosphate dibasic, anhydrous / sec-potassium phosphate, anhydrous / secundary potassium phosphate, anhydrous CAS 번호: 7758-11-4 기존화학물질 번호: KE-12167 ≥ 1 – < 5

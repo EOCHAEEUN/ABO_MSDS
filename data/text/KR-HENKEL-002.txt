@@ -35,19 +35,13 @@ V001.8
 위험성 :
 3. 구성성분의 명칭 및 함유량
 성분에 대한 정보: 혼합물
-화학물질명 관용명 및 이명(異名) CAS 번호 또는 함유량(%)
-식별번호
+화학물질명 관용명 및 이명(異名) CAS 번호 또는 식별번호 함유량(%)
 Mica Mica-group minerals 12001-26-2 >= 15 - < 20 %
 Octan-1-ol 1-Octanol 111-87-5 >= 10 - < 15 %
-Titanium dioxide < 1% particles with Titanium oxide (TiO2) < 13463-67-7 >= 1 - < 5 %
-diameter ≤ 10 μm 1% particles with
-diameter ≤ 10 μm
-Silica, amorphous, fumed, cryst.-free Silica, amorphous, 112945-52-5 >= 1 - < 5 %
-fumed, cryst.-free
-Cumene hydroperoxide Hydroperoxide, 1- 80-15-9 >= 0.25 - < 1 %
-methyl-1-phenylethyl
-Dimethyl-2,7-Octadien-6-ol, 2,6- 1,6-Octadien-3-ol, 3,7- 78-70-6 < 1 %
-dimethyl-
+Titanium dioxide < 1% particles with diameter ≤ 10 μm Titanium oxide (TiO2) < 1% particles with diameter ≤ 10 μm 13463-67-7 >= 1 - < 5 %
+Silica, amorphous, fumed, cryst.-free Silica, amorphous, fumed, cryst.-free 112945-52-5 >= 1 - < 5 %
+Cumene hydroperoxide Hydroperoxide, 1-methyl-1-phenylethyl 80-15-9 >= 0.25 - < 1 %
+Dimethyl-2,7-Octadien-6-ol, 2,6- 1,6-Octadien-3-ol, 3,7-dimethyl- 78-70-6 < 1 %
 Quartz (SiO2), <1% respirable Quartz (SiO2) 14808-60-7 < 1 %
 구성성분의 명칭 및 함유량에 기재되지 않은 물질은 고용노동부 고시에 따라 GHS 분류에 영향을 미치지 않으며
 한계농도 미만임.

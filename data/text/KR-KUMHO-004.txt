@@ -40,8 +40,5 @@ PPG
 3. 구성성분의 명칭 및 함유량
 제품 형태 : 혼합물
 화학물질명 관용명 및 이명 제품 식별 번호 함유량 (%)
-α,α',α''-1,2,3-Propanetriyltris[ω- - CAS 번호: 25791-96-2 99 – 100
-hydroxypoly[oxy(methyl-1,2-ethanediyl)]]; 기존화학물질 번호: KE-29338
-Polyoxypropylene glycerol triether
-Octadecyl 3-(3,5-di-tert-butyl-4- - CAS 번호: 2082-79-3 0 – 1
-hydroxyphenyl)propionate 기존화학물질 번호: KE-03070
+α,α',α''-1,2,3-Propanetriyltris[ω-hydroxypoly[oxy(methyl-1,2-ethanediyl)]]; Polyoxypropylene glycerol triether - CAS 번호: 25791-96-2 기존화학물질 번호: KE-29338 99 – 100
+Octadecyl 3-(3,5-di-tert-butyl-4-hydroxyphenyl)propionate - CAS 번호: 2082-79-3 기존화학물질 번호: KE-03070 0 – 1

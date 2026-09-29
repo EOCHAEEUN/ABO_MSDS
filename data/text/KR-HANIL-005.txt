@@ -26,7 +26,5 @@ H335 호흡기계 자극을 일으킬 수 있음
 3. 구성성분의 명칭 및 함유량
 물질명 이명(관용명) CAS번호 함유량(%)
 석고 13397-24-5 0 ~ 1
-고로슬래그 (제1철 금속)(BLAST FURNACE SLAGS (FERROUS 슬래그, 철을 함유한 금속, 용광로(SLAGS,
-65996-69-2 40 ~ 50
-METAL)) FERROUS METAL, BLAST FURNACE);
+고로슬래그 (제1철 금속)(BLAST FURNACE SLAGS (FERROUS METAL)) 슬래그, 철을 함유한 금속, 용광로(SLAGS, FERROUS METAL, BLAST FURNACE); 65996-69-2 40 ~ 50
 포틀랜드 시멘트 65997-15-1 50 ~ 60

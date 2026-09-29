@@ -58,26 +58,12 @@ POLYMERIZED DIMETHYL SILICONE FLUID
 3. 구성성분의 명칭 및 함유량
 가. 구성성분의 명칭 및 함유량
 화학물질명 이명 CAS 번호 함유량, %
-SEVERELY HYDROTREATED
-HEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19
-(심하게 히드로처리된 파라핀 증류액)
-MIXED PERFORMANCE ADDITIVE
-없음. 혼합물 9.3 ~ 13.6
-(복합성능첨가제)
-VISCOSITY INDEX IMPROVER
-없음. 혼합물질 4.7 ~ 6.9
-(점도지수향상제)
-첨가제 1 혼합물질 및
-없음 5.7~ 8.3
-(ADDITIVE 1) 122-39-4
-POLYMER, ESTERS OF METHACRYLIC
-ACID AND MIXED LONG CHAIN ALCOHOLS
-없음 혼합물 0.1∼0.5
-(긴 연결고리의 메타 크릴릭산에스테르계
-폴리머 고정제 광유)
-POLYMERIZED DIMETHYL SILICONE FLUID
-없음 혼합물 0.01∼0.2
-(디메틸 실리콘계 폴리머 용액)
+SEVERELY HYDROTREATED HEAVY PARAFFINIC DISTILLATE (심하게 히드로처리된 파라핀 증류액) 없음 64742-54-7 70.5 ~ 80.19
+MIXED PERFORMANCE ADDITIVE (복합성능첨가제) 없음. 혼합물 9.3 ~ 13.6
+VISCOSITY INDEX IMPROVER (점도지수향상제) 없음. 혼합물질 4.7 ~ 6.9
+첨가제 1 (ADDITIVE 1) 없음 혼합물질 및 122-39-4 5.7~ 8.3
+POLYMER, ESTERS OF METHACRYLIC ACID AND MIXED LONG CHAIN ALCOHOLS (긴 연결고리의 메타 크릴릭산에스테르계 폴리머 고정제 광유) 없음 혼합물 0.1∼0.5
+POLYMERIZED DIMETHYL SILICONE FLUID (디메틸 실리콘계 폴리머 용액) 없음 혼합물 0.01∼0.2
 나. 참조 사항
 -IP346에 따른 DMSO추출 실험에서 PAC 함유량이 3% 이하의 고순도 광유
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

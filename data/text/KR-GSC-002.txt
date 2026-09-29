@@ -37,10 +37,6 @@ LB2640 2012-11-30 2018-01-01 윤활유기술개발팀
 화학물질명 관용명 및 이명(異名) CAS No. EC No. 함유량(%)
 1-Decene, homopolymer, hydrogenated 68037-01-4 500-183-1 70 ~ 80
 영업비밀1 10 ~ 20
-Fatty acids, (C=8-10), triesters with
-91050-89-4 293-036-3 0.1 ~ 5
-trimethylolpropane
+Fatty acids, (C=8-10), triesters with trimethylolpropane 91050-89-4 293-036-3 0.1 ~ 5
 ar-Nonyl-N-(nonylphenyl)benzenamine 36878-20-3 253-249-4 0.1 ~ 2
-Phosphorodithioic acid O,O-dialkyl(C=3-14) esters 134759-18-
-1 ~ 5
-zinc salts 5
+Phosphorodithioic acid O,O-dialkyl(C=3-14) esters zinc salts 134759-18-5 1 ~ 5
