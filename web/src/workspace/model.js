@@ -3,6 +3,21 @@ export const current = state => state.documents.find(doc => doc.id === state.sel
 export const count = doc => doc.confirmed_fields.length;
 export const status = doc => doc.pending_extraction ? "추출 대기" : count(doc) === 5 ? "확정" : count(doc) > 1 ? "검토 필요" : "미확정";
 
+// Rule Engine의 OK는 정답과의 일치 판정이 아니다.
+export function canConfirmMatched(doc, key) {
+  const rule = doc.rule_results?.[key];
+  return rule?.review_status === "OK" && Boolean(rule.source_text?.trim()) &&
+    !doc.pending_extraction && !doc.confirmed_fields.includes(key) && !doc.reviews?.[key];
+}
+
+export function reviewBadge(rule, reviewed = false, warning = false) {
+  if (reviewed) return { label: "담당자 확인", tone: "confirmed" };
+  if (warning) return { label: "원문 확인 필요", tone: "warning" };
+  if (rule?.review_status && rule.review_status !== "OK") return { label: "검토 필요", tone: "warning" };
+  if (rule?.review_status === "OK" && rule.source_text?.trim()) return { label: "규칙 검사 통과", tone: "passed" };
+  return { label: rule?.review_status === "OK" ? "근거 확인 필요" : "대조 대기", tone: "pending" };
+}
+
 export function effective(doc) {
   const extraction = structuredClone(doc.extraction);
   for (const [key, review] of Object.entries(doc.reviews || {})) {
