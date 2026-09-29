@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import csv
 import re
+from collections import Counter
 from pathlib import Path
 
 import pdfplumber
@@ -21,14 +22,38 @@ from core.preprocess import (SECTION2_PATTERNS, SECTION3_PATTERNS, SECTION4_PATT
                              find_first, preprocess)
 
 MIN_TEXT_LEN = 200
-_COPIES_OF_FIVE = re.compile(r"([가-힣ㆍ․])\1{4}")
+# 문서마다 배수가 다르다(대부분 5회, KR-THERMO-001은 4회 확인됨) — 고정값 대신 문서별로 잰다.
+_RUN_RE = re.compile(r"([가-힣ㆍ․])\1+")
+_MIN_RUN_LEN = 3          # 이보다 짧은 반복(길이 2)은 "성성"처럼 원래 겹치는 낱말일 수 있어 배수 추정에서 뺀다
+_MIN_RUN_COUNT = 20       # 이보다 적게 나오면 우연한 반복으로 보고 배수를 매기지 않는다(원문 그대로 둠)
 LOG_COLUMNS = ("doc_id", "status", "section4_pattern", "p_block_pattern", "cut_page",
                "char_count", "token_count", "h_code_before", "h_code_after", "note", "reason")
 
 
+def bold_repeat_factor(text: str) -> int:
+    """pdfplumber가 굵은 글씨를 글자당 몇 번 겹쳐 뽑았는지 이 문서에서 실측한다.
+
+    길이 3 이상인 반복 구간의 최빈 길이를 배수로 본다("구성성분"처럼 원래 두 번 연달아
+    나오는 낱말은 배수 k의 문서에서 길이 2k로 나타나 최빈값보다 드물다). 반복이 거의
+    없으면(스캔이 아닌 정상 텍스트) 1을 돌려줘 아무것도 접지 않는다.
+    """
+    lengths = Counter(len(m.group(0)) for m in _RUN_RE.finditer(text) if len(m.group(0)) >= _MIN_RUN_LEN)
+    if not lengths:
+        return 1
+    factor, count = lengths.most_common(1)[0]
+    return factor if count >= _MIN_RUN_COUNT else 1
+
+
 def undouble(text: str) -> str:
-    """pdfplumber가 글자당 정확히 5번 뽑은 굵은 글씨만 복원한다."""
-    return _COPIES_OF_FIVE.sub(r"\1", text)
+    """굵은 글씨가 글자당 k번 겹쳐 뽑힌 것을 복원한다. k는 이 문서에서 잰 값(bold_repeat_factor).
+
+    k 단위로만 줄이므로 "구성성분"처럼 같은 글자가 원래 두 번 연달아 나오는 진짜 단어는
+    2k번 겹침으로 남아 올바르게 2개로 줄어든다(1개로 뭉개지지 않는다).
+    """
+    factor = bold_repeat_factor(text)
+    if factor <= 1:
+        return text
+    return re.compile(r"([가-힣ㆍ․])\1{%d}" % (factor - 1)).sub(r"\1", text)
 
 
 def _failed(reason: str, raw_text: str = "", note: str = "") -> dict:
