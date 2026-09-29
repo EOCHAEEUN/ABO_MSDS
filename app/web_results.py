@@ -31,11 +31,12 @@ if str(ROOT) not in sys.path:
 from app.rules.engine import run_rules  # noqa: E402
 from core.schema import extract_json  # noqa: E402
 
-CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_final")
+CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_r3", "qlora_final")
 LABEL = {"base_zs": ("Base Zero-shot", "Base ZS"), "base_fs": ("Base Few-shot (k=2)", "Base FS"),
          "qlora_r1": ("QLoRA r1", "QLoRA r1"), "qlora_r2": ("QLoRA r2", "QLoRA r2"),
+         "qlora_r3": ("QLoRA r3", "QLoRA r3"),
          "qlora_final": ("QLoRA 최종", "QLoRA 최종")}
-DOC_ORDER = ("qlora_final", "qlora_r2", "qlora_r1", "base_fs", "base_zs")  # 문서 목록 순서: 후보 모델 먼저
+DOC_ORDER = ("qlora_final", "qlora_r3", "qlora_r2", "qlora_r1", "base_fs", "base_zs")  # 문서 목록 순서: 후보 모델 먼저
 CORE_FIELDS = ("product_name", "ingredients", "ghs_classification", "signal_word", "hazard_statements")
 SECTION = {"product_name": "1항 가.", "ingredients": "3항", "ghs_classification": "2항 가.",
            "signal_word": "2항 나.", "hazard_statements": "2항 나."}

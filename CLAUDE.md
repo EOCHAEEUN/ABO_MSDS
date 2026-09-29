@@ -53,7 +53,7 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
 
 ## 규약
 - doc_id는 `KR|EN-제조사약칭-번호`, 정답 · 출력 파일명은 `{doc_id}.json`이다.
-- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_final}/val/{doc_id}.json`. test는 저장소 밖 `--out-root` 아래 `{base_zs,base_fs,qlora_final}/test/`(infer · score가 강제, `.gitignore`에도 `outputs/*/test/`)
+- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_r3,qlora_final}/val/{doc_id}.json`. test는 저장소 밖 `--out-root` 아래 `{base_zs,base_fs,qlora_final}/test/`(infer · score가 강제, `.gitignore`에도 `outputs/*/test/`)
   - 이 파일에는 모델이 낸 JSON만 둔다. 파싱 실패도 모델 출력 그대로 저장해 실패로 집계한다.
   - 시간 · 토큰 · 원문 로그는 `.jsonl`로, 채점 상세는 `*.json`이 아닌 이름으로 둔다. 검사기가 폴더의 `*.json`을 모두 검사한다.
 - 전처리: `data/text/{doc_id}.txt`. 실패 기록은 `data/text/_cut_log.csv` + `data/text/review_required/`
