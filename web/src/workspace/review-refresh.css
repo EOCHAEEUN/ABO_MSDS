@@ -496,3 +496,15 @@ body {
 .view-review .hazard-table,
 .view-review .hazard-source,
 .view-review .source-transcript pre { font-size: 14px; }
+
+/* Distinguish field names from values without vertical bars. */
+.review-field-card.is-selected { border-color: #3987b1; box-shadow: 0 0 0 2px #3987b12e, 0 3px 10px #234d6a12; }
+.review-field-label { justify-self: start; padding: 4px 7px; border-radius: 5px; background: #edf3f7; color: #315473; white-space: nowrap; }
+.review-field-card.is-selected .review-field-label { background: #dceef5; color: #17577e; }
+.review-field-content { padding-left: 4px; }
+.review-field-value { color: #203d56; font-weight: 500; }
+.review-field-evidence { border-top-color: #c9dee8; background: #f8fbfd; }
+.review-field-evidence > b { color: #244c68; text-decoration: underline; text-decoration-color: #9bc9d5; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.review-field-evidence > .multiline { padding: 8px 11px; border-radius: 4px; background: #eaf6f4; color: #26495a; }
+.hazard-review-card.is-open:not(.needs-review) { border-color: #3987b1; box-shadow: 0 0 0 2px #3987b12e; }
+.hazard-source { background: #f2faf8; color: #26495a; }
