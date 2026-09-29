@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, API_MODE, source } from "./api.js";
 import { FIELD_DEFS } from "./data.js";
-import { ROUTES, applyReview, count, current, download, downloadDocuments, effective, filteredDocuments, unverifiedHazard } from "./model.js";
+import { ROUTES, applyReview, canConfirmMatched, count, current, download, downloadDocuments, effective, filteredDocuments, unverifiedHazard } from "./model.js";
 
 function initialState() {
   return {
@@ -72,7 +72,9 @@ export function useWorkspaceController() {
       compareAttempt.current = "";
       update(next => {
         next.documents = docs;
-        next.selectedId = docs.some(doc => doc.id === next.selectedId) ? next.selectedId : docs[0]?.id;
+        const retainedSelection = docs.some(doc => doc.id === next.selectedId);
+        next.selectedId = retainedSelection ? next.selectedId : docs[0]?.id;
+        if (!retainedSelection && source.mode === "results") next.field = "product_name";
         next.error = "";
         next.dirtyDocuments.clear();
         next.checked = new Set([...next.checked].filter(id => docs.some(doc => doc.id === id)));
@@ -217,14 +219,14 @@ export function useWorkspaceController() {
         case "show-all": patch({ onlyPending: false }); break;
         case "confirm-matched": {
           if (!doc || snapshot.busy || doc.pending_extraction) break;
-          const keys = FIELD_DEFS.filter(field => !doc.confirmed_fields.includes(field.key) && !doc.reviews?.[field.key] && doc.rule_results?.[field.key]?.review_status === "OK").map(field => field.key);
-          if (!keys.length) { notify("새로 확정할 일치 항목이 없습니다."); break; }
+          const keys = FIELD_DEFS.filter(field => canConfirmMatched(doc, field.key)).map(field => field.key);
+          if (!keys.length) { notify("근거가 제공된 검사 통과 항목이 없습니다."); break; }
           update(next => {
             const target = next.documents.find(item => item.id === doc.id);
             const values = effective(target);
             for (const key of keys) applyReview(next, doc.id, key, values[key], Array.isArray(values[key]) ? { list_status: values.list_status[key] } : {});
           });
-          notify(`원문과 일치하는 ${keys.length}개 필드를 확정했습니다.`);
+          notify(`근거가 제공된 검사 통과 항목 ${keys.length}개를 확정했습니다.`);
           break;
         }
         case "delete-hazard": {

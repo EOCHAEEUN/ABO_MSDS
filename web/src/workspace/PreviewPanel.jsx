@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FIELD_DEFS, sourceText } from "./data.js";
 import { safePdfUrl } from "./model.js";
 import { useWorkspace } from "./WorkspaceContext.jsx";
@@ -37,22 +37,38 @@ function Paper({ doc }) {
   </article>;
 }
 
+function SourceText({ doc }) {
+  const { state } = useWorkspace();
+  const body = useRef(null);
+  const field = FIELD_DEFS.find(item => item.key === state.field);
+  const rule = doc.rule_results?.[state.field];
+  const snippet = doc.reviews?.[state.field]?.evidence?.source_text || rule?.source_text;
+  useEffect(() => { if (body.current) body.current.scrollTop = 0; }, [doc.id]);
+  return <div className="source-text-view" ref={body}>
+    <div className="source-reading-note"><Icon name="document" /><div><strong>추출된 원문 · 1~3항</strong><p>{doc.pdf_url ? "PDF에서 추출한 텍스트입니다." : "PDF 미연결 · 저장된 원문 텍스트로 검토합니다."} 쪽 위치는 제공되지 않았습니다.</p></div></div>
+    {snippet && <section className="source-focus" data-source={state.field}><div><span>선택한 필드의 근거</span><b>{field?.label} · {rule?.section || "위치 미제공"}</b></div><pre>{snippet}</pre></section>}
+    {doc.source_text?.trim() ? <article className="source-transcript"><header><h3>원문 전체</h3><span>추출 결과와 대조해 주세요</span></header><pre>{doc.source_text}</pre></article> : <div className="extracted-text">{FIELD_DEFS.map(item => <section data-source={item.key} key={item.key} className={`text-section ${item.key === state.field ? "highlighted" : ""}`}><h3>{item.section} · {item.label}</h3><p>{doc.rule_results?.[item.key]?.source_text || (doc.source ? sourceText(doc.source, item.key) : "원문 텍스트가 제공되지 않았습니다.")}</p></section>)}</div>}
+  </div>;
+}
+
 export default function PreviewPanel({ doc, compact = false }) {
   const { state } = useWorkspace();
   const panelRef = useRef(null);
-  const pdf = doc.pdf_url && (compact || state.sourceTab === "original") ? safePdfUrl(doc.pdf_url) : null;
+  const hasOriginal = Boolean(doc.pdf_url || doc.source);
+  const activeTab = hasOriginal ? state.sourceTab : "text";
+  const pdf = doc.pdf_url && (compact || activeTab === "original") ? safePdfUrl(doc.pdf_url) : null;
   const toggleFullscreen = () => document.fullscreenElement === panelRef.current ? document.exitFullscreen() : panelRef.current?.requestFullscreen?.();
   return <section ref={panelRef} className={`panel preview-panel ${compact ? "compact" : ""}`}>
     <div className="panel-toolbar">
-      {compact ? <h2>문서 미리보기</h2> : <div className="tabs" role="tablist" aria-label="원문 보기 방식">{["original", "text"].map((tab, i) => <Button action="source-tab" data-tab={tab} key={tab} role="tab" aria-selected={state.sourceTab === tab} className={`tab ${state.sourceTab === tab ? "active" : ""}`}>{["원문 보기", "추출 텍스트"][i]}</Button>)}</div>}
+      {compact ? <h2>문서 미리보기</h2> : <div className="tabs" role="tablist" aria-label="원문 보기 방식">{["original", "text"].map((tab, i) => <Button action="source-tab" data-tab={tab} key={tab} role="tab" disabled={tab === "original" && !hasOriginal} title={tab === "original" && !hasOriginal ? "원본 PDF가 연결되지 않았습니다" : undefined} aria-selected={activeTab === tab} className={`tab ${activeTab === tab ? "active" : ""}`}>{["원문 보기", "추출 텍스트"][i]}</Button>)}</div>}
       <div className="preview-controls">
-        <div className="preview-page-control"><Button action="prev-page" className="icon-button" aria-label="이전 페이지" disabled={state.page <= 1}><Icon name="left" /></Button><span className="page-count">{state.page} / {doc.page_count || "—"}</span><Button action="next-page" className="icon-button" aria-label="다음 페이지" disabled={state.page >= (doc.page_count || 1)}><Icon name="right" /></Button></div>
-        <div className="preview-zoom-control"><Button action="zoom-out" className="icon-button" aria-label="축소" disabled={state.zoom <= 70}><Icon name="minus" /></Button><Button action="zoom-reset" className="zoom-label" aria-label="확대 비율 초기화">{state.zoom}%</Button><Button action="zoom-in" className="icon-button" aria-label="확대" disabled={state.zoom >= 150}><Icon name="plus" /></Button></div>
+        {hasOriginal && <div className="preview-page-control"><Button action="prev-page" className="icon-button" aria-label="이전 페이지" disabled={state.page <= 1}><Icon name="left" /></Button><span className="page-count">{state.page} / {doc.page_count || "—"}</span><Button action="next-page" className="icon-button" aria-label="다음 페이지" disabled={state.page >= (doc.page_count || 1)}><Icon name="right" /></Button></div>}
+        {hasOriginal && <div className="preview-zoom-control"><Button action="zoom-out" className="icon-button" aria-label="축소" disabled={state.zoom <= 70}><Icon name="minus" /></Button><Button action="zoom-reset" className="zoom-label" aria-label="확대 비율 초기화">{state.zoom}%</Button><Button action="zoom-in" className="icon-button" aria-label="확대" disabled={state.zoom >= 150}><Icon name="plus" /></Button></div>}
         <button type="button" className="preview-expand" aria-label="원문 화면 확대" onClick={toggleFullscreen}><Icon name="expand" /></button>
       </div>
     </div>
-    {doc.pdf_url && (compact || state.sourceTab === "original") ? (pdf ? <iframe className="pdf-frame" src={`${pdf}#page=${state.page}&zoom=${state.zoom}`} title={`${doc.file_name} 원본 PDF`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :
-      !compact && state.sourceTab === "text" ? <div className="extracted-text">{FIELD_DEFS.map(field => <section data-source={field.key} key={field.key} className={`text-section ${field.key === state.field ? "highlighted" : ""}`}><h3>{field.section} · {field.label}</h3><p>{doc.rule_results?.[field.key]?.source_text || (doc.source ? sourceText(doc.source, field.key) : "원문 텍스트가 제공되지 않았습니다.")}</p></section>)}</div> :
+    {doc.pdf_url && (compact || activeTab === "original") ? (pdf ? <iframe className="pdf-frame" src={`${pdf}#page=${state.page}&zoom=${state.zoom}`} title={`${doc.file_name} 원본 PDF`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :
+      (!hasOriginal || (!compact && activeTab === "text")) ? <SourceText doc={doc} /> :
       <div className="pdf-workspace"><aside className="thumbnails" aria-label="페이지 목록">{Array.from({ length: Math.min(doc.page_count || 1, 4) }, (_, i) => <Button action="page" data-page={i + 1} key={i} className={`thumbnail ${state.page === i + 1 ? "active" : ""}`} aria-label={`${i + 1}쪽 보기`} aria-pressed={state.page === i + 1}><span className="mini-paper">{Array.from({ length: 8 }, (_, j) => <i key={j} />)}</span><span>{i + 1}</span></Button>)}</aside><div className="paper-scroll"><Paper doc={doc} /></div></div>}
   </section>;
 }

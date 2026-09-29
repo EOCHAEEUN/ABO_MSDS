@@ -1,6 +1,6 @@
-import { API_MODE } from "./api.js";
+import { API_MODE, source } from "./api.js";
 import { FIELD_DEFS } from "./data.js";
-import { count, effective, unverifiedHazard } from "./model.js";
+import { canConfirmMatched, count, effective, reviewBadge, unverifiedHazard } from "./model.js";
 import { useWorkspace } from "./WorkspaceContext.jsx";
 import { Button, FieldValue, Icon, Multiline, Progress } from "./ui.jsx";
 import PreviewPanel from "./PreviewPanel.jsx";
@@ -19,7 +19,7 @@ function ReviewDocumentHeader({ doc }) {
   }
   return <header className="review-document-header">
     <div className="review-document-heading">
-      <div className="review-title-row"><h1>{values.product_name.value || doc.file_name}</h1><span className="pdf-badge">PDF</span></div>
+      <div className="review-context-label"><span>{source.mode === "results" ? "저장된 실험 결과" : API_MODE ? "문서 검토" : "예시 문서"}</span>{doc.model_name && <b>{doc.model_name}</b>}</div><div className="review-title-row"><h1>{values.product_name.value || doc.file_name}</h1><span className="pdf-badge">{doc.pdf_url || doc.source ? "PDF" : "TEXT"}</span></div>
       <div className="review-document-meta">{meta.map((item, index) => <span key={index}>{index === 0 && <Icon name="document" />}{item}</span>)}</div>
     </div>
     <div className="review-header-tools">
@@ -30,8 +30,8 @@ function ReviewDocumentHeader({ doc }) {
 }
 
 function MatchBadge({ rule, reviewed = false, warning = false }) {
-  const status = warning ? "원문에서 확인되지 않음" : reviewed ? "담당자 확인" : rule?.review_status === "OK" ? "원문과 일치" : rule?.review_status ? "원문 확인 필요" : "대조 대기";
-  return <span className={`review-match-badge ${warning || (rule?.review_status && rule.review_status !== "OK" && !reviewed) ? "is-warning" : ""}`}>{status}</span>;
+  const badge = reviewBadge(rule, reviewed, warning);
+  return <span className={`review-match-badge is-${badge.tone}`}>{badge.label}</span>;
 }
 
 function ReviewField({ doc, field }) {
@@ -45,10 +45,10 @@ function ReviewField({ doc, field }) {
   return <article className={`review-field-card ${selected ? "is-selected" : ""}`}>
     <Button action="field" data-field={key} className="review-field-open" aria-label={`${fieldName(field)} 근거 보기`} aria-expanded={selected}><Icon name="right" /></Button>
     <div className="review-field-label">{fieldName(field)}</div>
-    <div className="review-field-content"><div className="review-field-value">{key === "ingredients" ? (effective(doc).ingredients.map(item => item.cas_number || (item.is_substitute_data ? "영업비밀" : "CAS 미기재")).join(", ") || effective(doc).list_status.ingredients) : <FieldValue doc={doc} field={key} />}</div><div className="review-field-meta"><span>{page ? `원문 ${page}쪽` : "근거 미제공"}</span><span aria-hidden="true">·</span><MatchBadge rule={rule} reviewed={Boolean(doc.reviews?.[key])} /></div></div>
+    <div className="review-field-content"><div className="review-field-value">{key === "ingredients" ? <div className="review-ingredients">{effective(doc).ingredients.length ? effective(doc).ingredients.map((item, i) => <div className="review-ingredient" key={i}><span>{item.chemical_name || `성분 ${i + 1}`}</span><code>{item.cas_number || (item.is_substitute_data ? "영업비밀" : "CAS 미기재")}</code><span>{item.content || "함유량 미기재"}</span></div>) : effective(doc).list_status.ingredients}</div> : <FieldValue doc={doc} field={key} />}</div><div className="review-field-meta"><span>{page ? `원문 ${page}쪽` : rule?.section || "위치 미제공"}</span><span aria-hidden="true">·</span><MatchBadge rule={rule} reviewed={confirmed} /></div></div>
     <Button action="edit-field" data-field={key} className="review-edit-button" disabled={doc.pending_extraction || state.busy}>수정</Button>
     <label className="review-field-confirm"><input type="checkbox" checked={confirmed} disabled={doc.pending_extraction || state.busy} onChange={event => toggleConfirm(key, event.target.checked)} /><span className="sr-only">{fieldName(field)} 담당자 확정</span></label>
-    {selected && <div className="review-field-evidence"><b>원문 근거</b><Multiline>{evidence?.source_text || rule?.source_text || "원문 근거가 아직 제공되지 않았습니다."}</Multiline></div>}
+    {selected && <div className="review-field-evidence"><b>원문 근거</b>{rule?.messages?.length > 0 && <ul className="review-rule-messages">{rule.messages.map((message, i) => <li key={i}>{message}</li>)}</ul>}<Multiline>{evidence?.source_text || rule?.source_text || "원문 근거가 아직 제공되지 않았습니다."}</Multiline></div>}
   </article>;
 }
 
@@ -66,18 +66,18 @@ function HazardReview({ doc }) {
   return <article className={`hazard-review-card ${selected ? "is-open" : ""} ${unresolved.length ? "needs-review" : ""}`}>
     <header className="hazard-card-header">
       <Button action="field" data-field={key} className="hazard-card-title" aria-expanded={selected}><Icon name="chevron" /><strong>유해 · 위험 문구</strong></Button>
-      <div className="hazard-card-status">{unresolved.length ? <span className="hazard-warning-count">{unresolved.length}건 확인 필요</span> : <MatchBadge rule={rule} reviewed={Boolean(doc.reviews?.[key])} />}
+      <div className="hazard-card-status">{unresolved.length ? <span className="hazard-warning-count">{unresolved.length}건 확인 필요</span> : <MatchBadge rule={rule} reviewed={confirmed} />}
         <label className="hazard-confirm"><input type="checkbox" checked={confirmed} disabled={Boolean(unresolved.length) || doc.pending_extraction || state.busy} onChange={event => toggleConfirm(key, event.target.checked)} /><span>확정</span></label>
       </div>
     </header>
     {selected && <>
-      <div className="hazard-table-scroll"><table className="hazard-table"><thead><tr><th>코드</th><th>유해 · 위험 문구</th><th>원문 페이지</th><th>확인 결과</th><th>작업</th></tr></thead><tbody>
-        {values.map((item, index) => { const warning = unverifiedHazard(doc, item); const matchedInSource = sourceText.includes(item.text) && (!item.code || sourceText.includes(item.code)); return <tr key={`${item.code || "none"}-${index}`} className={warning ? "hazard-warning-row" : ""}><td className="hazard-code">{item.code || "—"}</td><td>{item.text}</td><td>{warning ? "—" : page ? `원문 ${page}쪽` : "—"}</td><td><MatchBadge rule={matchedInSource ? { review_status: "OK" } : rule} warning={warning} reviewed={Boolean(doc.reviews?.[key]) && !warning} /></td><td><div className="hazard-row-actions">{warning ? <><Button action="delete-hazard" data-index={index} className="hazard-action" disabled={state.busy}>삭제</Button><Button action="keep-hazard" className="hazard-action" disabled={state.busy}>다른 페이지에서 찾기</Button></> : <Button action="edit-field" data-field={key} className="hazard-action" disabled={state.busy}>수정</Button>}</div></td></tr>; })}
+      <div className="hazard-table-scroll"><table className="hazard-table"><thead><tr><th>코드</th><th>유해 · 위험 문구</th><th>근거 위치</th><th>확인 결과</th><th>작업</th></tr></thead><tbody>
+        {values.map((item, index) => { const warning = unverifiedHazard(doc, item); return <tr key={`${item.code || "none"}-${index}`} className={warning ? "hazard-warning-row" : ""}><td className="hazard-code">{item.code || "—"}</td><td>{item.text}</td><td>{warning ? "—" : page ? `원문 ${page}쪽` : rule?.section || "위치 미제공"}</td><td><MatchBadge rule={rule} warning={warning} reviewed={confirmed && !warning} /></td><td><div className="hazard-row-actions">{warning ? <><Button action="delete-hazard" data-index={index} className="hazard-action" disabled={state.busy}>삭제</Button><Button action="keep-hazard" className="hazard-action" disabled={state.busy}>다른 페이지에서 찾기</Button></> : <Button action="edit-field" data-field={key} className="hazard-action" disabled={state.busy}>수정</Button>}</div></td></tr>; })}
         {!values.length && <tr><td colSpan={5} className="hazard-empty">유해 · 위험 문구: {effective(doc).list_status.hazard_statements}</td></tr>}
       </tbody></table></div>
       <div className="hazard-evidence-grid">
         <div><h3>원문 근거 {page ? `(${page}쪽)` : ""}</h3><div className="hazard-source"><Multiline>{sourceText || "원문 근거가 아직 제공되지 않았습니다."}</Multiline></div></div>
-        <div className="hazard-result"><h3><Icon name="info" /> 확인 결과</h3><p>{unresolved.length ? <>{unresolved.map(item => item.code || "코드 없는 문구").join(", ")}은 제공된 원문 근거에서 일치하는 문구를 찾지 못했습니다.<br /><span>원문에 없으면 삭제하고, 다른 페이지에 있으면 근거 위치를 지정하세요.</span></> : doc.reviews?.[key] ? "담당자가 원문과 문구를 검토했습니다." : rule?.review_status === "OK" ? "제공된 유해 · 위험 문구가 원문과 일치합니다." : "원문과 문구를 확인해 주세요."}</p></div>
+        <div className="hazard-result"><h3><Icon name="info" /> 확인 결과</h3><p>{unresolved.length ? <>{unresolved.map(item => item.code || "코드 없는 문구").join(", ")}은 제공된 원문 근거에서 일치하는 문구를 찾지 못했습니다.<br /><span>원문에 없으면 삭제하고, 다른 페이지에 있으면 근거 위치를 지정하세요.</span></> : confirmed ? "담당자가 원문과 문구를 검토했습니다." : rule?.review_status === "OK" ? "자동 규칙 검사에서 경고가 발견되지 않았습니다. 원문의 누락·오입력 여부를 확인한 뒤 확정하세요." : "원문과 문구를 확인해 주세요."}</p></div>
       </div>
     </>}
   </article>;
@@ -86,7 +86,7 @@ function HazardReview({ doc }) {
 function ReviewPanel({ doc }) {
   const { state, patch } = useWorkspace();
   return <section className="review-panel-refresh" aria-label="필드 검토">
-    <div className="review-panel-heading"><div className="review-panel-heading-copy"><h2>필드 검토</h2><span aria-hidden="true">›</span><p>1~3항의 핵심 정보를 확인하고 필요 시 수정하세요.</p></div><div className="review-panel-actions"><Button action="result-tab" data-tab={state.resultTab === "fields" ? "json" : "fields"} className="review-utility-button">{state.resultTab === "fields" ? "JSON 보기" : "필드 보기"}</Button><button type="button" className="review-utility-button" aria-pressed={state.onlyPending} onClick={() => patch({ onlyPending: !state.onlyPending })}>{state.onlyPending ? "전체 보기" : "미확정만"}</button><Button action="confirm-matched" className="review-confirm-all" disabled={doc.pending_extraction || state.busy}><Icon name="check" /> 일치하는 항목 모두 확정</Button></div></div>
+    <div className="review-panel-heading"><div className="review-panel-heading-copy"><h2>필드 검토</h2><span aria-hidden="true">›</span><p>1~3항의 핵심 정보를 확인하고 필요 시 수정하세요.</p></div><div className="review-panel-actions"><Button action="result-tab" data-tab={state.resultTab === "fields" ? "json" : "fields"} className="review-utility-button">{state.resultTab === "fields" ? "JSON 보기" : "필드 보기"}</Button><button type="button" className="review-utility-button" aria-pressed={state.onlyPending} onClick={() => patch({ onlyPending: !state.onlyPending })}>{state.onlyPending ? "전체 보기" : "미확정만"}</button><Button action="confirm-matched" className="review-confirm-all" disabled={state.busy || !FIELD_DEFS.some(field => canConfirmMatched(doc, field.key))}><Icon name="check" /> 검사 통과 항목 확정</Button></div></div>
     {doc.pending_extraction && <div className="inline-notice">업로드한 PDF의 로컬 미리보기입니다. 실제 추출에는 API 연결이 필요합니다.</div>}
     {state.resultTab === "json" ? <div className="review-json-panel"><div><span>담당자 수정값을 반영한 JSON</span><Button action="download-raw" className="review-utility-button">모델 원본 다운로드</Button></div><pre>{JSON.stringify(effective(doc), null, 2)}</pre></div> : <div className="review-cards">{FIELD_DEFS.filter(field => field.key !== "hazard_statements" && (!state.onlyPending || !doc.confirmed_fields.includes(field.key))).map(field => <ReviewField key={field.key} doc={doc} field={field} />)}{(!state.onlyPending || !doc.confirmed_fields.includes("hazard_statements")) && <HazardReview doc={doc} />}{state.onlyPending && count(doc) === 5 && <div className="review-all-done">모든 핵심 필드의 검토가 완료되었습니다.</div>}</div>}
   </section>;
