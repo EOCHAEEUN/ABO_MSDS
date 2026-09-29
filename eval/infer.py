@@ -30,6 +30,7 @@
 test 규칙 (docs/plan.md 3.3 · 9절 단계 7~8)
   test 문서·텍스트는 저장소 밖(test 담당)에 있다. --allow-test + 실험 고정(eval/experiment.json) +
   저장소 밖 --text-dir · --out-root가 모두 있어야 돈다. 비교군마다 1회, --overwrite · --limit 불가.
+  - --text-dir의 텍스트는 봉인(eval/seal.py, report/test_manifest.csv)과 같아야 한다. 봉인 전에는 돌지 않는다.
   - 비교군은 base_zs · base_fs · qlora_final만(plan 5절). qlora_r1 · r2 · r3는 val에서만 비교한다.
   - --max-new-tokens를 주면 experiment.json의 값과 같아야 하고, qlora_final의 --adapter는 폴더 해시가
     experiment.json의 adapter_sha256과 같아야 한다(고정한 뒤 다른 값·다른 어댑터로 도는 것을 막음).
@@ -64,6 +65,7 @@ from core.prompt import (  # noqa: E402
     prompt_subdir,
     recorded_prompt_version,
 )
+from eval.seal import require_sealed  # noqa: E402
 
 CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_r3", "qlora_final")
 TEST_CONDITIONS = ("base_zs", "base_fs", "qlora_final")  # test는 이 셋만 1회씩(plan 5절 · 9절 단계 8)
@@ -335,6 +337,7 @@ def check_args(args):
             sys.exit("[거부] test 텍스트는 저장소 밖에 있어야 한다: --text-dir <test 담당이 넘긴 폴더>")
         if not outside_repo(args.out_root):
             sys.exit("[거부] test 출력은 저장소 밖에 둔다: --out-root <저장소 밖 폴더>")
+        require_sealed("text", args.text_dir)  # test 담당이 넘긴 텍스트가 봉인(report/test_manifest.csv)과 같아야 함
         if args.overwrite or args.limit:
             sys.exit("[거부] test에는 --overwrite · --limit을 쓰지 않는다(비교군마다 전체 문서 1회)")
         if args.max_new_tokens is not None and args.max_new_tokens != exp["max_new_tokens"]:
