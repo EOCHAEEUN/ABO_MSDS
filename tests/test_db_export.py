@@ -182,6 +182,27 @@ class TestCliOnRealPdf(unittest.TestCase):
         exported = json.loads(Path(export_path).read_text(encoding="utf-8"))
         MSDSLabel.model_validate(exported["extraction"])
 
+    def test_get_text_uses_real_preprocess_bypassing_text_cache(self):
+        """data/text/{doc_id}.txt 캐시를 안 쓰는 경로(실시간 pdfplumber -> preprocess())를 직접 검증한다.
+
+        위 테스트는 KR-KUMHO-001에 이미 data/text/ 캐시가 있어서 이 경로를 안 타고 통과해버린다
+        (core.preprocess.preprocess()가 나중에 dict를 반환하도록 바뀌었을 때 이 구멍으로
+        회귀를 놓쳤었다). doc_id=None으로 캐시를 강제로 건너뛴다.
+        """
+        from app.pipeline_run import get_text
+
+        pdf_path = _REPO_ROOT / "data" / "raw" / "KR-3DSYS-001.pdf"
+        if not pdf_path.exists():
+            self.skipTest(f"{pdf_path} 없음 (data/raw/는 git 제외 대상이라 로컬에 없을 수 있음)")
+
+        text, reason = get_text(pdf_path, doc_id=None)
+        self.assertIsNone(reason)
+        self.assertIsNotNone(text)
+        self.assertIn("ColorBond", text)
+        self.assertIn("제품명", text)
+        # 굵은 글씨 5배 중복 복원(undouble)이 실제로 적용됐는지 — 안 됐으면 이 글자가 남아있다
+        self.assertNotIn("물물물물물", text)
+
 
 if __name__ == "__main__":
     unittest.main()

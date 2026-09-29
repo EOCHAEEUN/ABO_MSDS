@@ -3,18 +3,21 @@
 
 실행: python3 -m app.pipeline_run --pdf data/raw/<파일>.pdf --model mock --doc-id KR-KUMHO-002
 
-실제 모델(app/model.py의 predict())과 PDF -> 1~3항 텍스트 절단(core/preprocess.py의
-preprocess())은 이 스크립트가 새로 만들지 않는다(작업지시서 "하지 않는 것"). 아직 둘 다
-구현 전이므로:
-  - 모델은 --model mock으로 data/labels/{doc-id}.json을 "모델 출력인 척" 문자열로 씀.
-  - 텍스트는 core.preprocess.preprocess가 없으면 [임시]로 pdfplumber 원문 전체를 그대로
-    쓴다(1~3항 절단·NOT_FOUND 판정 없음). preprocess()가 core/preprocess.py에 생기면
-    이 파일은 고치지 않아도 자동으로 그쪽을 탄다 — get_text() 참고.
+실제 모델(app/model.py의 predict())은 아직 없어서 --model mock으로 data/labels/{doc-id}.json을
+"모델 출력인 척" 문자열로 쓴다(작업지시서 "하지 않는 것").
+
+core/preprocess.py의 preprocess()는 이제 구현돼 있어 그대로 가져다 쓴다(새로 만들지 않음).
+다만 preprocess()는 "굵은 글씨 겹침 복원(undouble)은 pipeline/extract_text.py가 preprocess()
+전에 한다"고 자기 docstring에 명시했는데, pipeline/extract_text.py는 아직 빈 파일이다.
+그래서 undouble만 get_text()에 [임시]로 넣었다 — pipeline/extract_text.py가 채워지면
+그쪽 걸 쓰도록 이 부분만 지우면 된다(_undouble 함수 참고, 이번에 KR-3DSYS-001 원문 텍스트를
+직접 고치면서 검증한 것과 같은 규칙: 굵은 글씨 문서는 글자당 정확히 5번 겹쳐 뽑힌다).
 """
 from __future__ import annotations
 
 import argparse
 import csv
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -29,9 +32,21 @@ if str(_REPO_ROOT) not in sys.path:
 from app.db import connect, init_db, save_extraction  # noqa: E402
 from app.export import export_json  # noqa: E402
 from app.rules.engine import run_rules  # noqa: E402
+from core.preprocess import preprocess  # noqa: E402
 from core.schema import check_schema, extract_json  # noqa: E402
 
 _MIN_TEXT_LEN = 200
+_UNDOUBLE_RE = re.compile(r"([가-힣ㆍ․])\1{4}")
+
+
+def _undouble(text: str) -> str:
+    """[임시] 굵은 글씨가 글자당 5번 겹쳐 뽑힌 것을 되돌린다("물물물물물"→"물").
+
+    pipeline/extract_text.py가 이 일을 하게 되면(강덕우 담당) 이 함수는 지우고 그쪽을 쓴다.
+    5개 단위로만 줄이므로 "구성성분"처럼 같은 글자가 원래 두 번 연달아 나오는 진짜 단어는
+    10개 겹침으로 남아 올바르게 2개로 줄어든다(1개로 뭉개지지 않는다).
+    """
+    return _UNDOUBLE_RE.sub(r"\1", text)
 
 
 def _raw_pdf_text(pdf_path: Path) -> Optional[str]:
@@ -47,8 +62,7 @@ def get_text(pdf_path: Path, doc_id: Optional[str]) -> tuple[Optional[str], Opti
 
     우선순위:
       1) data/text/{doc_id}.txt — 강덕우 파이프라인(pipeline/extract_text.py) 결과물이 있으면 최우선
-      2) core.preprocess.preprocess(원문) — 구현되면 자동으로 이 경로를 탐(1~3항 절단, NOT_FOUND 판정)
-      3) [임시] pdfplumber 원문 그대로 — preprocess() 구현 전까지만 쓰는 대체 경로
+      2) pdfplumber 원문 -> [임시] undouble -> core.preprocess.preprocess() (1~3항 절단, NOT_FOUND 판정)
     """
     if doc_id:
         cached = _REPO_ROOT / "data" / "text" / f"{doc_id}.txt"
@@ -64,20 +78,10 @@ def get_text(pdf_path: Path, doc_id: Optional[str]) -> tuple[Optional[str], Opti
     if len(raw_text) < _MIN_TEXT_LEN:
         return None, "TEXT_TOO_SHORT"
 
-    try:
-        from core.preprocess import preprocess  # 구현되면 이 경로를 탄다
-    except ImportError:
-        print(
-            "[pipeline_run] 경고: core.preprocess.preprocess()가 아직 없어 "
-            "1~3항 절단 없이 원문 전체를 씁니다(임시 대체 경로). NOT_FOUND 판정도 건너뜁니다.",
-            file=sys.stderr,
-        )
-        return raw_text, None
-
-    cut_text, cut_status = preprocess(raw_text)
-    if cut_status == "NOT_FOUND":
+    result = preprocess(_undouble(raw_text))
+    if result["status"] == "NOT_FOUND":
         return None, "NOT_FOUND_SECTION4"
-    return cut_text, None
+    return result["text"], None
 
 
 def _mock_predict(doc_id: str) -> str:
