@@ -22,7 +22,7 @@
 (학습은 v1, 추론은 v2처럼 어긋나는 것을 막음).
 
 프롬프트 버전: 설정의 prompt(기본 v1, core/prompt.py PROMPTS). v1이 아니면 데이터 기본 경로가 data/prompt_<버전>/
-(pipeline/build_jsonl.py --prompt <버전>의 출력)이다. r2를 프롬프트 v2로 하면 r2.yaml에 prompt: v2 한 줄만 적는다(r3 = v2_1도 같은 방식). --memcheck는 여유 5% 미만이면 실패로 끝난다(종료 코드 1).
+(pipeline/build_jsonl.py --prompt <버전>의 출력)이다. r3(프롬프트 v2_1)처럼 설정에 prompt: v2_1 한 줄만 적는다(데이터 경로를 같이 적어도 된다). --memcheck는 여유 5% 미만이면 실패로 끝난다(종료 코드 1).
 
 스모크(--smoke)는 동작 · 메모리 · 속도 확인용이다. runs/에 쓰지 않고 r1 · r2 · r3 이름을 쓰지 않으며, 결과를 조건 선택에 쓰지 않는다.
 """

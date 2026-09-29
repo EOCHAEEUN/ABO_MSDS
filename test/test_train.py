@@ -54,15 +54,17 @@ class ConfigTest(unittest.TestCase):
             self.assertEqual(cfg["num_epochs"], 3)
             self.assertEqual(cfg["learning_rate"], tq.load_config(tq.BASE_CONFIG)["learning_rate"])
 
-    def test_r2_r3_change_only_prompt(self):
-        """r2(v2) · r3(v2_1)는 각각 r1에서 프롬프트 하나만 바꾼다(데이터 경로는 그 버전의 학습셋)."""
+    def test_r2_r3_change_one_condition(self):
+        """r2 = epoch 1, r3 = 프롬프트 v2_1(데이터 경로는 그 버전의 학습셋) — 각각 r1에서 조건 하나만 바꾼다."""
         base = tq.load_config(tq.BASE_CONFIG)
-        for name, ver in (("r2", "v2"), ("r3", "v2_1")):
-            cfg = tq.load_config(tq.BASE_CONFIG.parent / f"{name}.yaml")
-            diff = {k for k in cfg if cfg[k] != base.get(k)}
-            self.assertEqual(diff, {"prompt", "train_jsonl", "val_jsonl", "build_report"}, name)
-            self.assertEqual(cfg["prompt"], ver)
-            self.assertTrue(cfg["train_jsonl"].startswith(f"data/prompt_{ver}/"), name)
+        diff = lambda cfg: {k for k in cfg if cfg[k] != base.get(k)}  # noqa: E731
+        r2 = tq.load_config(tq.BASE_CONFIG.parent / "r2.yaml")
+        self.assertEqual(diff(r2), {"num_epochs"})
+        self.assertEqual(r2["num_epochs"], 1)
+        r3 = tq.load_config(tq.BASE_CONFIG.parent / "r3.yaml")
+        self.assertEqual(diff(r3), {"prompt", "train_jsonl", "val_jsonl", "build_report"})
+        self.assertEqual(r3["prompt"], "v2_1")
+        self.assertTrue(r3["train_jsonl"].startswith("data/prompt_v2_1/"))
         self.assertIn("r3", tq.RESERVED_NAMES)
 
 

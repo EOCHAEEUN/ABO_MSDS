@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { FIELD_DEFS, sourceText } from "./data.js";
+import { sourceText } from "./data.js";
 import { safePdfUrl } from "./model.js";
 import { useWorkspace } from "./WorkspaceContext.jsx";
 import { Button, Icon, Multiline } from "./ui.jsx";
@@ -9,12 +9,13 @@ function Paper({ doc }) {
   if (!doc.source) return <div className="empty-state">원문 미리보기가 없습니다.</div>;
   const source = doc.source;
   const highlight = key => state.field === key && state.view === "review" ? " highlighted" : "";
-  if (state.page > 1) return <article className="paper placeholder-page" style={{ "--zoom": state.zoom / 100 }}>
+  const scale = state.zoom === "fit" ? 1 : state.zoom / 100;
+  if (state.page > 1) return <article className="paper placeholder-page" style={{ "--zoom": scale }}>
     <span className="paper-demo">예시 문서 · 원본 PDF 아님</span><h2>물 질 안 전 보 건 자 료</h2>
     <div className="unavailable-page"><Icon name="document" /><h3>{state.page}쪽 원문 미제공</h3><p>첨부 화면의 1쪽만 재현한 예시입니다.<br />PDF를 업로드하면 실제 원문을 볼 수 있습니다.</p><Button action="first-page">1쪽으로 돌아가기</Button></div>
     <footer>- {state.page} / {doc.page_count} -</footer>
   </article>;
-  return <article className="paper" style={{ "--zoom": state.zoom / 100 }}>
+  return <article className="paper" style={{ "--zoom": scale }}>
     <span className="paper-demo">예시 문서 · 원본 PDF 아님</span>
     <h2>물 질 안 전 보 건 자 료</h2><div className="paper-meta"><span>제출번호 : {doc.submission_number}</span><span>개정일자 : {doc.revision_date} (개정번호 3)</span></div>
     <h3>1. 화학제품과 회사에 관한 정보</h3>
@@ -40,19 +41,24 @@ function Paper({ doc }) {
 export default function PreviewPanel({ doc, compact = false }) {
   const { state } = useWorkspace();
   const panelRef = useRef(null);
-  const pdf = doc.pdf_url && (compact || state.sourceTab === "original") ? safePdfUrl(doc.pdf_url) : null;
+  // 왼쪽은 원본만 보여 준다(원본 PDF, 예시 문서는 종이 미리보기). 추출 텍스트는 필드 검토의 "원문 텍스트"에서 본다
+  const hasOriginal = Boolean(doc.pdf_url || doc.source);
+  const pdf = doc.pdf_url ? safePdfUrl(doc.pdf_url) : null;
+  // 브라우저 PDF 뷰어의 썸네일 · 자체 툴바를 숨기고(쪽 이동 · 확대는 위 툴바로), 기본은 폭 맞춤
+  const pdfView = state.zoom === "fit" ? "view=FitH" : `zoom=${state.zoom}`;
   const toggleFullscreen = () => document.fullscreenElement === panelRef.current ? document.exitFullscreen() : panelRef.current?.requestFullscreen?.();
   return <section ref={panelRef} className={`panel preview-panel ${compact ? "compact" : ""}`}>
     <div className="panel-toolbar">
-      {compact ? <h2>문서 미리보기</h2> : <div className="tabs" role="tablist" aria-label="원문 보기 방식">{["original", "text"].map((tab, i) => <Button action="source-tab" data-tab={tab} key={tab} role="tab" aria-selected={state.sourceTab === tab} className={`tab ${state.sourceTab === tab ? "active" : ""}`}>{["원문 보기", "추출 텍스트"][i]}</Button>)}</div>}
+      {compact ? <h2>문서 미리보기</h2> : <h2 className="preview-title">원본 PDF</h2>}
       <div className="preview-controls">
-        <div className="preview-page-control"><Button action="prev-page" className="icon-button" aria-label="이전 페이지" disabled={state.page <= 1}><Icon name="left" /></Button><span className="page-count">{state.page} / {doc.page_count || "—"}</span><Button action="next-page" className="icon-button" aria-label="다음 페이지" disabled={state.page >= (doc.page_count || 1)}><Icon name="right" /></Button></div>
-        <div className="preview-zoom-control"><Button action="zoom-out" className="icon-button" aria-label="축소" disabled={state.zoom <= 70}><Icon name="minus" /></Button><Button action="zoom-reset" className="zoom-label" aria-label="확대 비율 초기화">{state.zoom}%</Button><Button action="zoom-in" className="icon-button" aria-label="확대" disabled={state.zoom >= 150}><Icon name="plus" /></Button></div>
+        {hasOriginal && <div className="preview-page-control"><Button action="prev-page" className="icon-button" aria-label="이전 페이지" disabled={state.page <= 1}><Icon name="left" /></Button><span className="page-count">{state.page} / {doc.page_count || "—"}</span><Button action="next-page" className="icon-button" aria-label="다음 페이지" disabled={state.page >= (doc.page_count || 1)}><Icon name="right" /></Button></div>}
+        {hasOriginal && <div className="preview-zoom-control"><Button action="zoom-out" className="icon-button" aria-label="축소" disabled={state.zoom !== "fit" && state.zoom <= 70}><Icon name="minus" /></Button><Button action="zoom-reset" className="zoom-label" aria-label="폭 맞춤으로 되돌리기" title="폭 맞춤으로 되돌리기">{state.zoom === "fit" ? "폭 맞춤" : `${state.zoom}%`}</Button><Button action="zoom-in" className="icon-button" aria-label="확대" disabled={state.zoom >= 150}><Icon name="plus" /></Button></div>}
+        {pdf && <a className="preview-expand preview-open-tab" href={`${pdf}#page=${state.page}`} target="_blank" rel="noopener" aria-label="PDF를 새 탭에서 열기" title="새 탭에서 열기(다운로드 · 인쇄)"><Icon name="download" /></a>}
         <button type="button" className="preview-expand" aria-label="원문 화면 확대" onClick={toggleFullscreen}><Icon name="expand" /></button>
       </div>
     </div>
-    {doc.pdf_url && (compact || state.sourceTab === "original") ? (pdf ? <iframe className="pdf-frame" src={`${pdf}#page=${state.page}&zoom=${state.zoom}`} title={`${doc.file_name} 원본 PDF`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :
-      !compact && state.sourceTab === "text" ? <div className="extracted-text">{FIELD_DEFS.map(field => <section data-source={field.key} key={field.key} className={`text-section ${field.key === state.field ? "highlighted" : ""}`}><h3>{field.section} · {field.label}</h3><p>{doc.rule_results?.[field.key]?.source_text || (doc.source ? sourceText(doc.source, field.key) : "원문 텍스트가 제공되지 않았습니다.")}</p></section>)}</div> :
+    {doc.pdf_url ? (pdf ? <iframe key={`${doc.id}:${state.page}:${state.zoom}`} className="pdf-frame" src={`${pdf}#page=${state.page}&toolbar=0&navpanes=0&${pdfView}`} title={`${doc.file_name} 원본 PDF ${state.page}쪽`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :
+      !hasOriginal ? <div className="empty-state">원본 PDF가 연결되지 않았습니다.<br />근거 원문은 오른쪽 필드 검토의 "원문 텍스트"에서 확인하세요.</div> :
       <div className="pdf-workspace"><aside className="thumbnails" aria-label="페이지 목록">{Array.from({ length: Math.min(doc.page_count || 1, 4) }, (_, i) => <Button action="page" data-page={i + 1} key={i} className={`thumbnail ${state.page === i + 1 ? "active" : ""}`} aria-label={`${i + 1}쪽 보기`} aria-pressed={state.page === i + 1}><span className="mini-paper">{Array.from({ length: 8 }, (_, j) => <i key={j} />)}</span><span>{i + 1}</span></Button>)}</aside><div className="paper-scroll"><Paper doc={doc} /></div></div>}
   </section>;
 }

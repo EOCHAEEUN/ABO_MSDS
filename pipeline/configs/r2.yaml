@@ -1,9 +1,4 @@
-# [강덕우] r1에서 조건 1개만 변경 — r2 = 프롬프트 v2 (2026-09-29 결정, report/decisions.md)
-# 학습 설정(rank · lr · epoch · max_length 4096 등)은 r1.yaml 그대로. 바꾸는 조건은 prompt 하나다.
-# 아래 세 경로는 v1과 같은 데이터를 v2 프롬프트로 다시 만든 것(v1 data/train.jsonl 등은 그대로 둠):
-#   python3 pipeline/build_jsonl.py --seed 42 --secret 1 --renderers 6 --prompt v2
-# 증강 결과(예시 · 정답)는 v1과 같고 system 메시지만 다르다. 학습 사전 검사가 JSONL의 system 문구 = v2인지 확인한다.
-prompt: v2
-train_jsonl: data/prompt_v2/train.jsonl
-val_jsonl: data/prompt_v2/val.jsonl
-build_report: data/prompt_v2/build_report.json
+# [어채은] 2차 학습: r1에서 epoch 하나만 변경(2 → 1). 나머지 설정 · 데이터 · 프롬프트(v1)는 r1과 같음
+# 근거: r1 train loss가 step 40 무렵 0에 가깝고, val loss가 1 epoch 끝 0.0271 → 2 epoch 끝 0.0293으로 올랐음(runs/0928_r1/loss.csv)
+# step 수도 70 → 35로 줄고, 학습률 일정은 35 step에 맞춰 줄어든다(r1의 35 step 시점과 같은 모델이 아님)
+num_epochs: 1

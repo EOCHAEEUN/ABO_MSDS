@@ -47,22 +47,17 @@ H412 장기적인 영향에 의해 수생생물에게 유해함
 위험성 :
 3. 구성성분의 명칭 및 함유량
 성분에 대한 정보: 혼합물
-화학물질명 CAS 번호 또는 함유량(%)
-식별번호
-3,3,5 Trimethylcyclohexyl 7779-31-9 >= 10 - < 15 %
-methacrylate
+화학물질명 CAS 번호 또는 식별번호 함유량(%)
+3,3,5 Trimethylcyclohexyl methacrylate 7779-31-9 >= 10 - < 15 %
 2-Hydroxyethyl methacrylate 868-77-9 >= 10 - < 15 %
 Acrylic acid 79-10-7 >= 3 - < 5 %
-Methacrylic acid, monoester with 27813-02-1 >= 1 - < 5 %
-propane-1,2-diol
+Methacrylic acid, monoester with propane-1,2-diol 27813-02-1 >= 1 - < 5 %
 Cumene hydroperoxide 80-15-9 >= 0.25 - < 1 %
 Maleic acid 110-16-7 >= 0.1 - < 1 %
 Acetic acid, 2-phenylhydrazide 114-83-0 >= 0.1 - < 1 %
-2,2'-Ethylenedioxydiethyl 109-16-0 >= 0.1 - < 1 %
-dimethacrylate
+2,2'-Ethylenedioxydiethyl dimethacrylate 109-16-0 >= 0.1 - < 1 %
 Methacrylic acid 79-41-4 >= 0.1 - < 1 %
-2-Propenoic acid, 2-methyl-, 2-(2- 2351-43-1 >= 0.1 - < 1 %
-hydroxyethoxy)ethyl ester
+2-Propenoic acid, 2-methyl-, 2-(2-hydroxyethoxy)ethyl ester 2351-43-1 >= 0.1 - < 1 %
 Silica, amorphous, fumed, cryst.-free 112945-52-5 < 0.1 %
 구성성분의 명칭 및 함유량에 기재되지 않은 물질은 고용노동부 고시에 따라 GHS 분류에 영향을 미치지 않으며
 한계농도 미만임.

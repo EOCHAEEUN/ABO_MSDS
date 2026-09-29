@@ -29,6 +29,4 @@ Date of issue: 2022-11-30 Revision date: Version: R0001.0001
 - 자료없음
 3. 구성성분의 명칭 및 함유량
 화학물질명 관용명 및 이명(異名) CAS 번호 또는 식별번호 함유량(%)
-스타이렌-부타디엔 고무(STYRENE-BUTADIENE
-자료없음 9003-55-8 / KE-13258 97-99
-RUBBER)
+스타이렌-부타디엔 고무(STYRENE-BUTADIENE RUBBER) 자료없음 9003-55-8 / KE-13258 97-99

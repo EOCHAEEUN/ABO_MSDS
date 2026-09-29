@@ -239,6 +239,8 @@ th, td { padding: 9px 12px; text-align: left; }
 .toolbar-actions { display: flex; align-items: center; gap: 10px; }
 .toolbar-actions button { min-height: 32px; padding: 5px 12px; font-size: 12px; }
 .toolbar-actions .icon { width: 15px; height: 15px; }
+.documents-table-panel > .table-scroll { max-height: clamp(260px, 38vh, 420px); overflow: auto; }
+.document-table thead th { position: sticky; top: 0; z-index: 1; background: #f5f8fb; }
 .document-table { font-size: 12px; min-width: 1150px; white-space: nowrap; }
 .document-table th { padding: 10px 13px; }
 .document-table th, .document-table td { border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }

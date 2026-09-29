@@ -1,5 +1,5 @@
 # [강덕우] r1에서 조건 1개만 변경 — r3 = 프롬프트 v2_1 (2026-09-29 PM 결정, report/decisions.md)
-# r2(프롬프트 v2)와 따로 둔 3회째 학습이다. 학습 설정(rank · lr · epoch · max_length 4096 등)은 r1.yaml 그대로.
+# r2(epoch 1)와 따로 둔 3회째 학습이다(PM 결정). 학습 설정(rank · lr · epoch · max_length 4096 등)은 r1.yaml 그대로.
 # 바꾸는 조건은 prompt 하나다. 아래 세 경로는 v1과 같은 데이터를 v2_1 프롬프트로 다시 만든 것:
 #   python3 pipeline/build_jsonl.py --seed 42 --secret 1 --renderers 6 --prompt v2_1
 # 증강 결과(예시 · 정답)는 v1과 같고 system 메시지만 다르다. 학습 사전 검사가 JSONL의 system 문구 = v2_1인지 확인한다.

@@ -62,6 +62,8 @@ class ExportTest(unittest.TestCase):
             self.assertEqual(wr._missing_keys(d["extraction"]), [])
             self.assertEqual(set(d["rule_results"]), set(wr.CORE_FIELDS))
             self.assertTrue(d["split"].startswith("val"))
+            # 원본 PDF는 파일명 대신 doc_id 주소로만 가리킨다(vite.config.js가 결과 목록에 있는 문서만 보냄)
+            self.assertIn(d["pdf_url"], (None, f"./pdfs/{d['doc_id']}.pdf"))
 
 
 if __name__ == "__main__":

@@ -31,9 +31,5 @@ MFO320 (Marine Fuel Oil 320)
 MFO320 (Marine Fuel Oil 320) 0 2 0
 3. 구성성분의 명칭 및 함유량
 화학물질명 관용명 및 이명(異名) CAS No. KE No. 함유량(%)
-Residues (petroleum), atm.
-64741-45-3 KE-30131 96.5
-tower
-Sulfur, precipitated,
-유황;콜로이드 유황 7704-34-9 KE-32688 3.5
-sublimed or colloidal
+Residues (petroleum), atm. tower 64741-45-3 KE-30131 96.5
+Sulfur, precipitated, sublimed or colloidal 유황;콜로이드 유황 7704-34-9 KE-32688 3.5

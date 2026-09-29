@@ -29,6 +29,9 @@ node_modules/
 # 프런트엔드 빌드 결과
 web/dist/
 
+# W&B 로컬 기록(scripts/wandb_watch.py)
+wandb/
+
 
 # PDF → SQLite 적재 결과물 (app/pipeline_run.py)
 data/db/

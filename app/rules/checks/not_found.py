@@ -15,7 +15,7 @@ def run(label: dict, ctx: CheckContext) -> list[Finding]:
         return []
 
     findings: list[Finding] = []
-    for path, value in iter_evidence_targets(label):
+    for path, value, _label_hint in iter_evidence_targets(label):
         found, _match_type, _snippet = locate(ctx.source_text, value)
         if not found:
             findings.append(
