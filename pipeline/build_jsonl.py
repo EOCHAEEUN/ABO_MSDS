@@ -4,6 +4,10 @@
   python3 pipeline/build_jsonl.py --dry-run          # 건수 · 유형별 수 · 거부 목록 · 길이만 출력(파일 안 씀)
   python3 pipeline/build_jsonl.py                    # data/train.jsonl, data/val.jsonl, data/build_report.json
   python3 pipeline/build_jsonl.py --no-tokens ...    # 토크나이저 없이(길이 측정 생략) — 코드 시험용
+  python3 pipeline/build_jsonl.py --prompt v2 ...    # data/prompt_v2/{train,val}.jsonl · build_report.json (v1 파일은 그대로)
+
+--prompt(core/prompt.py PROMPTS, 기본 v1): 시스템 프롬프트 버전. v1이 아니면 --out-dir · --report 아래 prompt_<버전>/에 쓴다.
+증강(난수 · 변형)은 프롬프트와 무관하므로 같은 옵션이면 버전끼리 system 메시지만 다르다.
 
 최종 학습 세트는 tag label-rules-frozen · split-frozen 뒤에만 만든다. 그 전에는 test/fixtures/로 코드만 시험한다:
   python3 pipeline/build_jsonl.py --splits test/fixtures/splits.csv --label-dir test/fixtures/labels \
@@ -37,7 +41,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from core.prompt import CHAT_TEMPLATE_KWARGS, build_messages, format_target  # noqa: E402
+from core.prompt import (  # noqa: E402
+    CHAT_TEMPLATE_KWARGS,
+    DEFAULT_PROMPT,
+    PROMPTS,
+    build_messages,
+    format_target,
+    prompt_sha256,
+    prompt_subdir,
+)
 from core.schema import check_schema  # noqa: E402
 from pipeline.augment.check_forbidden import check  # noqa: E402
 from pipeline.augment.mutators import MUTATORS  # noqa: E402
@@ -57,15 +69,15 @@ def sha256_file(p):
     return sha256_bytes(Path(p).read_bytes())
 
 
-def example(doc_id, split, variant, text, label):
-    msgs = build_messages(text) + [{"role": "assistant", "content": format_target(label)}]
+def example(doc_id, split, variant, text, label, prompt=DEFAULT_PROMPT):
+    msgs = build_messages(text, prompt=prompt) + [{"role": "assistant", "content": format_target(label)}]
     return {"doc_id": doc_id, "split": split, "variant": variant, "messages": msgs}
 
 
 def variants_for(doc_id, text, label, rng, split, args):
     """→ (예시 목록, 거부 목록, 해당 없음 목록)
     거부: 만들었지만 검사에 걸림. 해당 없음: 문서에 바꿀 곳이 없음(예: H코드 없는 문서의 nohcode)."""
-    out, rejected, not_applicable = [example(doc_id, split, "orig", text, label)], [], []
+    out, rejected, not_applicable = [example(doc_id, split, "orig", text, label, args.prompt)], [], []
     seen = {text}
 
     def problems(new_text, new_label, gone, mutation):
@@ -86,7 +98,7 @@ def variants_for(doc_id, text, label, rng, split, args):
             probs = problems(*r, mutation)
             if not probs:
                 seen.add(r[0])
-                out.append(example(doc_id, split, name, r[0], r[1]))
+                out.append(example(doc_id, split, name, r[0], r[1], args.prompt))
                 return
         rejected.append({"doc_id": doc_id, "variant": name, "reasons": probs})
 
@@ -234,6 +246,8 @@ def main():
     ap.add_argument("--max-length", type=int, default=4096, help="이 길이를 넘는 예시를 목록으로 남긴다(버리지 않음)")
     ap.add_argument("--no-tokens", action="store_true", help="길이 측정 생략(코드 시험용)")
     ap.add_argument("--dry-run", action="store_true", help="파일을 쓰지 않고 요약만 출력")
+    ap.add_argument("--prompt", choices=sorted(PROMPTS), default=DEFAULT_PROMPT,
+                    help=f"시스템 프롬프트 버전(기본 {DEFAULT_PROMPT}). v1이 아니면 out-dir/prompt_<버전>/에 쓴다")
     args = ap.parse_args()
 
     refuse_sealed(args.splits, args.label_dir, args.text_dir, args.out_dir)
@@ -244,6 +258,7 @@ def main():
         "args": vars(args),
         "inputs": {"splits_sha256": sha256_file(args.splits)},
         "code_sha256": {f: sha256_file(ROOT / f) for f in CODE_FILES if (ROOT / f).exists()},
+        "prompt": {"version": args.prompt, "text_sha256": prompt_sha256(args.prompt)},
         "splits": {},
     }
     built = {}
@@ -267,7 +282,8 @@ def main():
 
     if args.dry_run:
         return
-    out_dir = Path(args.out_dir)
+    sub = prompt_subdir(args.prompt)  # v1은 ""(기존 위치), v2는 prompt_v2/ — v1 학습셋을 덮어쓰지 않게
+    out_dir = Path(args.out_dir) / sub
     out_dir.mkdir(parents=True, exist_ok=True)
     for split, name in (("train", args.train_out), ("val", args.val_out)):
         path = out_dir / name
@@ -275,7 +291,7 @@ def main():
         path.write_bytes(data)
         report["splits"][split]["jsonl"] = {"path": str(path), "lines": len(built[split]), "sha256": sha256_bytes(data)}
         print(f"  → {path}  sha256 {sha256_bytes(data)[:16]}…")
-    rp = Path(args.report) if args.report else out_dir / "build_report.json"
+    rp = Path(args.report).parent / sub / Path(args.report).name if args.report else out_dir / "build_report.json"
     rp.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"  → {rp}")
 

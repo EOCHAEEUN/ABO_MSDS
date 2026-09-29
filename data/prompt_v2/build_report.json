@@ -1,0 +1,442 @@
+{
+  "created_at": "2026-09-29T01:45:49+00:00",
+  "args": {
+    "seed": 42,
+    "secret": 1,
+    "renderers": 6,
+    "ecnum": false,
+    "splits": "/home/aiuser/ABO_MSDS/data/splits.csv",
+    "label_dir": "/home/aiuser/ABO_MSDS/data/labels",
+    "text_dir": "/home/aiuser/ABO_MSDS/data/text",
+    "out_dir": "/home/aiuser/ABO_MSDS/data",
+    "train_out": "train.jsonl",
+    "val_out": "val.jsonl",
+    "report": null,
+    "tokenizer": "Qwen/Qwen3-4B",
+    "max_length": 4096,
+    "no_tokens": false,
+    "dry_run": false,
+    "prompt": "v2"
+  },
+  "inputs": {
+    "splits_sha256": "07aaacfe3bafcee3a64bb1fdd644d5717e5deefae42b752641f3fa82e5f46ed3",
+    "train_labels_sha256": "446fcedf89b4b8930a62f7edc0a2461e80b8acff5abbbe883b55c44788fa0201",
+    "val_labels_sha256": "a9032ee593947543f5d9b86eedd1bc0f37d558bf43c8f6dbacf62374fec2c777"
+  },
+  "code_sha256": {
+    "core/prompt.py": "32a276d53d8478dac5ef8be0d846e4d6639928c8d1e19e0acd9b09ff50c597d1",
+    "core/schema.py": "72e754657bcc858445d1d4ec889b82940cabe89892470f384199a7be5e5679f3",
+    "src/schema.py": "b77b118b3b9164e8da3ed432976bed3aed53f0482cd8b81d7409a67f8099a51b",
+    "pipeline/build_jsonl.py": "f15ce175e2d16a4d60ae4b3eb568580a91f454fc896b29bf1277d30f8771172d",
+    "pipeline/guard.py": "36a8d7dcf2d0337de9b4b5763ac7adab0774b6008453c8d3ca5abb95530e7b95",
+    "pipeline/augment/renderers.py": "00a377ea8ddcd6c587a5e2bac74ba00addd75897973a460876b62814611313a2",
+    "pipeline/augment/mutators.py": "7b8e3f80b7b776ef84f3f253d64682e90a755542a518a59f629adb370e3de6b2",
+    "pipeline/augment/check_forbidden.py": "379cf8ecc96f5e76f167422d5d669f135afe9c0938025e97e29028ca05572de3"
+  },
+  "prompt": {
+    "version": "v2",
+    "text_sha256": "61ed598863358ef05b4f2156f71b03d1a4e50544ab2480aa273b2d3de2357aaf"
+  },
+  "splits": {
+    "train": {
+      "docs": 35,
+      "examples": 282,
+      "multiplier_incl_orig": 8.06,
+      "augmented_only": 247,
+      "variants": {
+        "bullet": 23,
+        "caslabel": 34,
+        "colon": 35,
+        "nohcode": 22,
+        "orig": 35,
+        "pagehdr": 35,
+        "secret": 29,
+        "section": 35,
+        "subnum": 34
+      },
+      "by_form": {
+        "구서식": {
+          "docs": 6,
+          "examples": 44
+        },
+        "수입품 국문판": {
+          "docs": 5,
+          "examples": 35
+        },
+        "현행": {
+          "docs": 24,
+          "examples": 203
+        }
+      },
+      "docs_with": {
+        "영업비밀": 7,
+        "H코드없음": 4
+      },
+      "examples_with": {
+        "영업비밀": 78,
+        "H코드없음": 51
+      },
+      "skipped": [],
+      "rejected": [
+        {
+          "doc_id": "KR-HANIL-005",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HANIL-006",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HENKEL-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-HENKEL-002",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-KNAUF-001",
+          "variant": "caslabel",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-002",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-003",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-005",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-006",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-NOROO-007",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-OCI-006",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-THERMO-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-THERMO-001",
+          "variant": "subnum",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        }
+      ],
+      "not_applicable": {
+        "secret1": 6,
+        "nohcode": 13
+      },
+      "not_applicable_docs": [
+        {
+          "doc_id": "KR-DUKSAN-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-GSC-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-GSC-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KNAUF-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-KNAUF-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KNAUF-002",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-KNAUF-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-003",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-004",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-KUMHO-005",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-NOROO-001",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-NOROO-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-NOROO-003",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-NOROO-005",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-OCI-001",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-OCI-002",
+          "variant": "nohcode"
+        },
+        {
+          "doc_id": "KR-OCI-005",
+          "variant": "secret1"
+        },
+        {
+          "doc_id": "KR-THERMO-001",
+          "variant": "secret1"
+        }
+      ],
+      "tokens": {
+        "max_length": 4096,
+        "p50": 2547,
+        "p90": 2944,
+        "p95": 3325,
+        "max": 3552,
+        "mean": 2595.7,
+        "longest": "KR-HENKEL-001:pagehdr",
+        "over_limit": []
+      },
+      "jsonl": {
+        "path": "/home/aiuser/ABO_MSDS/data/prompt_v2/train.jsonl",
+        "lines": 282,
+        "sha256": "f4573de048f1e224fb2a8afb968dd0fdcbe676bda910f58e7027bcde24a0f031"
+      }
+    },
+    "val": {
+      "docs": 10,
+      "examples": 65,
+      "multiplier_incl_orig": 6.5,
+      "augmented_only": 55,
+      "variants": {
+        "bullet": 8,
+        "caslabel": 10,
+        "colon": 9,
+        "orig": 10,
+        "pagehdr": 9,
+        "section": 9,
+        "subnum": 10
+      },
+      "by_form": {
+        "수입품 국문판": {
+          "docs": 5,
+          "examples": 31
+        },
+        "현행": {
+          "docs": 5,
+          "examples": 34
+        }
+      },
+      "docs_with": {
+        "영업비밀": 0,
+        "H코드없음": 0
+      },
+      "examples_with": {
+        "영업비밀": 0,
+        "H코드없음": 0
+      },
+      "skipped": [],
+      "rejected": [
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "section",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "colon",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-3DSYS-001",
+          "variant": "pagehdr",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        },
+        {
+          "doc_id": "KR-ASIACEM-001",
+          "variant": "bullet",
+          "reasons": [
+            "원본·다른 변형과 텍스트가 같음"
+          ]
+        }
+      ],
+      "not_applicable": {},
+      "not_applicable_docs": [],
+      "tokens": {
+        "max_length": 4096,
+        "p50": 2830,
+        "p90": 4329,
+        "p95": 4333,
+        "max": 4354,
+        "mean": 2943.6,
+        "longest": "KR-NEOGEN-002:pagehdr",
+        "over_limit": [
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "pagehdr",
+            "tokens": 4354
+          },
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "section",
+            "tokens": 4339
+          },
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "subnum",
+            "tokens": 4339
+          },
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "colon",
+            "tokens": 4333
+          },
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "bullet",
+            "tokens": 4333
+          },
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "orig",
+            "tokens": 4333
+          },
+          {
+            "doc_id": "KR-NEOGEN-002",
+            "variant": "caslabel",
+            "tokens": 4329
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "pagehdr",
+            "tokens": 4229
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "section",
+            "tokens": 4191
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "orig",
+            "tokens": 4188
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "colon",
+            "tokens": 4188
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "subnum",
+            "tokens": 4188
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "bullet",
+            "tokens": 4187
+          },
+          {
+            "doc_id": "KR-NEOGEN-001",
+            "variant": "caslabel",
+            "tokens": 4184
+          }
+        ]
+      },
+      "jsonl": {
+        "path": "/home/aiuser/ABO_MSDS/data/prompt_v2/val.jsonl",
+        "lines": 65,
+        "sha256": "6f03ef9f966062a50236acf15b22f9e9d25cfeba692b8030ae7f136c07faf869"
+      }
+    }
+  },
+  "checks": {
+    "train_val_doc_overlap": [],
+    "val_variants_in_train": 0
+  }
+}

@@ -263,5 +263,61 @@ class TestSplitTest(unittest.TestCase):
         self.assertFalse((self.pred_dir / score.UNKNOWN_FILE).exists())
 
 
+class PromptVersionTest(unittest.TestCase):
+    """--prompt v2: prompt_v2/ 폴더를 채점해 scores_prompt_v2.csv에 쓴다. v1 점수 파일은 건드리지 않는다."""
+    VAL = ["KR-HANIL-001", "KR-HENKEL-001"]  # fixtures/splits.csv의 val
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.scores = self.tmp / "report" / "scores.csv"
+        self.scores.parent.mkdir()
+        self.scores.write_text("condition,split,subset,metric,value\nbase_zs,val,ko,n_docs,10\n", encoding="utf-8")
+
+    def write_outputs(self, sub, version):
+        d = self.tmp / "out" / sub / "base_zs" / "val"
+        d.mkdir(parents=True)
+        for doc_id in self.VAL:
+            (d / f"{doc_id}.json").write_text(json.dumps(label(doc_id), ensure_ascii=False), encoding="utf-8")
+        (d / "_run.jsonl").write_text(json.dumps({"prompt_version": version}) + "\n", encoding="utf-8")
+
+    def run_score(self, *extra):
+        with mock.patch.object(score, "SCORES_CSV", self.scores), contextlib.redirect_stdout(io.StringIO()):
+            score.main(["--condition", "base_zs", "--split", "val", "--splits", str(FIX / "splits.csv"),
+                        "--label-dir", str(FIX / "labels"), "--text-dir", str(FIX / "text"),
+                        "--out-root", str(self.tmp / "out"), *extra])
+
+    def test_v2_scores_go_to_own_file(self):
+        before = self.scores.read_text(encoding="utf-8")
+        self.write_outputs("prompt_v2", "v2")
+        self.run_score("--prompt", "v2")
+        self.assertEqual(self.scores.read_text(encoding="utf-8"), before)
+        v2 = (self.tmp / "report" / "scores_prompt_v2.csv").read_text(encoding="utf-8")
+        self.assertIn("base_zs,val,ko,n_docs,2", v2)
+
+    def test_v2_1_scores_go_to_own_file(self):
+        self.write_outputs("prompt_v2_1", "v2_1")
+        self.run_score("--prompt", "v2_1")
+        self.assertIn("base_zs,val,ko,n_docs,2",
+                      (self.tmp / "report" / "scores_prompt_v2_1.csv").read_text(encoding="utf-8"))
+        self.assertFalse((self.tmp / "report" / "scores_prompt_v2.csv").exists())
+
+    def test_edited_prompt_text_refused(self):
+        self.write_outputs("prompt_v2", "v2")
+        run = self.tmp / "out" / "prompt_v2" / "base_zs" / "val" / "_run.jsonl"
+        run.write_text(json.dumps({"prompt_version": "v2", "prompt_text_sha256": "0" * 64}) + "\n", encoding="utf-8")
+        with self.assertRaises(SystemExit) as cm:
+            self.run_score("--prompt", "v2")
+        self.assertIn("문구가 바뀌었다", str(cm.exception))
+
+    def test_version_mismatch_refused(self):
+        self.write_outputs("prompt_v2", "v1")   # v2 자리에 v1 출력
+        self.write_outputs("", "v2")            # v1 자리에 v2 출력
+        for extra in (["--prompt", "v2"], []):
+            with self.subTest(extra=extra), self.assertRaises(SystemExit) as cm:
+                self.run_score(*extra)
+            self.assertIn("거부", str(cm.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

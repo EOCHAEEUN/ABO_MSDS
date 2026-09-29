@@ -7,7 +7,17 @@
 - train.jsonl을 만든 뒤에는 이 파일을 고치지 않는다(고치면 JSONL·어댑터를 다시 만들어야 함).
 
 [v1 초안] SYSTEM_PROMPT 문구는 data/README.md 표기 규칙을 옮긴 것이다. 학습 전 강덕우 확인 필요.
+
+프롬프트 버전 (2026-09-29, report/decisions.md)
+- v1: SYSTEM_PROMPT. r1 학습 · main의 val 결과가 이 문구다. 한 글자도 바꾸지 않는다(test/test_prompt.py가 해시로 확인).
+- v2: v1 + 규칙 10~14(PM 결정). v1을 고치지 않고 뒤에 붙였다. val Base 결과(outputs/prompt_v2/)가 있으므로
+  이 문구도 바꾸지 않는다(test/test_prompt.py가 해시로 확인).
+- v2_1: v2의 규칙 12(제품명 칸 우선) · 13(원문에 없는 "KE-"를 붙이지 않음)을 고친 것. 10 · 11 · 14는 v2와 같다.
+- 문구를 고칠 때는 기존 버전을 바꾸지 않고 새 버전을 추가한다(결과 폴더 · 점수 파일이 버전별로 따로 생긴다).
+- 버전마다 결과 폴더를 나눈다(prompt_subdir). v1은 기존 위치 그대로, v2는 그 아래 prompt_v2/ —
+  v2 결과가 v1 결과(outputs/ · report/scores.csv · data/train.jsonl)를 덮어쓰지 않게.
 """
+import hashlib
 import json
 
 # Qwen3 chat template에 넘길 인자. 세 조건(base_zs/base_fs/qlora) 모두 thinking 끔
@@ -38,6 +48,45 @@ SYSTEM_PROMPT = """너는 MSDS(물질안전보건자료) 1~3항 텍스트에서 
 8. content는 원문 함유량에서 %와 공백만 빼고 그대로 쓴다(예: "80 이상 ~ 90 % 미만" → "80이상~90미만").
 9. hazard_statements는 유해·위험 문구(H문구)만 쓴다. 예방조치 문구(P문구)는 넣지 않는다. 원문에 H코드가 없으면 code는 null이고 코드를 추정해서 붙이지 않는다. 문구 끝 마침표는 뺀다."""
 
+SYSTEM_PROMPT_V2 = SYSTEM_PROMPT + """
+10. 상태는 그 항목 자리에 적힌 문구로만 판단한다. 항목이나 칸이 비었거나 항목 자체가 없으면 "자료없음"이다. "해당없음"은 그 항목에 "해당없음"·"분류되지 않음"·"라벨 부착 규정 없음"·"없음" 같은 문구가 실제로 있을 때만 쓴다. 다른 항목(예: 그림문자)의 "해당없음"을 분류·신호어·유해·위험 문구의 상태로 옮기지 않는다.
+11. hazard_statements는 경고표지 항목의 유해·위험 문구 목록에서만 뽑는다. "분류기준에 포함되지 않는 기타 유해성·위험성" 항목의 문장은 H문구가 아니다.
+12. product_name은 1항의 제품명 값이다(제품명·상품명·물질명·제품 설명 칸, 또는 그 제목 바로 아래 줄). "용도"·"권고 용도" 칸의 문구는 product_name이 아니라 recommended_use에 쓴다.
+13. ke_number에는 "KE-"로 시작하는 번호만 쓴다. KE 자리에 다른 번호(EC 등)가 있으면 null로 둔다.
+14. hazard_class에는 분류명만 쓰고 "구분 N"은 category에 쓴다. "물리적 위험성"·"건강 유해성" 같은 묶음 제목은 항목으로 넣지 않는다. 분류명 옆에 "분류되지 않음"·"해당없음"이 적힌 줄은 분류가 아니므로 넣지 않는다."""
+
+SYSTEM_PROMPT_V2_1 = SYSTEM_PROMPT + """
+10. 상태는 그 항목 자리에 적힌 문구로만 판단한다. 항목이나 칸이 비었거나 항목 자체가 없으면 "자료없음"이다. "해당없음"은 그 항목에 "해당없음"·"분류되지 않음"·"라벨 부착 규정 없음"·"없음" 같은 문구가 실제로 있을 때만 쓴다. 다른 항목(예: 그림문자)의 "해당없음"을 분류·신호어·유해·위험 문구의 상태로 옮기지 않는다.
+11. hazard_statements는 경고표지 항목의 유해·위험 문구 목록에서만 뽑는다. "분류기준에 포함되지 않는 기타 유해성·위험성" 항목의 문장은 H문구가 아니다.
+12. product_name은 1항의 제품명 값이다. 제품명 칸(또는 그 제목 바로 아래 줄)이 있으면 그 값을 쓰고, 없을 때만 상품명·물질명·제품 설명 칸의 값을 쓴다. "용도"·"권고 용도" 칸의 문구는 product_name이 아니라 recommended_use에 쓴다.
+13. ke_number에는 원문에 "KE-"로 시작하게 적힌 번호만 그대로 쓴다. 원문에 없는 "KE-"를 붙이지 않는다. KE 자리에 다른 번호(EC 등)가 있으면 null로 둔다.
+14. hazard_class에는 분류명만 쓰고 "구분 N"은 category에 쓴다. "물리적 위험성"·"건강 유해성" 같은 묶음 제목은 항목으로 넣지 않는다. 분류명 옆에 "분류되지 않음"·"해당없음"이 적힌 줄은 분류가 아니므로 넣지 않는다."""
+
+PROMPTS = {"v1": SYSTEM_PROMPT, "v2": SYSTEM_PROMPT_V2, "v2_1": SYSTEM_PROMPT_V2_1}
+DEFAULT_PROMPT = "v1"  # 서빙 · r1 · 기존 스크립트 기본값. v2는 --prompt v2 / 설정 prompt: v2로만 쓴다
+# 버전을 기록하기 전(09-29 이전)의 _run.jsonl은 core/prompt.py 파일 해시만 남겼다. 그 해시 = v1
+LEGACY_V1_FILE_SHA256 = "f69f229829e4199aebad4e0aa0d0ee228b3575a2d8bcd54eb076bb78f2e7bb19"
+
+
+def prompt_subdir(version):
+    """버전별 결과 하위 폴더. v1은 ""(기존 위치 그대로), 그 밖은 "prompt_{버전}"."""
+    if version not in PROMPTS:
+        raise ValueError(f"알 수 없는 프롬프트 버전: {version} (있는 버전: {sorted(PROMPTS)})")
+    return "" if version == "v1" else f"prompt_{version}"
+
+
+def prompt_sha256(version):
+    """모델이 실제로 받는 문구(system + user 틀)의 해시. 파일 해시와 달리 다른 버전을 추가해도 바뀌지 않는다."""
+    msgs = build_messages("<MSDS 본문>", prompt=version)
+    return hashlib.sha256(json.dumps(msgs, ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def recorded_prompt_version(run):
+    """_run.jsonl 첫 줄 → 그 폴더를 만든 프롬프트 버전. 버전 기록이 없는 옛 기록은 파일 해시로 판정(모르면 None)."""
+    if run.get("prompt_version"):
+        return run["prompt_version"]
+    return "v1" if run.get("prompt_sha256") == LEGACY_V1_FILE_SHA256 else None
+
 
 def format_user(doc_text):
     return f"다음 MSDS 1~3항에서 정보를 추출해 JSON으로만 답하라.\n\n<MSDS>\n{doc_text.strip()}\n</MSDS>"
@@ -48,9 +97,11 @@ def format_target(label):
     return json.dumps(label, ensure_ascii=False, separators=(",", ":"))
 
 
-def build_messages(doc_text, fewshot=()):
-    """fewshot: [(예시 문서 텍스트, 예시 정답 dict), ...]. zero-shot이면 비워 둔다."""
-    msgs = [{"role": "system", "content": SYSTEM_PROMPT}]
+def build_messages(doc_text, fewshot=(), prompt=DEFAULT_PROMPT):
+    """fewshot: [(예시 문서 텍스트, 예시 정답 dict), ...]. zero-shot이면 비워 둔다. prompt: PROMPTS의 버전."""
+    if prompt not in PROMPTS:
+        raise ValueError(f"알 수 없는 프롬프트 버전: {prompt} (있는 버전: {sorted(PROMPTS)})")
+    msgs = [{"role": "system", "content": PROMPTS[prompt]}]
     for ex_text, ex_label in fewshot:
         msgs.append({"role": "user", "content": format_user(ex_text)})
         msgs.append({"role": "assistant", "content": format_target(ex_label)})

@@ -14,6 +14,7 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from core.prompt import LEGACY_V1_FILE_SHA256  # noqa: E402
 from eval import infer  # noqa: E402
 
 FIX = ROOT / "test" / "fixtures"
@@ -23,6 +24,12 @@ VAL_IDS = ["KR-HANIL-001", "KR-HENKEL-001"]  # fixtures/splits.csv의 val
 def fake_generate(tok, model, messages, max_new_tokens):
     """마지막 user 메시지 길이만 보고 정해진 문자열을 낸다. few-shot이면 메시지가 5개(system + 2쌍 + user)."""
     return f"not json ({len(messages)} msgs)", 0.5, 123, 7
+
+
+def write_run_config(run_dir, version):
+    """train_qlora.py가 run 폴더에 남기는 config.json 중 프롬프트 기록 부분"""
+    aug = {"prompt": {"version": version, "text_sha256": infer.prompt_sha256(version)}}
+    (Path(run_dir) / "config.json").write_text(json.dumps({"augmentation": aug}), encoding="utf-8")
 
 
 class InferTest(unittest.TestCase):
@@ -144,12 +151,14 @@ class InferTest(unittest.TestCase):
             adapter = tmp / "adapter"
             adapter.mkdir()
             (adapter / "adapter_config.json").write_text("{}", encoding="utf-8")
+            write_run_config(tmp, "v1")
             other = tmp / "other_adapter"
             other.mkdir()
             (other / "adapter_config.json").write_text('{"r": 8}', encoding="utf-8")
             exp = tmp / "experiment.json"
             exp.write_text(json.dumps({"max_new_tokens": 1300, "adapter": "runs/x/adapter",
-                                       "adapter_sha256": infer.sha256_dir(adapter)}), encoding="utf-8")
+                                       "adapter_sha256": infer.sha256_dir(adapter), "prompt_version": "v1"}),
+                           encoding="utf-8")
             text_dir = tmp / "text"  # test 텍스트는 저장소 밖이어야 하므로 fixture를 복사
             text_dir.mkdir()
             for d in VAL_IDS:
@@ -163,6 +172,7 @@ class InferTest(unittest.TestCase):
                 (["--condition", "qlora_r1", *base, *out, "--adapter", str(adapter)], "비교군"),
                 (["--condition", "base_zs", *base, *out, "--max-new-tokens", "2048"], "experiment.json의 1300"),
                 (["--condition", "qlora_final", *base, *out, "--adapter", str(other)], "adapter_sha256"),
+                (["--condition", "base_zs", *base, *out, "--prompt", "v2"], "prompt_version v1"),
             ]
             with mock.patch.object(infer, "EXPERIMENT_JSON", exp):
                 for argv, msg in cases:
@@ -177,6 +187,101 @@ class InferTest(unittest.TestCase):
                                 "--max-new-tokens", "1300"])
             run = json.loads((tmp / "out" / "qlora_final" / "test" / "_run.jsonl").read_text(encoding="utf-8"))
             self.assertEqual(run["max_new_tokens"], 1300)
+
+
+class PromptVersionTest(unittest.TestCase):
+    """v2 출력은 prompt_v2/ 아래에만 쌓이고, v1 폴더를 덮어쓰거나 섞지 않는다."""
+
+    def run_infer(self, out, *extra):
+        InferTest.run_infer(self, out, *extra)
+
+    def test_v2_goes_to_own_folder_and_leaves_v1_untouched(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.run_infer(tmp)
+            v1 = Path(tmp) / "base_zs" / "val"
+            before = {p.name: p.read_bytes() for p in v1.iterdir()}
+            self.run_infer(tmp, "--prompt", "v2", "--overwrite")
+            v2 = Path(tmp) / "prompt_v2" / "base_zs" / "val"
+            self.assertEqual(sorted(p.stem for p in v2.glob("*.json")), VAL_IDS)
+            self.assertEqual({p.name: p.read_bytes() for p in v1.iterdir()}, before)
+            run = json.loads((v2 / "_run.jsonl").read_text(encoding="utf-8"))
+            self.assertEqual(run["prompt_version"], "v2")
+            self.assertEqual(run["prompt_text_sha256"], infer.prompt_sha256("v2"))
+
+    def test_v2_1_goes_to_own_folder_and_leaves_v2_untouched(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.run_infer(tmp, "--prompt", "v2")
+            v2 = Path(tmp) / "prompt_v2" / "base_zs" / "val"
+            before = {p.name: p.read_bytes() for p in v2.iterdir()}
+            self.run_infer(tmp, "--prompt", "v2_1")
+            self.assertEqual({p.name: p.read_bytes() for p in v2.iterdir()}, before)
+            run = json.loads((Path(tmp) / "prompt_v2_1" / "base_zs" / "val" / "_run.jsonl").read_text(encoding="utf-8"))
+            self.assertEqual((run["prompt_version"], run["prompt_text_sha256"]), ("v2_1", infer.prompt_sha256("v2_1")))
+
+    def test_edited_prompt_text_refused_in_same_folder(self):
+        """같은 버전 이름의 문구를 고친 뒤 기존 폴더로 돌리면 --overwrite여도 거부(새 버전으로 돌려야 함)"""
+        with tempfile.TemporaryDirectory() as tmp:
+            self.run_infer(tmp, "--prompt", "v2", "--limit", "1")
+            edited = {**infer.PROMPTS, "v2": infer.PROMPTS["v2"] + "\n15. 고친 규칙"}
+            with mock.patch.dict("core.prompt.PROMPTS", edited), self.assertRaises(SystemExit) as cm:
+                self.run_infer(tmp, "--prompt", "v2", "--overwrite")
+            self.assertIn("문구가 바뀌었다", str(cm.exception))
+
+    def test_version_mismatch_refused_even_with_overwrite(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.run_infer(tmp, "--prompt", "v2")
+            with self.assertRaises(SystemExit) as cm:  # --out-root를 v2 폴더 위로 잡아 v1로 덮어쓰려 해도
+                self.run_infer(Path(tmp) / "prompt_v2", "--overwrite")
+            self.assertIn("프롬프트 v2의 결과 폴더", str(cm.exception))
+
+    def test_legacy_v1_record_resumes_as_v1_and_refuses_v2(self):
+        """09-29 이전 _run.jsonl(파일 해시만 있음) = main의 v1 결과. v1로는 이어 돌고, v2 설정은 거부."""
+        with tempfile.TemporaryDirectory() as tmp:
+            self.run_infer(tmp, "--limit", "1")
+            run_path = Path(tmp) / "base_zs" / "val" / "_run.jsonl"
+            current = json.loads(run_path.read_text(encoding="utf-8"))
+            legacy = {k: v for k, v in current.items() if k not in ("prompt_version", "prompt_text_sha256")}
+            legacy["prompt_sha256"] = LEGACY_V1_FILE_SHA256
+            run_path.write_text(json.dumps(legacy) + "\n", encoding="utf-8")
+            self.run_infer(tmp)  # v1로 나머지 1건
+            self.assertEqual(len(list(run_path.parent.glob("*.json"))), 2)
+            current.pop("created_at")
+            with self.assertRaises(SystemExit) as cm:
+                infer.check_resume(run_path.parent, {**current, "prompt_version": "v2",
+                                                     "prompt_text_sha256": infer.prompt_sha256("v2")})
+            self.assertIn("프롬프트 v1의 결과 폴더", str(cm.exception))
+    def test_adapter_must_match_trained_prompt(self):
+        """어댑터를 학습한 프롬프트 버전과 --prompt가 다르면 거부, 확인할 수 없어도 거부"""
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir = Path(tmp) / "runs" / "0929_r2"
+            adapter = run_dir / "adapter"
+            adapter.mkdir(parents=True)
+            (adapter / "adapter_config.json").write_text("{}", encoding="utf-8")
+            out = Path(tmp) / "out"
+            qlora = ["--condition", "qlora_r2", "--adapter", str(adapter)]
+            with self.assertRaises(SystemExit) as cm:          # config.json 없음
+                self.run_infer(out, *qlora, "--prompt", "v2")
+            self.assertIn("확인할 수 없다", str(cm.exception))
+            write_run_config(run_dir, "v2")
+            with self.assertRaises(SystemExit) as cm:          # v2로 학습한 어댑터를 v1으로
+                self.run_infer(out, *qlora)
+            self.assertIn("프롬프트 v2로 학습", str(cm.exception))
+            self.run_infer(out, *qlora, "--prompt", "v2")      # 같은 버전이면 돈다
+            self.assertEqual(len(list((out / "prompt_v2" / "qlora_r2" / "val").glob("*.json"))), len(VAL_IDS))
+            # 문구가 바뀐 v2(같은 이름, 다른 해시)도 확인 불가로 거부
+            (run_dir / "config.json").write_text(json.dumps({"augmentation": {"prompt": {"version": "v2",
+                                                             "text_sha256": "0" * 64}}}), encoding="utf-8")
+            self.assertIsNone(infer.adapter_prompt_version(adapter))
+            # 09-29 이전 학습(r1): 버전 기록 없이 core/prompt.py 파일 해시만 → v1
+            (run_dir / "config.json").write_text(json.dumps({"augmentation": {"code_sha256": {
+                "core/prompt.py": LEGACY_V1_FILE_SHA256}}}), encoding="utf-8")
+            self.assertEqual(infer.adapter_prompt_version(adapter), "v1")
+
+    def test_r1_record_is_v1(self):
+        r1 = ROOT / "runs" / "0928_r1"
+        if not (r1 / "config.json").exists():
+            self.skipTest("runs/0928_r1/config.json 없음")
+        self.assertEqual(infer.adapter_prompt_version(r1 / "adapter"), "v1")
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from core.prompt import PROMPTS  # noqa: E402
 from pipeline.augment.check_forbidden import check, protected_counts  # noqa: E402
 from pipeline.augment.mutators import MUTATORS  # noqa: E402
 from pipeline.augment.renderers import RENDERERS, cas_labels  # noqa: E402
@@ -158,6 +159,24 @@ class BuildTest(unittest.TestCase):
             rep = json.loads((a / "build_report.json").read_text(encoding="utf-8"))
             self.assertEqual(rep["checks"]["train_val_doc_overlap"], [])
             self.assertEqual(rep["checks"]["val_variants_in_train"], 0)
+
+    def test_prompt_v2_goes_to_own_folder_and_only_system_differs(self):
+        """--prompt v2는 out-dir/prompt_v2/에 쓰고(v1 파일 그대로), 증강 결과는 같고 system 메시지만 다르다."""
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d) / "out"
+            self.assertEqual(self.run_build(FIX / "splits.csv", out).returncode, 0)
+            v1 = {n: (out / n).read_bytes() for n in ("train.jsonl", "val.jsonl", "build_report.json")}
+            r = self.run_build(FIX / "splits.csv", out, "--prompt", "v2")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertEqual({n: (out / n).read_bytes() for n in v1}, v1)
+            for n in ("train.jsonl", "val.jsonl"):
+                a = [json.loads(l) for l in v1[n].decode("utf-8").splitlines()]
+                b = [json.loads(l) for l in (out / "prompt_v2" / n).read_text(encoding="utf-8").splitlines()]
+                self.assertEqual([(x["doc_id"], x["variant"], x["messages"][1:]) for x in a],
+                                 [(x["doc_id"], x["variant"], x["messages"][1:]) for x in b])
+                self.assertEqual({x["messages"][0]["content"] for x in b}, {PROMPTS["v2"]})
+            rep = json.loads((out / "prompt_v2" / "build_report.json").read_text(encoding="utf-8"))
+            self.assertEqual(rep["prompt"]["version"], "v2")
 
 
 if __name__ == "__main__":
