@@ -8,6 +8,8 @@
 - 모델 출력 원문을 파싱해 extraction으로 쓰고, Rule Engine(app/rules)을 돌려 핵심 5필드의 검토 상태를 붙인다.
 - 파싱에 실패했거나 필수 키가 없는 출력은 목록에 넣지 않고 skipped에 사유와 함께 남긴다(조용히 버리지 않음).
 - val만 다룬다. test는 저장소 밖이며 여기서 읽지 않는다.
+- 원본 PDF는 커밋하지 않는다(data/raw/, 저작권). pdf_url은 "./pdfs/{doc_id}.pdf"로만 적고, 개발 · 미리보기 서버
+  (web/vite.config.js)가 이 결과 파일에 있는 문서만 로컬 data/raw/에서 찾아 보여 준다. 쪽수는 로컬에 PDF가 있을 때만 센다.
 나중에 app/main.py의 GET /documents · POST /compare가 같은 함수를 쓰면 된다.
 """
 from __future__ import annotations
@@ -117,6 +119,17 @@ def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> 
     return out
 
 
+def _page_count(pdf: Path) -> Optional[int]:
+    if not pdf.is_file():
+        return None
+    try:
+        import pdfplumber
+        with pdfplumber.open(pdf) as doc:
+            return len(doc.pages)
+    except Exception:  # noqa: BLE001 — 쪽수는 표시용이라 실패해도 결과 생성은 계속한다
+        return None
+
+
 def _missing_keys(obj: Any) -> list[str]:
     if not isinstance(obj, dict):
         return ["(JSON 객체 아님)"]
@@ -131,6 +144,7 @@ def build_documents(root: Path = ROOT) -> dict:
         sources = {r["doc_id"]: r for r in csv.DictReader(open(root / "data/sources.csv", encoding="utf-8-sig"))}
     val_ids = sorted(d for d, r in splits.items() if r["split"] == "val")
     docs, skipped, n = [], [], 0
+    pages: dict[str, Optional[int]] = {}
     for cond in DOC_ORDER:
         out_dir = root / "outputs" / cond / "val"
         if not (out_dir / "_run.jsonl").exists():
@@ -153,15 +167,18 @@ def build_documents(root: Path = ROOT) -> dict:
             text = text_path.read_text(encoding="utf-8") if text_path.exists() else None
             n += 1
             when = _fmt_time(rec.get("created_at"))
+            source_file = sources.get(doc_id, {}).get("source_file")
+            if source_file and doc_id not in pages:
+                pages[doc_id] = _page_count(root / "data" / "raw" / source_file)
             docs.append({
                 "id": f"{doc_id}__{cond}", "number": n, "doc_id": doc_id, "condition": cond,
-                "file_name": sources.get(doc_id, {}).get("source_file") or f"{doc_id}.pdf",
+                "file_name": source_file or f"{doc_id}.pdf",
                 "language": "한국어" if splits[doc_id].get("lang") == "ko" else "영어",
-                "page_count": None, "submission_number": doc_id, "revision_date": None,
+                "page_count": pages.get(doc_id), "submission_number": doc_id, "revision_date": None,
                 "extracted_at": when, "updated_at": when, "owner": "미지정",
                 "split": f"val · {name}", "form": splits[doc_id].get("form"), "model_name": name,
                 "generation_seconds": rec.get("gen_time_sec"), "output_tokens": rec.get("output_tokens"),
-                "pdf_url": None, "source": None, "source_text": text,
+                "pdf_url": f"./pdfs/{doc_id}.pdf" if source_file else None, "source": None, "source_text": text,
                 "extraction": obj, "reviews": {}, "confirmed_fields": [],
                 "rule_results": field_rule_results(obj, text, doc_id),
             })
