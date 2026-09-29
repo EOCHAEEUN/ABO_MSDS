@@ -50,7 +50,7 @@ sys.path.insert(0, str(ROOT))
 
 from core.prompt import CHAT_TEMPLATE_KWARGS, build_messages  # noqa: E402
 
-CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_final")
+CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_r3", "qlora_final")
 TEST_CONDITIONS = ("base_zs", "base_fs", "qlora_final")  # test는 이 셋만 1회씩(plan 5절 · 9절 단계 8)
 SPLITS = ("val", "train", "val_en", "test")  # train: Base 난이도 진단 전용(few-shot 예시 제외, 보고 금지)
 
