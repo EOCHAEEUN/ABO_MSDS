@@ -1,7 +1,7 @@
 {
  "generated_from": "outputs/*/val · data/text · app/rules",
  "split": "val",
- "stamp": "f5214b20798a7182",
+ "stamp": "1cbc5e989321142e",
  "n_val_docs": 10,
  "documents": [
   {
@@ -75,41 +75,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "정 횟수 1.02\n1: 화학제품과 회사에 관한 정보\n가. 제품명\n제품명 ColorBond / zbond® 90\n제품 코드 2-83104\nCAS 번호 27816-23-5\n나. 제품의",
+     "source_text": "제품명 ColorBond / zbond® 90",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "3항",
-     "source_text": "질\n화학물질명 일반명 및 이명 CAS 번호 기타 식별 번호 함유량(%)\n2-methoxyethyl 2-cyanoacrylate 자료 없음 27816-23-5 Listed or Exempt 90 -\norBond / zbond® 90\n제품 코드 2-83104\nCAS 번호 27816-23-5\n나. 제품의 권고 용도와 사용상의 제한\n권권고고 용용도도 ZPrinte",
+     "source_text": "CAS 번호 27816-23-5",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 유해성ㆍ위험성 분류\n나. 예방조치 문구를 포함한 경고 표지 항목\n그림문자",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n그림문자\n해당없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "/ zbond® 90\n페이지 1 / 9\n최종 개정일자 12-8-2024\n물에 대한 반응성이 높음. 접촉 시 피부에 바로 접착됩니다. 접촉 시 눈꺼풀이 달라붙습니다. 접촉 시 입이 바로 달라붙습니다.\n3: 구성성분의 명칭 및 함유량\n물질\n화학물질명 일반명 및 이명 CAS",
+     "source_text": "다. 유해성위험성 분류기준에 포함되지 않는 기타 유해성위험성\n물에 대한 반응성이 높음. 접촉 시 피부에 바로 접착됩니다. 접촉 시 눈꺼풀이 달라붙습니다. 접촉 시 입이 바로 달라붙습니다.",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -235,41 +240,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "43-0000000001\n1. 화학제품과 회사에 관한 정보\n가. 제품명 아세아몰탈(일반 미장용)\n나. 제품의 권고 용도와 사용상의 제한\n권고 용도 단열재 및 건축용 재",
+     "source_text": "가. 제품명 아세아몰탈(일반 미장용)",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "CAS번호 또는 식별번호\nCAS 번호 식별번호 범위 단일\n기타 식별번호\nPortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly\n범위 단일\n기타 식별번호\nPortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8\nortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자\nent 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자료없음\n모래 자료없음 자",
+     "source_text": "Portland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자료없음\n모래 자료없음 자료없음 65-75 자료없음\n공기연행제 자료없음 자료없음 0-1 자료없음",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "피부 부식성/피부 자극성 : 구분 1\n심한 눈 손상성/눈 자극성 : 구분 1\n특정표적장기 독성(1회 노출) : 구분 3(호흡기 자극)\n흡인 유해성 : 구분 1",
+     "source_text": "가. 유해성·위험성 분류\n피부 부식성/피부 자극성 : 구분 1\n심한 눈 손상성/눈 자극성 : 구분 1\n특정표적장기 독성(1회 노출) : 구분 3(호흡기 자극)\n흡인 유해성 : 구분 1",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "함한 경고 표지 항목\n그림문자\n신호어 위험\n유해·위험 문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에\n문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으\n있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음\n다. 유해성 · 위험성 분\n눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음\n다. 유해성 · 위험성 분류기준에 포함되지 않는 기타 유해성 · 위험성",
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n유해·위험 문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -418,41 +428,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "물질안전보건자료\n1. 화학제품과 회사에 관한 정보\n가. 제품명 Plexus MA2090 접착제\n기타 식별 수단\nSKU# IT195\n나. 제품의 권고용도와 사용상의 제",
+     "source_text": "가. 제품명 Plexus MA2090 접착제",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "및 함유량\n화학물질명 관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACR\n관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 14\n식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976\n량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976 5-10%\n메타크릴산 79-41-4 K",
+     "source_text": "메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976 5-10%\n메타크릴산 79-41-4 KE-24906 1-5%\n트라이메틸올프로페인 트라이메타크릴레이트 3290-92-4 KE-25014 1-5%\nN,N-DIETHYLAMINOETHYL METHACRYLATE 105-16-8 KE-24955 0.10-0.99%",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n심한 눈 손상/눈 자극성 구분 2\n피부 과민성 구분 1\n생식독성 구분 1B\n환경 유해성 수생환경 유해성, 만성 구분 2",
+     "source_text": "가. 유해성·위험성 분류\n물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n심한 눈 손상/눈 자극성 구분 2\n피부 과민성 구분 1\n생식독성 구분 1B\n환경 유해성 수생환경 유해성, 만성 구분 2",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "o 신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "고 표지 항목\no 그림문자\no 신호어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬\n어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한\n225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손\n극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상을 일으킬 수 있음.\nH411 장기",
+     "source_text": "o 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상을 일으킬 수 있음.\nH411 장기적인 영향에 의해 수생생물에게 유독함.",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -571,41 +586,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "물질안전보건자료\n1. 화학제품과 회사에 관한 정보\n가. 제품명 Devweld 531 접착제\n기타 식별 수단 자료없음.\n나. 제품의 권고용도와 사용상의 제한\n제품의",
+     "source_text": "가. 제품명 Devweld 531 접착제",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "및 함유량\n화학물질명 관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE\n관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5\n식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다\n량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮은 기타",
+     "source_text": "메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮은 기타 성분",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n환경 유해성 수생환경 유해성, 만성 구분 3",
+     "source_text": "가. 유해성·위험성 분류\n물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n환경 유해성 수생환경 유해성, 만성 구분 3",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "o 신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "고 표지 항목\no 그림문자\no 신호어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬\n어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향\n225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.\n다. 유해성•위험성\n극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.\n다. 유해성•위험성 분류기준에 알려지지 않음.\n포함되지 않는 기타\n유",
+     "source_text": "o 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -748,41 +768,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "명\n- 006(N)\n나. 제품의 권고 용도와 사용상의 제한\n- 용도 : 신너 (자동차용 수용성 세정신너)\n- 사용상의 제한 : 용도외의 사용을 금함\n다. 제조자/공급자/유통업자",
+     "source_text": "- 용도 : 신너 (자동차용 수용성 세정신너)",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "유량\n화학물질명 관용명 및 이명 CAS 번호 또는 식별번호 함유량(%)\n2-뷰톡시에탄올 O-부틸 에틸렌 글라이콜 ; 에틸렌 글라이콜 부틸 에테르 ;\n에틸렌 글\n에테르 ;\n에틸렌 글라이콜 N-부틸 에테르 ; 글라이콜 부틸 에테르 ;\n111-76-2 / KE-04134 59~60\n글라이콜 모노부틸 에테르 ; 모노부틸 글\n에테르 ; 글라이콜 부틸 에테르 ;\n111-76-2 / KE-04134 59~60\n글라이콜 모노부틸 에테르 ; 모노부틸 글라이콜 에테르 ;\n부틸 글라이콜\n에테르 ; 모노부틸 글라이콜 에테르 ;\n부틸 글라이콜 ; 부틸 옥시톨\n2-프로판올 아이소프로파놀 ; 다이메틸카르비놀 ; 아이소프로필 알코\n올 ; n-프로",
+     "source_text": "111-76-2 / KE-04134 59~60\n올 ; n-프로판-2-올 ; 프로판-2-올 ; I-프로필 알코올 ; 2-프 67-63-0 / KE-29363 38~39\n108-01-0 / KE-11494 2~3",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "- 인화성 액체 : 구분2\n- 급성 독성(경구) : 구분4\n- 급성 독성(흡입: 증기) : 구분4\n- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 발암성 : 구분2",
+     "source_text": "가. 유해성·위험성 분류\n- 인화성 액체 : 구분2\n- 급성 독성(경구) : 구분4\n- 급성 독성(흡입: 증기) : 구분4\n- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 발암성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(마취영향)",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "2. 유해성·위험성",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "항목\n○ 그림문자\n○ 신호어\n- 위험\n○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H31\n험\n○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\nH225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n-\nH302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n- H336 졸음 또는 현기증을 일으킬 수",
+     "source_text": "○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n- H336 졸음 또는 현기증을 일으킬 수 있음\n- H351 암을 일으킬 것으로 의심됨",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -853,41 +878,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "보건자료 (MSDS)\n1. 화학제품과 회사에 관한 정보\n가. 제품명\n- SeraSense SF 50 [SF1000NFX050]\n나. 제품의 권고 용도와 사용상의 제한\n- 용도 : 윤활제\n- 사용상의",
+     "source_text": "- SeraSense SF 50 [SF1000NFX050]",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "3항",
-     "source_text": "물질명 관용명 및 이명(異名) CAS 번호 또는 식별번호. 함유량(%)\nSiloxanes and Silicones, di-Me Dimethyl silicones and siloxanes 63148-\ndi-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100",
+     "source_text": "Siloxanes and Silicones, di-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 유해성·위험성 분류\n해당없음\n나. 예방조치 문구를 포함한 경고 표지 항목",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n○ 그림문자\n- 해당없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "○ 유해·위험 문구\n- 해당없음\n다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성",
+     "source_kind": "section",
      "messages": []
     }
    }
@@ -1077,17 +1107,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "LESS Medium\n물질안전보건자료\n고용노동부고시 2020-130에 따름\nMSDS 번호:",
+     "source_text": "LESS Medium",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 3,
      "section": "3항",
-     "source_text": "혼합물\n화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)\nPeptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOP\nein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSod\nalt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS\no-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 10 – < 15\nacetylformic acid, sodium s",
+     "source_text": "Peptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 10 – < 15\n3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nSodium chloride AKZO, BROXO 6/15 / AXAL / BRINE / CAS 번호: 7647-14-5 ≥ 5 – < 10\nMagnesium sulfate anhydrous E518 / epsom salts / magnesium CAS 번호: 7487-88-9 ≥ 5 – < 10\nPotassium phosphate dibasic dibasic potassium phosphate, CAS 번호: 7758-11-4 ≥ 1 – < 5",
+     "source_kind": "value",
      "messages": [
       "ingredients.3.ke_number: Value error, KE 번호 형식 오류: 'KE-2010-3-4223'",
       "함유량 'N-'에서 하한값을 읽을 수 없어 합계 검사에서 제외했습니다."
@@ -1096,9 +1128,10 @@
     "ghs_classification": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "급성 독성 (경구), 구분 5 H303\n급성 독성 (경피), 구분 5 H313\n급성 수생환경, 구분 1 H400\n만성 수생환경, 구분 1 H410",
+     "source_text": "가. 유해성·위험성 분류\n급성 독성 (경구), 구분 5 H303\n급성 독성 (경피), 구분 5 H313\n급성 수생환경, 구분 1 H400\n만성 수생환경, 구분 1 H410\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 부식성/피부 자극성, 분류되지 않음",
+     "source_kind": "value",
      "messages": [
       "ghs_classification.7.category: Value error, category는 '구분 N' 형식이어야 함: '해당없음'"
      ]
@@ -1106,17 +1139,19 @@
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
      "source_text": "나. 예방조치문구를 포함한 경고표지 항목",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "KR)\n경고.\nO 유해∙위험 문구 (GHS KR)\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n고.\nO 유해∙위험 문구 (GHS KR)\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n03+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독\n있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해",
+     "source_text": "나. 예방조치문구를 포함한 경고표지 항목\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해 수생생물에게 매우 유독함",
+     "source_kind": "value",
      "messages": [
       "H코드 H303의 문구가 대응표와 다릅니다: '삼키거나 피부에 접촉하면 유해할 수 있음'",
       "H코드 H313의 문구가 대응표와 다릅니다: '피부에 접촉하면 유해할 수 있음'"
@@ -1326,17 +1361,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "LESS Plus Medium\n물질안전보건자료\n고용노동부고시 2020-130에 따름\nMSDS 번호:",
+     "source_text": "LESS Plus Medium",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 3,
      "section": "3항",
-     "source_text": "혼합물\n화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)\n3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호:\n3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nacid / 3-(N- 기존화학물질 번호: 201\n따름\n화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)\nPeptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 10 – < 15\nPep\n호 함유량 (%)\nPeptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 10 – < 15\nPeptones, beef 자료없음 CAS 번호:",
+     "source_text": "3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nPeptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 10 – < 15\nPeptones, beef 자료없음 CAS 번호: 91079-38-8 ≥ 10 – < 15\nLithium chloride hydrochloric acid lithium salt / CAS 번호: 7447-41-8 ≥ 10 – < 15\nCitric acid trisodium salt 1,2,3-propanetricarboxylic acid, 2- CAS 번호: 68-04-2 ≥ 5 – < 10\nSodium carbonate anhydrous soda / ash / bisodium CAS 번호: 497-19-8 ≥ 1 – < 5\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 1 – < 5",
+     "source_kind": "value",
      "messages": [
       "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '2010-3-4223'"
      ]
@@ -1344,25 +1381,28 @@
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "급성 독성 (경구), 구분 4 H302\n급성 독성 (경피), 구분 4 H312\n급성 독성 (흡입: 분진, 미스트), 구분 4 H332\n피부 부식성/피부 자극성, 구분 2 H315\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317",
+     "source_text": "가. 유해성·위험성 분류\n급성 독성 (경구), 구분 4 H302\n급성 독성 (경피), 구분 4 H312\n급성 독성 (흡입: 분진, 미스트), 구분 4 H332\n피부 부식성/피부 자극성, 구분 2 H315\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317\n생식독성, 구분 1A H360\n수유독성 H362",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "2. 유해성·위험성",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "험.\nO 유해∙위험 문구 (GHS KR)\nH302+H312+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을\n+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH360 - 태아 또는 생식능력에\n일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH360 - 태아 또는 생식능력에 손상을 일으킬 수 있음\nH362 -",
+     "source_text": "나. 예방조치문구를 포함한 경고표지 항목\nH302+H312+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\n가. 유해성·위험성 분류\n급성 독성 (경피), 구분 4 H312\n급성 독성 (흡입: 분진, 미스트), 구분 4 H332\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH360 - 태아 또는 생식능력에 손상을 일으킬 수 있음\nH362 - 모유를 먹는 아이에게 유해할 수 있음",
+     "source_kind": "value",
      "messages": [
       "H코드 H302의 문구가 대응표와 다릅니다: '삼키거나, 피부에 접촉하거나 흡입하면 유해함'",
       "H코드 H312의 문구가 대응표와 다릅니다: '피부에 자극을 일으킴'",
@@ -1486,41 +1526,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "1/12\n물질안전보건자료 (MSDS)\n요소\nDate of issue: 2013-05-18 Revision date",
+     "source_text": "요소",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "1/12\n물질안전보건자료 (MSDS)\n요소\nDate of issue: 2013-05-18 Revision date\n및 이명(異名) CAS 번호 또는 식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 686\n식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.\n)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.3-1.5\n뷰렛 자",
+     "source_text": "요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.3-1.5\n뷰렛 자료없음 108-19-0 / KE-20952 0.1-1.0\n물 다이하이드로젠 옥사이드 7732-18-5 / KE-35400 0.1-0.5",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(호흡기 자극)",
+     "source_text": "가. 유해성·위험성 분류\n- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(호흡기 자극)",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "항목\n○ 그림문자\n○ 신호어\n- 경고\n○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬\n경고\n○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음\n다. 유해성·위험성 분류기준\n피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음\n다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성\n- 자",
+     "source_text": "○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -1626,41 +1671,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "---------------------------------------\n7 BLUE 1 15W-40\n---------------------------------------",
+     "source_text": "7 BLUE 1 15W-40",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "OTREATED\nHEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\n(심하게 히드로처리된 파라핀 증류액)\nMIXED\n보건=1, 화재=1, 반응성=0\n(심하게 히드로처리된 파라핀 증류액)\nMIXED PERFORMANCE ADDITIVE\n건강=1, 화재=1, 반응성=0\n(복합성능첨가제)\nVISCOSITY I\nCE ADDITIVE\n건강=1, 화재=1, 반응성=0\n(복합성능첨가제)\nVISCOSITY INDEX IMPROVER\n건강=0, 화재=1, 반응성=0\n(점도지수향상제)\n첨가제 1\n건강=1,\nEX IMPROVER\n건강=0, 화재=1, 반응성=0\n(점도지수향상제)\n첨가제 1\n건강=1, 화재=1, 반응성=0\n(ADDITIVE 1)\nPOLYMER,",
+     "source_text": "HEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\nMIXED PERFORMANCE ADDITIVE\nVISCOSITY INDEX IMPROVER\n(ADDITIVE 1) 122-39-4\nPOLYMERIZED DIMETHYL SILICONE FLUID",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 위험·유해성 분류 및 구분:\n화학물질의 분류 유해․ 위험성 구분\n유해하지 않음 0",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치문구를 포함한 경고 표지 항목\n구 분 표 시\n그림문자 그림문자 없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "유해·위험문구 - 건강 유해성 : 유해위험물질로 분류되지 않음\n- 환경 유해성 : 환경적 유해위험물질로 분류되지 않음\n예방조치",
+     "source_kind": "section",
      "messages": []
     }
    }
@@ -1736,41 +1786,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "정 횟수 1.02\n1: 화학제품과 회사에 관한 정보\n가. 제품명\n제품명 ColorBond / zbond® 90\n제품 코드 2-83104\nCAS 번호 27816-23-5\n나. 제품의",
+     "source_text": "제품명 ColorBond / zbond® 90",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "3항",
-     "source_text": "질\n화학물질명 일반명 및 이명 CAS 번호 기타 식별 번호 함유량(%)\n2-methoxyethyl 2-cyanoacrylate 자료 없음 27816-23-5 Listed or Exempt 90 -\norBond / zbond® 90\n제품 코드 2-83104\nCAS 번호 27816-23-5\n나. 제품의 권고 용도와 사용상의 제한\n권권고고 용용도도 ZPrinte\nylate 자료 없음 27816-23-5 Listed or Exempt 90 - 100",
+     "source_text": "CAS 번호 27816-23-5",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 유해성ㆍ위험성 분류\n나. 예방조치 문구를 포함한 경고 표지 항목\n그림문자",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n그림문자\n해당없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "/ zbond® 90\n페이지 1 / 9\n최종 개정일자 12-8-2024\n물에 대한 반응성이 높음. 접촉 시 피부에 바로 접착됩니다. 접촉 시 눈꺼풀이 달라붙습니다. 접촉 시 입이 바로 달라붙습니다.\n3: 구성성분의 명칭 및 함유량\n물질\n화학물질명 일반명 및 이명 CAS",
+     "source_text": "다. 유해성위험성 분류기준에 포함되지 않는 기타 유해성위험성\n물에 대한 반응성이 높음. 접촉 시 피부에 바로 접착됩니다. 접촉 시 눈꺼풀이 달라붙습니다. 접촉 시 입이 바로 달라붙습니다.",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -1896,41 +1951,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "43-0000000001\n1. 화학제품과 회사에 관한 정보\n가. 제품명 아세아몰탈(일반 미장용)\n나. 제품의 권고 용도와 사용상의 제한\n권고 용도 단열재 및 건축용 재",
+     "source_text": "가. 제품명 아세아몰탈(일반 미장용)",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "S 번호 식별번호 범위 단일\n기타 식별번호\nPortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재\n범위 단일\n기타 식별번호\nPortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8\nortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자\n시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자료없음\n모래 자료없음 자료없음",
+     "source_text": "Portland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자료없음\n모래 자료없음 자료없음 65-75 자료없음\n공기연행제 자료없음 자료없음 0-1 자료없음",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "피부 부식성/피부 자극성 : 구분 1\n심한 눈 손상성/눈 자극성 : 구분 1\n특정표적장기 독성(1회 노출) : 구분 3(호흡기 자극)\n흡인 유해성 : 구분 1",
+     "source_text": "가. 유해성·위험성 분류\n피부 부식성/피부 자극성 : 구분 1\n심한 눈 손상성/눈 자극성 : 구분 1\n특정표적장기 독성(1회 노출) : 구분 3(호흡기 자극)\n흡인 유해성 : 구분 1",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "함한 경고 표지 항목\n그림문자\n신호어 위험\n유해·위험 문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에\n문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으\n있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음\n다. 유해성 · 위험성 분\n눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음\n다. 유해성 · 위험성 분류기준에 포함되지 않는 기타 유해성 · 위험성",
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n유해·위험 문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -2079,41 +2139,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": null,
+     "source_text": "가. 제품명 Plexus MA2090 접착제\n기타 식별 수단\nSKU# IT195",
+     "source_kind": "section",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "및 함유량\n화학물질명 관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACR\n관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 14\n식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976\n량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976 5-10%\n메타크릴산 79-41-4 K",
+     "source_text": "메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976 5-10%\n메타크릴산 79-41-4 KE-24906 1-5%\n트라이메틸올프로페인 트라이메타크릴레이트 3290-92-4 KE-25014 1-5%\nN,N-DIETHYLAMINOETHYL METHACRYLATE 105-16-8 KE-24955 0.10-0.99%",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n생식독성 구분 1B\n환경 유해성 수생환경 유해성, 만성 구분 2",
+     "source_text": "가. 유해성·위험성 분류\n물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n생식독성 구분 1B\n환경 유해성 수생환경 유해성, 만성 구분 2",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "o 신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "고 표지 항목\no 그림문자\no 신호어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬\n어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한\n225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상\n극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상을 일으킬 수 있음.\nH411 장기적",
+     "source_text": "o 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상을 일으킬 수 있음.\nH411 장기적인 영향에 의해 수생생물에게 유독함.",
+     "source_kind": "value",
      "messages": [
       "문구 코드 ['H225', 'H315', 'H411']는 목록에 있는 분류로 설명되지 않습니다."
      ]
@@ -2234,33 +2299,37 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "물질안전보건자료\n1. 화학제품과 회사에 관한 정보\n가. 제품명 Devweld 531 접착제\n기타 식별 수단 자료없음.\n나. 제품의 권고용도와 사용상의 제한\n제품의",
+     "source_text": "가. 제품명 Devweld 531 접착제",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "및 함유량\n화학물질명 관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE\n관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5\n식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮\n량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮은 기타",
+     "source_text": "메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮은 기타 성분",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n환경 유해성 수생환경 유해성, 만성 구분 3",
+     "source_text": "가. 유해성·위험성 분류\n물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n환경 유해성 수생환경 유해성, 만성 구분 3",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "o 신호어 위험",
+     "source_kind": "value",
      "messages": [
       "분류로 미루어 신호어는 '경고'이어야 하는데 문서는 '위험'입니다."
      ]
@@ -2268,9 +2337,10 @@
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "고 표지 항목\no 그림문자\no 신호어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬\n어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향\n225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.\n다. 유해성•위험성 분\n극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.\n다. 유해성•위험성 분류기준에 알려지지 않음.\n포함되지 않는 기타\n유해",
+     "source_text": "o 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.",
+     "source_kind": "value",
      "messages": [
       "문구 코드 ['H225', 'H412']는 목록에 있는 분류로 설명되지 않습니다."
      ]
@@ -2415,41 +2485,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "보건자료 (MSDS)\nMSDS 번호: AA00017-0000000992\n006(N)\n1. 화학제품과 회사에 관한 정보\n가. 제품명\n- 006(N)\n나. 제",
+     "source_text": "006(N)",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "유량\n화학물질명 관용명 및 이명 CAS 번호 또는 식별번호 함유량(%)\n2-뷰톡시에탄올 O-부틸 에틸렌 글라이콜 ; 에틸렌 글라이콜 부틸 에테르 ;\n에틸렌 글\n에테르 ;\n에틸렌 글라이콜 N-부틸 에테르 ; 글라이콜 부틸 에테르 ;\n111-76-2 / KE-04134 59~60\n글라이콜 모노부틸 에테르 ; 모노부틸 글\n에테르 ; 글라이콜 부틸 에테르 ;\n111-76-2 / KE-04134 59~60\n글라이콜 모노부틸 에테르 ; 모노부틸 글라이콜 에테르 ;\n부틸 글라이콜\n에테르 ; 모노부틸 글라이콜 에테르 ;\n부틸 글라이콜 ; 부틸 옥시톨\n2-프로판올 아이소프로파놀 ; 다이메틸카르비놀 ; 아이소프로필 알코\n올 ; n-프로",
+     "source_text": "111-76-2 / KE-04134 59~60\n올 ; n-프로판-2-올 ; 프로판-2-올 ; I-프로필 알코올 ; 2-프 67-63-0 / KE-29363 38~39\n108-01-0 / KE-11494 2~3",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "- 인화성 액체 : 구분2\n- 급성 독성(경구) : 구분4\n- 급성 독성(흡입: 증기) : 구분4\n- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 발암성 : 구분2",
+     "source_text": "가. 유해성·위험성 분류\n- 인화성 액체 : 구분2\n- 급성 독성(경구) : 구분4\n- 급성 독성(흡입: 증기) : 구분4\n- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 발암성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(마취영향)",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "2. 유해성·위험성",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "항목\n○ 그림문자\n○ 신호어\n- 위험\n○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H31\n험\n○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\nH225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n-\nH302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n- H336 졸음 또는 현기증을 일으킬 수",
+     "source_text": "○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n- H336 졸음 또는 현기증을 일으킬 수 있음\n- H351 암을 일으킬 것으로 의심됨",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -2520,41 +2595,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "보건자료 (MSDS)\n1. 화학제품과 회사에 관한 정보\n가. 제품명\n- SeraSense SF 50 [SF1000NFX050]\n나. 제품의 권고 용도와 사용상의 제한\n- 용도 : 윤활제\n- 사용상의",
+     "source_text": "- SeraSense SF 50 [SF1000NFX050]",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "3항",
-     "source_text": "물질명 관용명 및 이명(異名) CAS 번호 또는 식별번호. 함유량(%)\nSiloxanes and Silicones, di-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100\ndi-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100\nnes and siloxanes 63148-62-9 / KE-31068 95 ~ 100",
+     "source_text": "Siloxanes and Silicones, di-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 유해성·위험성 분류\n해당없음\n나. 예방조치 문구를 포함한 경고 표지 항목",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n○ 그림문자\n- 해당없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "○ 유해·위험 문구\n- 해당없음\n다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성",
+     "source_kind": "section",
      "messages": []
     }
    }
@@ -2721,17 +2801,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "LESS Medium\n물질안전보건자료\n고용노동부고시 2020-130에 따름\nMSDS 번호:",
+     "source_text": "LESS Medium",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 3,
      "section": "3항",
-     "source_text": "혼합물\n화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)\nPeptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOP\neptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-\nein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSod\nalt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS",
+     "source_text": "Peptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 10 – < 15\n3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nSodium chloride AKZO, BROXO 6/15 / AXAL / BRINE / CAS 번호: 7647-14-5 ≥ 5 – < 10\nMagnesium sulfate anhydrous E518 / epsom salts / magnesium CAS 번호: 7487-88-9 ≥ 5 – < 10\nPotassium phosphate dibasic dibasic potassium phosphate, CAS 번호: 7758-11-4 ≥ 1 – < 5",
+     "source_kind": "value",
      "messages": [
       "ingredients.3.ke_number: Value error, KE 번호 형식 오류: 'KE-2010-3-4223'"
      ]
@@ -2739,9 +2821,10 @@
     "ghs_classification": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "급성 독성 (경구), 구분 5 H303\n급성 독성 (경피), 구분 5 H313\n피부 부식성/피부 자극성, 분류되지 않음\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317\n급성 수생환경, 구분 1 H400",
+     "source_text": "가. 유해성·위험성 분류\n급성 독성 (경구), 구분 5 H303\n급성 독성 (경피), 구분 5 H313\n피부 부식성/피부 자극성, 분류되지 않음\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317\n급성 수생환경, 구분 1 H400\n만성 수생환경, 구분 1 H410",
+     "source_kind": "value",
      "messages": [
       "ghs_classification.2.category: Value error, category는 '구분 N' 형식이어야 함: '해당없음'"
      ]
@@ -2749,17 +2832,19 @@
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
      "source_text": "나. 예방조치문구를 포함한 경고표지 항목",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "KR)\n경고.\nO 유해∙위험 문구 (GHS KR)\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n고.\nO 유해∙위험 문구 (GHS KR)\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n03+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독\n있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해",
+     "source_text": "나. 예방조치문구를 포함한 경고표지 항목\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해 수생생물에게 매우 유독함",
+     "source_kind": "value",
      "messages": [
       "H코드 H303의 문구가 대응표와 다릅니다: '삼키거나 피부에 접촉하면 유해할 수 있음'",
       "H코드 H313의 문구가 대응표와 다릅니다: '피부에 접촉하면 유해할 수 있음'"
@@ -2955,17 +3040,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "LESS Plus Medium\n물질안전보건자료\n고용노동부고시 2020-130에 따름\nMSDS 번호:",
+     "source_text": "LESS Plus Medium",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 3,
      "section": "3항",
-     "source_text": "3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nacid / 3-(N- 기존화학물질 번호: 201\nolino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nacid / 3-(N- 기존화학물질 번호: 2010-3-4223\nmor\n3-propanetricarboxylic acid, 2- CAS 번호: 68-04-2 ≥ 5 – < 10\nhydroxy-, trisodium salt / 2\netricarboxylic acid, 2- CAS 번호: 68-04-2 ≥ 5 – < 10\nhydroxy-, trisodium salt / 2-hydroxy- 기",
+     "source_text": "3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nCitric acid trisodium salt 1,2,3-propanetricarboxylic acid, 2- CAS 번호: 68-04-2 ≥ 5 – < 10\nSodium carbonate anhydrous soda / ash / bisodium CAS 번호: 497-19-8 ≥ 1 – < 5\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 1 – < 5",
+     "source_kind": "value",
      "messages": [
       "ingredients.0.ke_number: Value error, KE 번호 형식 오류: '2010-3-4223'",
       "'3-Morpholinopropanesulfonic acid / 3-(N-morpholino)propanesulfonic acid / 3-morpholinopropanesulphonic acid / 4-morpholinepropanesulfonic acid / MOPS / MOPS, DNase, RNase, protease free / morpholinepropanesulfonic acid / N-(3-sulfopropyl)morpholine / WAS'이(가) 원문에서 찾아지지 않습니다. 추출 오류나 환각 가능성이 있습니다.",
@@ -2977,25 +3064,28 @@
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "급성 독성 (경구), 구분 4 H302\n급성 독성 (경피), 구분 4 H312\n급성 독성 (흡입: 분진, 미스트), 구분 4 H332\n피부 부식성/피부 자극성, 구분 2 H315\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317",
+     "source_text": "가. 유해성·위험성 분류\n급성 독성 (경구), 구분 4 H302\n급성 독성 (경피), 구분 4 H312\n급성 독성 (흡입: 분진, 미스트), 구분 4 H332\n피부 부식성/피부 자극성, 구분 2 H315\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317\n생식독성, 구분 1A H360\n수유독성 H362",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "2. 유해성·위험성",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "험.\nO 유해∙위험 문구 (GHS KR)\nH302+H312+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을\nHS KR)\nH302+H312+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을\n+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n촉하거나 흡입하면 유해함\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH360 - 태아 또는 생식능력에",
+     "source_text": "나. 예방조치문구를 포함한 경고표지 항목\nH302+H312+H332 - 삼키거나, 피부에 접촉하거나 흡입하면 유해함\n가. 유해성·위험성 분류\n급성 독성 (경피), 구분 4 H312\nH315 - 피부에 자극을 일으킴\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH360 - 태아 또는 생식능력에 손상을 일으킬 수 있음\nH362 - 모유를 먹는 아이에게 유해할 수 있음",
+     "source_kind": "value",
      "messages": [
       "H코드 H302의 문구가 대응표와 다릅니다: '삼키거나, 피부에 접촉하거나 흡입하면 유해함'",
       "H코드 H312의 문구가 대응표와 다릅니다: '피부에 접촉하면 유해함'",
@@ -3118,41 +3208,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "1/12\n물질안전보건자료 (MSDS)\n요소\nDate of issue: 2013-05-18 Revision date",
+     "source_text": "요소",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "학물질명 관용명 및 이명(異名) CAS 번호 또는 식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품\n및 이명(異名) CAS 번호 또는 식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 686\n식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.\n)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.3-1.5\n뷰렛 자",
+     "source_text": "요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.3-1.5\n뷰렛 자료없음 108-19-0 / KE-20952 0.1-1.0\n물 다이하이드로젠 옥사이드 7732-18-5 / KE-35400 0.1-0.5",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(호흡기 자극)",
+     "source_text": "가. 유해성·위험성 분류\n- 피부 부식성/피부 자극성 : 구분2\n- 심한 눈 손상성/눈 자극성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(호흡기 자극)",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "항목\n○ 그림문자\n○ 신호어\n- 경고\n○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬\n경고\n○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음\n다. 유해성·위험성 분류기준\n피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음\n다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성\n- 자",
+     "source_text": "○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -3258,41 +3353,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "---------------------------------------\n7 BLUE 1 15W-40\n---------------------------------------",
+     "source_text": "7 BLUE 1 15W-40",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "OTREATED\nHEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\n(심하게 히드로처리된 파라핀 증류액)\nMIXED\nAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\n(심하게 히드로처리된 파라핀 증류액)\nMIXED PERFORMANCE\n보건=1, 화재=1, 반응성=0\n(심하게 히드로처리된 파라핀 증류액)\nMIXED PERFORMANCE ADDITIVE\n건강=1, 화재=1, 반응성=0\n(복합성능첨가제)\nVISCOSITY I\n증류액)\nMIXED PERFORMANCE ADDITIVE\n없음. 혼합물 9.3 ~ 13.6\n(복합성능첨가제)\nVISCOSITY INDEX IMPROVER\n없음.",
+     "source_text": "HEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\nMIXED PERFORMANCE ADDITIVE\nVISCOSITY INDEX IMPROVER\n(ADDITIVE 1) 122-39-4\nPOLYMERIZED DIMETHYL SILICONE FLUID",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 위험·유해성 분류 및 구분:\n화학물질의 분류 유해․ 위험성 구분\n유해하지 않음 0",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치문구를 포함한 경고 표지 항목\n구 분 표 시\n그림문자 그림문자 없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "유해·위험문구 - 건강 유해성 : 유해위험물질로 분류되지 않음\n- 환경 유해성 : 환경적 유해위험물질로 분류되지 않음\n예방조치",
+     "source_kind": "section",
      "messages": []
     }
    }
@@ -3363,17 +3463,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "정 횟수 1.02\n1: 화학제품과 회사에 관한 정보\n가. 제품명\n제품명 ColorBond / zbond® 90\n제품 코드 2-83104\nCAS 번호 27816-23-5\n나. 제품의",
+     "source_text": "제품명 ColorBond / zbond® 90",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 1,
      "section": "3항",
-     "source_text": "질\n화학물질명 일반명 및 이명 CAS 번호 기타 식별 번호 함유량(%)\n2-methoxyethyl 2-cyanoacrylate 자료 없음 27816-23-5 Listed or Exempt 90 -\norBond / zbond® 90\n제품 코드 2-83104\nCAS 번호 27816-23-5\n나. 제품의 권고 용도와 사용상의 제한\n권권고고 용용도도 ZPrinte\nylate 자료 없음 27816-23-5 Listed or Exempt 90 - 100",
+     "source_text": "CAS 번호 27816-23-5",
+     "source_kind": "value",
      "messages": [
       "ingredients.0.ke_number: Value error, KE 번호 형식 오류: 'Listed or Exempt'"
      ]
@@ -3381,25 +3483,28 @@
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 유해성ㆍ위험성 분류\n나. 예방조치 문구를 포함한 경고 표지 항목\n그림문자",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n그림문자\n해당없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "유해/위험 문구\n다. 유해성위험성 분류기준에 포함되지 않는 기타 유해성위험성\n․․․․․ ․․․․․",
+     "source_kind": "section",
      "messages": []
     }
    }
@@ -3525,17 +3630,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "43-0000000001\n1. 화학제품과 회사에 관한 정보\n가. 제품명 아세아몰탈(일반 미장용)\n나. 제품의 권고 용도와 사용상의 제한\n권고 용도 단열재 및 건축용 재",
+     "source_text": "가. 제품명 아세아몰탈(일반 미장용)",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "CAS번호 또는 식별번호\nCAS 번호 식별번호 범위 단일\n기타 식별번호\nPortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly\n범위 단일\n기타 식별번호\nPortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8\nortland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자\nent 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자료없음\n모래 자료없음 자",
+     "source_text": "Portland cement 포틀란드 시멘트 65997-15-1 자료없음 10-20 자료없음\nFly ash 석탄재 68131-74-8 자료없음 0-10 자료없음\n모래 자료없음 자료없음 65-75 자료없음\n공기연행제 자료없음 자료없음 0-1 자료없음",
+     "source_kind": "value",
      "messages": [
       "ingredients.2.ke_number: Value error, KE 번호 형식 오류: '65-75'",
       "함유량 '자료없음'에서 하한값을 읽을 수 없어 합계 검사에서 제외했습니다."
@@ -3544,25 +3651,28 @@
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "피부 부식성/피부 자극성 : 구분 1\n심한 눈 손상성/눈 자극성 : 구분 1\n특정표적장기 독성(1회 노출) : 구분 3(호흡기 자극)\n흡인 유해성 : 구분 1",
+     "source_text": "가. 유해성·위험성 분류\n피부 부식성/피부 자극성 : 구분 1\n심한 눈 손상성/눈 자극성 : 구분 1\n특정표적장기 독성(1회 노출) : 구분 3(호흡기 자극)\n흡인 유해성 : 구분 1",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "함한 경고 표지 항목\n그림문자\n신호어 위험\n유해·위험 문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에\n문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으\n있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음\n다. 유해성 · 위험성 분\n눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음\n다. 유해성 · 위험성 분류기준에 포함되지 않는 기타 유해성 · 위험성",
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n유해·위험 문구 H304 : 삼켜서 기도로 유입되면 치명적일 수 있음\nH314 : 피부에 심한 화상과 눈에 손상을 일으킴\nH318 : 눈에 심한 손상을 일으킴\nH335 : 호흡기계 자극을 일으킬 수 있음",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -3718,41 +3828,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "물질안전보건자료\n1. 화학제품과 회사에 관한 정보\n가. 제품명 Plexus MA2090 접착제\n기타 식별 수단\nSKU# IT195\n나. 제품의 권고용도와 사용상의 제",
+     "source_text": "가. 제품명 Plexus MA2090 접착제",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "및 함유량\n화학물질명 관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACR\n관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 14\n식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976\n량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976 5-10%\n메타크릴산 79-41-4 K",
+     "source_text": "메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\nDODECYL METHACRYLATE 142-90-5 KE-24976 5-10%\n메타크릴산 79-41-4 KE-24906 1-5%\n트라이메틸올프로페인 트라이메타크릴레이트 3290-92-4 KE-25014 1-5%\nN,N-DIETHYLAMINOETHYL METHACRYLATE 105-16-8 KE-24955 0.10-0.99%\n보고가능 수준보다 낮은 기타 성분",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n심한 눈 손상/눈 자극성 구분 2\n피부 과민성 구분 1\n생식독성 구분 1B\n환경 유해성 수생환경 유해성, 만성 구분 2",
+     "source_text": "가. 유해성·위험성 분류\n물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n심한 눈 손상/눈 자극성 구분 2\n피부 과민성 구분 1\n생식독성 구분 1B\n환경 유해성 수생환경 유해성, 만성 구분 2",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "o 신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "고 표지 항목\no 그림문자\no 신호어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬\n어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한\n225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상\n극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상을 일으킬 수 있음.\nH411 장기적",
+     "source_text": "o 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH319 눈에 심한 자극을 일으킴.\nH360 태아 또는 생식능력에 손상을 일으킬 수 있음.\nH411 장기적인 영향에 의해 수생생물에게 유독함.",
+     "source_kind": "value",
      "messages": [
       "문구 코드 ['H225']는 목록에 있는 분류로 설명되지 않습니다."
      ]
@@ -3873,41 +3988,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "물질안전보건자료\n1. 화학제품과 회사에 관한 정보\n가. 제품명 Devweld 531 접착제\n기타 식별 수단 자료없음.\n나. 제품의 권고용도와 사용상의 제한\n제품의",
+     "source_text": "가. 제품명 Devweld 531 접착제",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "및 함유량\n화학물질명 관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE\n관용명 및 이명 CAS 번호 식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5\n식별번호 함유량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮\n량(%)\n메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮은 기타",
+     "source_text": "메틸 메타크릴레이트 80-62-6 KE-25050 30-60%\n말레산 110-16-7 KE-13657 5-10%\n보고가능 수준보다 낮은 기타 성분",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n환경 유해성 수생환경 유해성, 만성 구분 3",
+     "source_text": "가. 유해성·위험성 분류\n물리적 위험성 인화성 액체 구분 2\n건강 유해성 피부 부식성/자극성 구분 2\n피부 과민성 구분 1\n환경 유해성 수생환경 유해성, 만성 구분 3",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "o 신호어 위험",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "고 표지 항목\no 그림문자\no 신호어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬\n어 위험\no 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향\n225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.\n다. 유해성•위험성 분\n극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.\n다. 유해성•위험성 분류기준에 알려지지 않음.\n포함되지 않는 기타\n유해",
+     "source_text": "o 유해·위험 문구\nH225 고인화성 액체 및 증기.\nH315 피부에 자극을 일으킴\nH317 알레르기성 피부 반응을 일으킬 수 있음.\nH412 장기적 영향에 의해 수생생물에 유해함.",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -4046,25 +4166,28 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "명\n- 006(N)\n나. 제품의 권고 용도와 사용상의 제한\n- 용도 : 신너 (자동차용 수용성 세정신너)\n- 사용상의 제한 : 용도외의 사용을 금함\n다. 제조자/공급자/유통업자",
+     "source_text": "- 용도 : 신너 (자동차용 수용성 세정신너)",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "유량\n화학물질명 관용명 및 이명 CAS 번호 또는 식별번호 함유량(%)\n2-뷰톡시에탄올 O-부틸 에틸렌 글라이콜 ; 에틸렌 글라이콜 부틸 에테르 ;\n에틸렌 글\n에테르 ;\n에틸렌 글라이콜 N-부틸 에테르 ; 글라이콜 부틸 에테르 ;\n111-76-2 / KE-04134 59~60\n글라이콜 모노부틸 에테르 ; 모노부틸 글\n에테르 ; 글라이콜 부틸 에테르 ;\n111-76-2 / KE-04134 59~60\n글라이콜 모노부틸 에테르 ; 모노부틸 글라이콜 에테르 ;\n부틸 글라이콜\n에테르 ; 모노부틸 글라이콜 에테르 ;\n부틸 글라이콜 ; 부틸 옥시톨\n2-프로판올 아이소프로파놀 ; 다이메틸카르비놀 ; 아이소프로필 알코\n올 ; n-프로",
+     "source_text": "111-76-2 / KE-04134 59~60\n올 ; n-프로판-2-올 ; 프로판-2-올 ; I-프로필 알코올 ; 2-프 67-63-0 / KE-29363 38~39\n108-01-0 / KE-11494 2~3",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "- 인화성 액체 : 구분2\n- 급성 독성(경구) : 구분4\n- 특정표적장기 독성(1회 노출) : 구분3(마취영향)",
+     "source_text": "가. 유해성·위험성 분류\n- 인화성 액체 : 구분2\n- 급성 독성(경구) : 구분4\n- 특정표적장기 독성(1회 노출) : 구분3(마취영향)",
+     "source_kind": "value",
      "messages": [
       "ghs_classification.5.category: Value error, category는 '구분 N' 형식이어야 함: '구분 3(마취영향)'"
      ]
@@ -4072,17 +4195,19 @@
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "2. 유해성·위험성",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "항목\n○ 그림문자\n○ 신호어\n- 위험\n○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H31\n험\n○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\nH225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n-\nH302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n- H336 졸음 또는 현기증을 일으킬 수",
+     "source_text": "○ 유해·위험 문구\n- H225 고인화성 액체 및 증기\n- H302 삼키면 유해함\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H332 흡입하면 유해함\n- H336 졸음 또는 현기증을 일으킬 수 있음\n- H351 암을 일으킬 것으로 의심됨",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -4153,41 +4278,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "보건자료 (MSDS)\n1. 화학제품과 회사에 관한 정보\n가. 제품명\n- SeraSense SF 50 [SF1000NFX050]\n나. 제품의 권고 용도와 사용상의 제한\n- 용도 : 윤활제\n- 사용상의",
+     "source_text": "- SeraSense SF 50 [SF1000NFX050]",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "3항",
-     "source_text": "물질명 관용명 및 이명(異名) CAS 번호 또는 식별번호. 함유량(%)\nSiloxanes and Silicones, di-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100\ndi-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100\nnes and siloxanes 63148-62-9 / KE-31068 95 ~ 100",
+     "source_text": "Siloxanes and Silicones, di-Me Dimethyl silicones and siloxanes 63148-62-9 / KE-31068 95 ~ 100",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 유해성·위험성 분류\n해당없음\n나. 예방조치 문구를 포함한 경고 표지 항목",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목\n○ 그림문자\n- 해당없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "○ 유해·위험 문구\n- 해당없음\n다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성",
+     "source_kind": "section",
      "messages": []
     }
    }
@@ -4375,17 +4505,19 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "LESS Medium\n물질안전보건자료\n고용노동부고시 2020-130에 따름\nMSDS 번호:",
+     "source_text": "LESS Medium",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "FORMAT_ERROR",
-     "page": null,
+     "page": 3,
      "section": "3항",
-     "source_text": "혼합물\n화학물질명 관용명 및 이명 CAS번호 및 식별번호 함유량 (%)\nPeptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOP\neptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-\nein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSod\nalt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS",
+     "source_text": "Peptones, casein 자료없음 CAS 번호: 91079-40-2 ≥ 15 – < 25\nMOPS Sodium Salt 자료없음 CAS 번호: 71119-22-7 ≥ 15 – < 25\nSodium pyruvate 2-oxo-propanoic acid, sodium salt / CAS 번호: 113-24-6 ≥ 10 – < 15\nacetylformic acid, sodium salt / 기존화학물질 번호: KE-27653\npropanoic acid, 2-oxo-, sodium salt /\n3-Morpholinopropanesulfonic acid 3-(N-morpholino)propanesulfonic CAS 번호: 1132-61-2 ≥ 10 – < 15\nSodium chloride AKZO, BROXO 6/15 / AXAL / BRINE / CAS 번호: 7647-14-5 ≥ 5 – < 10",
+     "source_kind": "value",
      "messages": [
       "ingredients.6.ke_number: Value error, KE 번호 형식 오류: 'KE-2010-3-4223'"
      ]
@@ -4393,25 +4525,28 @@
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "급성 독성 (경구), 구분 5 H303\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317",
+     "source_text": "가. 유해성·위험성 분류\n급성 독성 (경구), 구분 5 H303\n심한 눈 손상성/눈 자극성, 구분 2 H319\n피부 과민성, 구분 1 H317",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
      "source_text": "나. 예방조치문구를 포함한 경고표지 항목",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "REVIEW_REQUIRED",
      "reason_code": "INCONSISTENT",
-     "page": null,
+     "page": 2,
      "section": "2항 나.",
-     "source_text": "KR)\n경고.\nO 유해∙위험 문구 (GHS KR)\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에\n03+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독\n있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해\n응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해 수생생물에게 매우 유독함\n다. 유해성",
+     "source_text": "나. 예방조치문구를 포함한 경고표지 항목\nH303+H313 - 삼키거나 피부에 접촉하면 유해할 수 있음\nH317 - 알레르기성 피부 반응을 일으킬 수 있음\nH319 - 눈에 심한 자극을 일으킴\nH400 - 수생생물에 매우 유독함\nH410 - 장기적인 영향에 의해 수생생물에게 매우 유독함",
+     "source_kind": "value",
      "messages": [
       "H코드 H303의 문구가 대응표와 다릅니다: '삼키거나 피부에 접촉하면 유해할 수 있음'",
       "H코드 H313의 문구가 대응표와 다릅니다: '삼키거나 피부에 접촉하면 유해할 수 있음'"
@@ -4532,41 +4667,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "1/12\n물질안전보건자료 (MSDS)\n요소\nDate of issue: 2013-05-18 Revision date",
+     "source_text": "요소",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "1/12\n물질안전보건자료 (MSDS)\n요소\nDate of issue: 2013-05-18 Revision date\n및 이명(異名) CAS 번호 또는 식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 686\n식별번호 함유량(%)\n요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.\n소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.3-1.5\n뷰렛 자",
+     "source_text": "요소 카바마이드 57-13-6 / KE-35144 96.6-97.6\n요소 수지 가공품 자료없음 68611-64-3 / KE-35223 1.3-1.5\n뷰렛 자료없음 108-19-0 / KE-20952 0.1-1.0\n물 다이하이드로젠 옥사이드 7732-18-5 / KE-35400 0.1-0.5",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": "- 피부 부식성/피부 자극성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(호흡기 자극)",
+     "source_text": "가. 유해성·위험성 분류\n- 피부 부식성/피부 자극성 : 구분2\n- 특정표적장기 독성(1회 노출) : 구분3(호흡기 자극)",
+     "source_kind": "value",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
      "source_text": "나. 예방조치 문구를 포함한 경고 표지 항목",
+     "source_kind": "value",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": "항목\n○ 그림문자\n○ 신호어\n- 경고\n○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬\n경고\n○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음\n다. 유해성·위험성 분류기준\n피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음\n다. 유해성·위험성 분류기준에 포함되지 않는 기타 유해성·위험성\n- 자",
+     "source_text": "○ 유해·위험 문구\n- H315 피부에 자극을 일으킴\n- H319 눈에 심한 자극을 일으킴\n- H335 호흡기 자극을 일으킬 수 있음",
+     "source_kind": "value",
      "messages": []
     }
    }
@@ -4672,41 +4812,46 @@
     "product_name": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "1항 가.",
-     "source_text": "---------------------------------------\n7 BLUE 1 15W-40\n---------------------------------------",
+     "source_text": "7 BLUE 1 15W-40",
+     "source_kind": "value",
      "messages": []
     },
     "ingredients": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 2,
      "section": "3항",
-     "source_text": "OTREATED\nHEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\n(심하게 히드로처리된 파라핀 증류액)\nMIXED\nAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\n(심하게 히드로처리된 파라핀 증류액)\nMIXED PERFORMANCE\n보건=1, 화재=1, 반응성=0\n(심하게 히드로처리된 파라핀 증류액)\nMIXED PERFORMANCE ADDITIVE\n건강=1, 화재=1, 반응성=0\n(복합성능첨가제)\nVISCOSITY I\n증류액)\nMIXED PERFORMANCE ADDITIVE\n없음. 혼합물 9.3 ~ 13.6\n(복합성능첨가제)\nVISCOSITY INDEX IMPROVER\n없음.",
+     "source_text": "HEAVY PARAFFINIC DISTILLATE 없음 64742-54-7 70.5 ~ 80.19\nMIXED PERFORMANCE ADDITIVE\nVISCOSITY INDEX IMPROVER\n(ADDITIVE 1) 122-39-4\nPOLYMERIZED DIMETHYL SILICONE FLUID",
+     "source_kind": "value",
      "messages": []
     },
     "ghs_classification": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 가.",
-     "source_text": null,
+     "source_text": "가. 위험·유해성 분류 및 구분:\n화학물질의 분류 유해․ 위험성 구분\n유해하지 않음 0",
+     "source_kind": "section",
      "messages": []
     },
     "signal_word": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "나. 예방조치문구를 포함한 경고 표지 항목\n구 분 표 시\n그림문자 그림문자 없음",
+     "source_kind": "section",
      "messages": []
     },
     "hazard_statements": {
      "review_status": "OK",
      "reason_code": null,
-     "page": null,
+     "page": 1,
      "section": "2항 나.",
-     "source_text": null,
+     "source_text": "유해·위험문구 - 건강 유해성 : 유해위험물질로 분류되지 않음\n- 환경 유해성 : 환경적 유해위험물질로 분류되지 않음\n예방조치",
+     "source_kind": "section",
      "messages": []
     }
    }
