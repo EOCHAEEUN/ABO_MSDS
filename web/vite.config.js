@@ -39,12 +39,20 @@ function localPdfs() {
   };
 }
 
+// API 모드(workspace.html?mode=api)의 요청을 FastAPI 서버(python3 -m app.main serve)로 넘긴다.
+// 화면 경로와 겹치지 않게 API 경로만 정확히 고른다. 서버 주소는 MSDS_API로 바꿀 수 있다.
+const API = process.env.MSDS_API || "http://127.0.0.1:8000";
+const apiProxy = {
+  "^/(documents|extract|confirm|compare)$": { target: API, changeOrigin: true },
+  "^/files/\\d+\\.pdf$": { target: API, changeOrigin: true },
+};
+
 export default defineConfig({
   base: "./",
   appType: "mpa",
   plugins: [react(), localPdfs()],
-  server: { port: 5173, strictPort: true },
-  preview: { port: 4173, strictPort: true },
+  server: { port: 5173, strictPort: true, proxy: apiProxy },
+  preview: { port: 4173, strictPort: true, proxy: apiProxy },
   build: {
     rolldownOptions: {
       input: {

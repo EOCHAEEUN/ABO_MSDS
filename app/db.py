@@ -178,15 +178,17 @@ def save_confirmation(
     confirmed_value: Any,
     review_status: Optional[str],
     reason_code: Optional[str],
+    confirmed_at: Optional[str] = None,
 ) -> int:
-    """사람이 확정·수정한 값을 msds_reviews에 넣는다. 나중에 /confirm API가 호출할 자리."""
+    """사람이 확정·수정한 값을 msds_reviews에 넣는다. POST /confirm(app/main.py)이 호출한다.
+    confirmed_at을 주면 그 값을 쓴다 — 한 번 저장한 여러 행을 같은 시각으로 묶어 "마지막 저장분"을 다시 읽기 위해서."""
 
     def _ser(v: Any) -> Optional[str]:
         if v is None or isinstance(v, str):
             return v
         return json.dumps(v, ensure_ascii=False)
 
-    confirmed_at = datetime.now(timezone.utc).isoformat()
+    confirmed_at = confirmed_at or datetime.now(timezone.utc).isoformat()
     with conn:
         cur = conn.execute(
             """
