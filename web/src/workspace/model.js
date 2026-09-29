@@ -1,4 +1,4 @@
-export const ROUTES = { review: "문서 검토", documents: "문서 목록", compare: "실험 비교" };
+export const ROUTES = { review: "문서 검토", documents: "문서 목록", compare: "실험 비교", data: "데이터" };
 export const current = state => state.documents.find(doc => doc.id === state.selectedId) || state.documents[0];
 export const count = doc => doc.confirmed_fields.length;
 export const status = doc => doc.pending_extraction ? "추출 대기" : count(doc) === 5 ? "확정" : count(doc) > 1 ? "검토 필요" : "미확정";

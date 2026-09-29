@@ -63,6 +63,10 @@ function readDemo() {
 }
 
 export const api = {
+  database(table = 'msds_documents', offset = 0, limit = 25) {
+    const query = new URLSearchParams({ table, offset: String(offset), limit: String(limit) });
+    return request(`/data?${query}`);
+  },
   async documents() {
     if (!API_MODE) {
       const results = await readResults();

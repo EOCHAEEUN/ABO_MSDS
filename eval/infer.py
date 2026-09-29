@@ -350,8 +350,9 @@ def check_args(args):
 
 def select_docs(args, splits, text_dir):
     """split 전체 문서(--limit 적용 전)."""
-    if args.split == "test":  # test 문서는 splits.csv에 없다. 넘겨받은 폴더의 텍스트 전체가 대상
-        return sorted(p.stem for p in Path(text_dir).glob("*.txt"))
+    if args.split == "test":  # 실패 문서는 .txt가 없어도 _cut_log에 남는다
+        cut = read_cut_status(text_dir)
+        return sorted({p.stem for p in Path(text_dir).glob("*.txt")} | set(cut))
     doc_ids = sorted(d for d, r in splits.items() if r["split"] == args.split)
     if args.split == "train":  # few-shot 예시는 base_fs가 정답을 보고 푸는 셈이라 두 조건 모두에서 뺀다
         doc_ids = [d for d in doc_ids if d not in set(fewshot_ids_in_file())]
