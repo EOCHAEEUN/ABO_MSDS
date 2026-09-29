@@ -1,7 +1,7 @@
 {
  "split": "val",
  "subset": "all",
- "executed_at": "2026.09.29 05:57",
+ "executed_at": "2026.09.29 13:41",
  "note": "val(조건 선택용) 결과이며 최종 보고 수치(test)가 아닙니다.",
  "experiments": [
   {
@@ -59,6 +59,26 @@
    "ghs": 97.6,
    "exact": 50.0,
    "nocas": 75.0,
+   "input_tokens": 1942,
+   "n_docs": 10,
+   "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+   "max_new_tokens": 2048
+  },
+  {
+   "id": "qlora_r2",
+   "name": "QLoRA r2",
+   "short": "QLoRA r2",
+   "condition": "LoRA r16 · lr 2e-4 · 1 epoch",
+   "parsing": 100.0,
+   "schema": 70.0,
+   "cas": 97.0,
+   "pair": 97.0,
+   "hcode": 100.0,
+   "seconds": 28.1,
+   "tokens": 572,
+   "ghs": 90.5,
+   "exact": 50.0,
+   "nocas": 80.0,
    "input_tokens": 1942,
    "n_docs": 10,
    "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
