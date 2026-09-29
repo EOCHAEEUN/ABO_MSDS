@@ -120,7 +120,7 @@ body {
 /* Source and review work area */
 .view-review .review-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(400px, 1fr);
+  grid-template-columns: minmax(0, 1.22fr) minmax(420px, 1fr);
   gap: 20px;
   flex: 1;
   min-height: 0;
@@ -251,7 +251,7 @@ body {
   .review-document-header { padding-left: 25px; }
   .review-header-tools { flex-basis: 330px; }
   .review-document-meta > span { padding: 0 13px; }
-  .view-review .review-layout { grid-template-columns: minmax(0, 1.4fr) minmax(380px, 1fr); gap: 12px; padding: 0 16px; }
+  .view-review .review-layout { grid-template-columns: minmax(0, 1.15fr) minmax(400px, 1fr); gap: 12px; padding: 0 16px; }
   .review-panel-heading p { display: none; }
   .review-field-card { grid-template-columns: 22px 96px minmax(0,1fr) 52px 26px; gap: 5px; }
   .view-review .review-footer { padding: 0 16px; }
@@ -370,7 +370,7 @@ body {
   .review-title-row h1 { font-size: 22px; }
   .review-document-meta { font-size: 11px; margin-top: 10px; }
   .review-document-meta > span { padding-inline: 11px; }
-  .view-review .review-layout { grid-template-columns: minmax(0, 1.5fr) minmax(400px, 1fr); gap: 16px; padding: 0 20px 12px; }
+  .view-review .review-layout { grid-template-columns: minmax(0, 1.22fr) minmax(420px, 1fr); gap: 16px; padding: 0 20px 12px; }
   .review-field-card { grid-template-columns: 20px 75px minmax(0, 1fr) 46px 22px; padding: 12px 10px; gap: 7px; }
   .review-field-label { font-size: 12px; }
   .review-field-value { font-size: 12px; line-height: 1.65; }
@@ -386,7 +386,7 @@ body {
 @media (min-width: 801px) and (max-width: 1120px) {
   .review-document-header { flex-wrap: wrap; gap: 10px; }
   .review-header-tools { flex-basis: 100%; flex-direction: row; align-items: center; }
-  .view-review .review-layout { grid-template-columns: minmax(0, 1.2fr) minmax(360px, 1fr); }
+  .view-review .review-layout { grid-template-columns: minmax(0, 1.05fr) minmax(360px, 1fr); }
   .review-search { flex: 1; }
   .review-field-card { grid-template-columns: 18px minmax(0, 1fr) 44px 22px; }
   .review-field-label { grid-column: 2; }
@@ -410,3 +410,38 @@ body {
 }
 .review-field-evidence > .multiline { display: block; max-height: 82px; overflow: auto; scrollbar-width: thin; line-height: 1.8; }
 .hazard-source { max-height: 170px; overflow: auto; scrollbar-width: thin; }
+
+/* 필드 검토 가독성 보정(2026-09-29): 801px 이상 규칙이 글자를 10~12px로 줄이던 것을 키우고 간격을 넓힌다.
+   파일 끝에 두어 앞의 규칙을 덮어쓴다. 글자 크기를 조절할 때는 이 블록만 고친다. */
+@media (min-width: 801px) {
+  .review-panel-heading h2 { font-size: 18px; }
+  .review-utility-button { padding: 5px 9px; font-size: 13px; }
+  .review-confirm-all { min-height: 36px; font-size: 13px; }
+  .review-field-card { margin-top: 9px; padding: 14px 12px; }
+  .review-field-label { font-size: 14px; }
+  .review-field-value { font-size: 15px; line-height: 1.6; }
+  .review-field-meta { gap: 6px; margin-top: 6px; font-size: 12px; }
+  .review-match-badge { min-height: 24px; padding: 2px 8px; font-size: 12px; }
+  .review-edit-button { font-size: 13px; }
+  .review-field-evidence { grid-template-columns: 1fr; gap: 6px; padding: 12px 14px; font-size: 13.5px; line-height: 1.75; }
+  .review-ingredients { gap: 8px; }
+  .review-ingredient code { font-size: 13px; }
+  .review-ingredient > span:last-child { font-size: 13px; }
+  .hazard-card-title { font-size: 15px; }
+  .hazard-confirm { font-size: 13px; }
+  .hazard-warning-count { font-size: 13px; }
+  .hazard-table { font-size: 13px; }
+  .hazard-action { font-size: 12px; }
+  .hazard-evidence-grid { grid-template-columns: 1fr; }
+  .hazard-evidence-grid h3 { font-size: 13.5px; }
+  .hazard-source { font-size: 13.5px; line-height: 1.75; }
+  .hazard-result p { font-size: 13px; line-height: 1.65; }
+  .review-json-panel > div { font-size: 13px; }
+  .review-json-panel pre { font-size: 13px; }
+  .source-focus > div { font-size: 12.5px; }
+  .source-focus pre, .source-transcript pre { font-size: 13.5px; }
+  .source-transcript h3 { font-size: 14px; }
+}
+@media (min-width: 1121px) {
+  .review-field-card { grid-template-columns: 20px 92px minmax(0, 1fr) 54px 24px; gap: 10px; }
+}

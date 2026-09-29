@@ -26,6 +26,13 @@ test('검토 필요 항목은 원문 근거가 있어도 일괄 확정하지 않
   }
 });
 
+test('항목 제목 줄만 있는 근거(값 없음)는 통과로 표시하거나 일괄 확정하지 않는다', () => {
+  const rule = { review_status: 'OK', source_text: '가. 유해성·위험성 분류\n나. 예방조치 문구', source_kind: 'section' };
+  const doc = { rule_results: { ghs_classification: rule }, confirmed_fields: [], reviews: {} };
+  assert.equal(canConfirmMatched(doc, 'ghs_classification'), false);
+  assert.equal(reviewBadge(rule).label, '근거 확인 필요');
+});
+
 test('검사 결과 없음과 담당자 확정을 구분한다', () => {
   assert.equal(reviewBadge(undefined).label, '대조 대기');
   assert.equal(reviewBadge(undefined, true).label, '담당자 확인');

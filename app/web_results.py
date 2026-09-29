@@ -186,15 +186,22 @@ def field_rule_results(label: dict, source_text: Optional[str], doc_id: str,
         else:
             status, reason = "OK", None
         needles = _needles(label, field)
-        text = None
+        # source_kind: value(값이 든 줄) · section(값이 없어 항목 제목 줄만) · rule(Rule Engine 조각)
+        # section은 값을 확인해 주는 근거가 아니므로 화면에서 "근거 확인 필요"로 두고 일괄 확정에서 뺀다
+        text, kind = None, None
         if source_text:
-            text = (_lines_with(source_text, needles, prefer="신호어" if field == "signal_word" else None,
-                                heading=field in ("ghs_classification", "hazard_statements"))
-                    if needles else None) or _header_lines(source_text, field)
+            if needles:
+                text = _lines_with(source_text, needles, prefer="신호어" if field == "signal_word" else None,
+                                   heading=field in ("ghs_classification", "hazard_statements"))
+                kind = "value" if text else None
+            if text is None:
+                text = _header_lines(source_text, field)
+                kind = "section" if text else None
         if text is None and snippets[field]:  # 줄을 못 찾으면 Rule Engine 조각이라도 보여 준다
-            text = "\n".join(snippets[field][:4])
+            text, kind = "\n".join(snippets[field][:4]), "rule"
         out[field] = {"review_status": status, "reason_code": reason, "page": _find_page(pdf_pages, field, needles),
-                      "section": SECTION[field], "source_text": text, "messages": [f["message"] for f in found][:5]}
+                      "section": SECTION[field], "source_text": text, "source_kind": kind,
+                      "messages": [f["message"] for f in found][:5]}
     return out
 
 
