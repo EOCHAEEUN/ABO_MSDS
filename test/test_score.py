@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT))
 from unittest import mock  # noqa: E402
 
 from eval import score  # noqa: E402
+from eval import seal  # noqa: E402
 from eval.score import Acc, doc_exact, score_doc, score_docs  # noqa: E402
 
 FIX = ROOT / "test" / "fixtures"
@@ -221,6 +222,11 @@ class TestSplitTest(unittest.TestCase):
         self.exp = self.tmp / "experiment.json"
         self.exp.write_text('{"max_new_tokens": 1300, "adapter_sha256": "x"}', encoding="utf-8")
         self.pred_dir = pred_dir
+        self.manifest = self.tmp / "manifest.csv"
+        rows = [r for kind, path in (("label", self.tmp / "labels"), ("text", self.tmp / "text"),
+                                     ("subset", self.tmp / "subset.csv"))
+                for r in seal.manifest_rows(kind, seal.file_hashes(kind, path))]
+        self.manifest.write_text("kind,sha256\n" + "".join(f"{k},{h}\n" for k, h in rows), encoding="utf-8")
 
     def argv(self, out_root=None):
         return ["--condition", "base_zs", "--split", "test", "--allow-test",
@@ -229,7 +235,7 @@ class TestSplitTest(unittest.TestCase):
 
     def run_score(self, argv):
         buf = io.StringIO()
-        with mock.patch.object(score, "EXPERIMENT_JSON", self.exp), \
+        with mock.patch.object(score, "EXPERIMENT_JSON", self.exp), mock.patch.object(seal, "MANIFEST", self.manifest), \
              mock.patch.object(score, "upsert_scores"), contextlib.redirect_stdout(buf):
             score.main(argv)
         return buf.getvalue()
@@ -241,6 +247,18 @@ class TestSplitTest(unittest.TestCase):
             with self.subTest(argv=argv), self.assertRaises(SystemExit) as cm:
                 self.run_score(argv)
             self.assertIn("거부", str(cm.exception))
+
+    def test_refuses_labels_changed_after_seal(self):
+        """봉인 뒤 정답 파일이 바뀌면(한 글자라도) 채점하지 않는다. 화면에 문서 ID를 내지 않는다."""
+        f = self.tmp / "labels" / f"{GSC}.json"
+        gold = label(GSC)
+        gold["signal_word"]["value"] = "경고" if gold["signal_word"]["value"] != "경고" else "위험"
+        f.write_text(json.dumps(gold, ensure_ascii=False), encoding="utf-8")
+        with self.assertRaises(SystemExit) as cm:
+            self.run_score(self.argv())
+        self.assertIn("봉인", str(cm.exception))
+        self.assertNotIn(GSC, str(cm.exception))
+        self.assertFalse((self.pred_dir / score.DETAIL_FILE).exists())
 
     def test_unknown_classes_go_to_file_not_screen_and_first_score_kept(self):
         out = self.run_score(self.argv())

@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 
 from core.prompt import LEGACY_V1_FILE_SHA256  # noqa: E402
 from eval import infer  # noqa: E402
+from eval import seal  # noqa: E402
 
 FIX = ROOT / "test" / "fixtures"
 VAL_IDS = ["KR-HANIL-001", "KR-HENKEL-001"]  # fixtures/splits.csv의 val
@@ -25,6 +26,13 @@ VAL_IDS = ["KR-HANIL-001", "KR-HENKEL-001"]  # fixtures/splits.csv의 val
 def fake_generate(tok, model, messages, max_new_tokens):
     """마지막 user 메시지 길이만 보고 정해진 문자열을 낸다. few-shot이면 메시지가 5개(system + 2쌍 + user)."""
     return f"not json ({len(messages)} msgs)", 0.5, 123, 7
+
+
+def write_manifest(path, **dirs):
+    """봉인 manifest를 kind=경로로 만든다(eval/seal.py --write의 점검 없이 해시만)"""
+    rows = [r for kind, d in dirs.items() for r in seal.manifest_rows(kind, seal.file_hashes(kind, d))]
+    Path(path).write_text("kind,sha256\n" + "".join(f"{k},{h}\n" for k, h in rows), encoding="utf-8")
+    return Path(path)
 
 
 def write_run_config(run_dir, version):
@@ -150,7 +158,8 @@ class InferTest(unittest.TestCase):
             self.assertIn(msg, str(cm.exception))
 
     def test_test_split_gates(self):
-        """test: 저장소 밖 --out-root, 비교군 3개, experiment.json의 max_new_tokens · adapter_sha256과 대조"""
+        """test: 저장소 밖 --out-root, 비교군 3개, experiment.json의 max_new_tokens · adapter_sha256과 대조,
+        텍스트는 봉인과 같아야 함"""
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             adapter = tmp / "adapter"
@@ -171,6 +180,11 @@ class InferTest(unittest.TestCase):
                                                    encoding="utf-8")
             base = ["--split", "test", "--allow-test", "--text-dir", str(text_dir), "--base", "dummy", "--revision", "rev-x"]
             out = ["--out-root", str(tmp / "out")]
+            manifest = write_manifest(tmp / "manifest.csv", text=text_dir)
+            unsealed = tmp / "unsealed"  # 봉인 뒤 한 글자 바뀐 텍스트
+            unsealed.mkdir()
+            for f in text_dir.iterdir():
+                (unsealed / f.name).write_text(f.read_text(encoding="utf-8") + " ", encoding="utf-8")
             cases = [
                 (["--condition", "base_zs", *base], "--out-root"),  # 기본 outputs/(저장소 안)
                 (["--condition", "base_zs", *base, "--out-root", str(ROOT / "outputs")], "--out-root"),
@@ -178,8 +192,10 @@ class InferTest(unittest.TestCase):
                 (["--condition", "base_zs", *base, *out, "--max-new-tokens", "2048"], "experiment.json의 1300"),
                 (["--condition", "qlora_final", *base, *out, "--adapter", str(other)], "adapter_sha256"),
                 (["--condition", "base_zs", *base, *out, "--prompt", "v2"], "prompt_version v1"),
+                ([a if a != str(text_dir) else str(unsealed) for a in ["--condition", "base_zs", *base, *out]],
+                 "봉인"),
             ]
-            with mock.patch.object(infer, "EXPERIMENT_JSON", exp):
+            with mock.patch.object(infer, "EXPERIMENT_JSON", exp), mock.patch.object(seal, "MANIFEST", manifest):
                 for argv, msg in cases:
                     with self.subTest(argv=argv), self.assertRaises(SystemExit) as cm:
                         infer.main(argv)
