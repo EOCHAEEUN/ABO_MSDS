@@ -62,23 +62,6 @@ def _top_field(path: Optional[str]) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _lines_with(text: str, needles: list[str], prefer: Optional[str] = None) -> Optional[str]:
-    """원문에서 값이 들어 있는 줄들(근거 표시용). prefer가 들어 있는 줄을 먼저 고른다."""
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
-    squash = lambda s: re.sub(r"\s+", "", s)  # noqa: E731
-    picked: list[str] = []
-    for n in needles:
-        key = squash(n)
-        if not key:
-            continue
-        hits = [l for l in lines if key in squash(l)]
-        if prefer:
-            hits.sort(key=lambda l: prefer not in l)
-        if hits and hits[0] not in picked:
-            picked.append(hits[0])
-    return "\n".join(picked) or None
-
-
 def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> dict:
     """run_rules() 결과를 핵심 5필드별 {review_status, reason_code, page, section, source_text}로 바꾼다.
     page는 전처리 텍스트에 쪽 경계가 없어 null로 둔다."""
@@ -106,12 +89,10 @@ def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> 
             status, reason = "SOURCE_CHECK_REQUIRED", None
         else:
             status, reason = "OK", None
-        text = "\n".join(snippets[field][:4]) or None
-        if text is None and source_text:  # 근거 대상이 아닌 필드(분류 · 신호어)는 값이 든 줄을 찾아 보여 준다
-            if field == "ghs_classification":
-                text = _lines_with(source_text, [c.get("hazard_class") or "" for c in label.get(field) or []][:6])
-            elif field == "signal_word" and (label.get(field) or {}).get("value"):
-                text = _lines_with(source_text, [label[field]["value"]], prefer="신호어")
+        # signal_word · ghs_classification도 app/rules(evidence.py)가 원문 대조 대상에 넣고 있어
+        # snippets[field]로 다 들어온다. 개수 상한은 성분이 많은 문서(10건 이상)에서 뒤쪽 성분의
+        # CAS·함유량 근거가 잘리지 않도록 넉넉히 잡는다.
+        text = "\n".join(snippets[field][:20]) or None
         out[field] = {"review_status": status, "reason_code": reason, "page": None, "section": SECTION[field],
                       "source_text": text, "messages": [f["message"] for f in found][:5]}
     return out

@@ -1,5 +1,9 @@
-// UI demonstration fixtures, transcribed from the supplied mockup.
-// Never read training labels, sealed test data, or report scores here.
+// 예시 모드 데이터: data/labels(train·val 정답 라벨) + data/text(원문 1~3항 텍스트)로
+// scripts/build_demo_documents.py가 만든 실제 문서 45건. 재생성하려면 그 스크립트를 다시
+// 돌리고 demo-documents.json을 갱신한다. source(종이 모양 mock)는 없고 대신 source_text에
+// 원문 전체가 들어 있어 PreviewPanel이 "원문 전체 / 추출 결과와 대조" 화면으로 보여준다.
+import demoDocumentsData from './demo-documents.json';
+
 export const FIELD_DEFS = [
   { key: 'product_name', label: '제품명', section: '1항 가.' },
   { key: 'ingredients', label: '구성성분 · CAS 번호', section: '3항' },
@@ -8,18 +12,6 @@ export const FIELD_DEFS = [
   { key: 'hazard_statements', label: '유해·위험 문구', section: '2항 나.' },
 ];
 
-const products = [
-  ['pgmea_msds_kr.pdf', '프로필렌글리콜 모노메틸에테르 아세테이트', '○○케미칼(주)', '108-65-6', '한국어', 16, 4, '김민수'],
-  ['acetonitrile_msds.pdf', '아세토니트릴', '△△화학(주)', '75-05-8', '한국어', 12, 2, '이영희'],
-  ['methanol_msds_en.pdf', '메탄올', 'Sample Chemicals', '67-56-1', '영어', 14, 5, '박지훈'],
-  ['toluene_msds_kr.pdf', '톨루엔', '○○케미칼(주)', '108-88-3', '한국어', 11, 1, '최수진'],
-  ['sulfuricacid_msds_kr.pdf', '황산', '□□산업(주)', '7664-93-9', '한국어', 18, 5, '김민수'],
-  ['n-hexane_msds_en.pdf', 'n-헥산', 'Example Supplier', '110-54-3', '영어', 13, 3, '이영희'],
-  ['ipa_msds_kr.pdf', '이소프로필 알코올', '△△화학(주)', '67-63-0', '한국어', 15, 0, '박지훈'],
-  ['hydrochloricacid_msds.pdf', '염화수소 (수용액)', '□□산업(주)', '7647-01-0', '한국어', 20, 5, '최수진'],
-];
-
-const stated = value => ({ value, source_status: '기재' });
 const missing = () => ({ value: null, source_status: '자료없음' });
 
 export function emptyExtraction() {
@@ -32,41 +24,7 @@ export function emptyExtraction() {
 }
 
 export function demoDocuments() {
-  return products.map(([file, product, supplier, cas, language, pages, confirmed, owner], index) => {
-    // Only the first fixture has hazard data supplied by the user's screen.
-    // Do not infer chemical classifications for the other document-list fixtures.
-    const extraction = {
-      ...emptyExtraction(), product_name: stated(product),
-      recommended_use: index === 0 ? stated('반도체 공정용 세정제, 희석 용제') : missing(),
-      use_restrictions: index === 0 ? stated('권고 용도 외 사용 금지') : missing(),
-      supplier: { company_name: supplier, address: index === 0 ? '경기도 ○○시 ○○구 ○○로 123' : null, emergency_phone: index === 0 ? '031-000-0000' : null },
-      ingredients: [{ chemical_name: product, cas_number: cas, ke_number: null, content: index === 0 ? '≥99.0' : null, is_substitute_data: false }],
-      ghs_classification: index === 0 ? [{ hazard_class: '인화성 액체', category: '구분 3' }, { hazard_class: '특정표적장기 독성(1회 노출)', category: '구분 3' }] : [],
-      signal_word: index === 0 ? stated('경고') : missing(),
-      hazard_statements: index === 0 ? [
-        { code: 'H226', text: '인화성 액체 및 증기' },
-        { code: 'H336', text: '졸음 또는 현기증을 일으킬 수 있음' },
-        { code: 'H335', text: '호흡기계 자극을 일으킬 수 있음' },
-      ] : [],
-      list_status: { ingredients: '기재', ghs_classification: index === 0 ? '기재' : '자료없음', hazard_statements: index === 0 ? '기재' : '자료없음' },
-    };
-    const source = structuredClone(extraction);
-    if (index === 0) source.hazard_statements.pop();
-    return {
-      id: `demo-${index + 1}`, number: 128 - index, file_name: file, language, page_count: pages,
-      submission_number: index === 0 ? '○○○○-○○○○○○○○' : `DEMO-2025-00${index + 1}`,
-      revision_date: `2025.08.${String(12 - index).padStart(2, '0')}`,
-      updated_at: `2025.08.${String(12 - index).padStart(2, '0')} 14:37`,
-      extracted_at: '2025.08.12 10:24', owner, split: '예시', model_name: 'QLoRA v1',
-      generation_seconds: 7.2, output_tokens: 412, extraction, source, reviews: {},
-      confirmed_fields: FIELD_DEFS.slice(0, confirmed).map(field => field.key),
-      rule_results: Object.fromEntries(FIELD_DEFS.map(field => [field.key, {
-        review_status: index === 0 && field.key === 'hazard_statements' ? 'SOURCE_CHECK_REQUIRED' : 'OK',
-        reason_code: null, page: 1, section: field.section,
-        source_text: sourceText(source, field.key),
-      }])),
-    };
-  });
+  return demoDocumentsData.map(doc => structuredClone(doc));
 }
 
 export function sourceText(extraction, field) {
