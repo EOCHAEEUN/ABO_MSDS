@@ -40,6 +40,4 @@ SAN
 물질안전보건자료
 고용노동부고시 2020-130에 따름
 화학물질명 관용명 및 이명 제품 식별 번호 함유량 (%)
-'2-Propenenitrile polymer with - CAS 번호: 9003-54-7 99 – 100
-ethenylbenzene; Acrylonitrile-styrene 기존화학물질 번호: KE-29423
-copolymer
+'2-Propenenitrile polymer with ethenylbenzene; Acrylonitrile-styrene copolymer - CAS 번호: 9003-54-7 기존화학물질 번호: KE-29423 99 – 100

@@ -18,8 +18,7 @@ CAS 번호 67-64-1
 공급자의 정보
 수입자 공급자
 회사명 : 한국피셔과학 Thermo Fisher Scientific Chemicals, Inc.
-주 소 : 인천광역시 중구 공항동로 296번길 30 Bond Street
-150, D5, D6 (운서동, 공항물류단지) Ward Hill, MA 01835-8099
+주 소 : 인천광역시 중구 공항동로 296번길 150, D5, D6 (운서동, 공항물류단지) 30 Bond Street Ward Hill, MA 01835-8099
 Tel: +82-1661-9555
 Fax: +82-2-2023-0603
 E-mail 주소 Chem.KR@thermofisher.com
