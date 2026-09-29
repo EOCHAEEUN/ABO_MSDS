@@ -261,7 +261,7 @@ D3(r1)은 같은 형식 인자로 `pipeline/quantize_quark.py`가 돌린다. 입
 | `eval/check_merge.py` | D2 teacher forcing 일치율 | 새 파일 |
 | `eval/infer_deploy.py` | 병합본 · 양자화본 추론(D4r · D4). 입력 · 출력 형식은 `eval/infer.py` 함수를 import해 같게 씀. `_run.jsonl`은 `score.py`의 프롬프트 버전 검사를 통과하도록 `infer.py`와 같은 키로 남김. 조건 이름은 `deploy_`로 시작해야 하고, `--split test`는 거부 | 새 파일 |
 | `eval/deploy_compare.py` | 5절 기준선 선택(D0 결과) · 짝 비교 · 판정 → `report/deploy/*.md`. 정답은 읽지 않고 채점 상세(`_score_detail.jsonl`)만 읽음 | 새 파일 |
-| `eval/score.py` | `--scores-csv` 옵션 추가(기본값 · 동작 불변). D0(`qlora_r1` 이름을 그대로 씀)이 공식 행을 덮어쓰지 않게, 경량화 점수가 `report/scores.csv`에 섞이지 않게. `--no-write`는 `_score_detail.jsonl`도 쓰지 않아 짝 비교에 쓸 수 없다 | 기존 파일 수정, 평 리뷰 필수. 회귀 테스트(`test/test_score.py`) 통과 |
+| `eval/score.py` | `--scores-csv` 옵션 추가(기본값 · 동작 불변). D0(`qlora_r1` 이름을 그대로 씀)이 공식 행을 덮어쓰지 않게, 경량화 점수가 `report/scores.csv`에 섞이지 않게. `--no-write`는 `_score_detail.jsonl`도 쓰지 않아 짝 비교에 쓸 수 없다 | 기존 파일 수정. 혼자 진행해 리뷰는 테스트로 대신한다: 회귀 테스트(`test/test_score.py`) 통과 + PR 설명에 기본값 · 기존 동작 불변 근거 기록 |
 | `test/test_deploy.py` | test split 거부, 조건 이름 규칙, 보정 표본에 val 문서 섞임 거부, 입력 해시 대조, 적용 매핑이 3.3절 3쌍과 같은지 | 새 파일 |
 | `pipeline/configs/awq_qwen3.json` | 3.3절 AWQ 스케일링 매핑 3쌍(v → o 제외). `quantize_quark.py --quant_algo_config_file awq`로 넘김 | 새 파일, **PR 1(계획서와 함께)에 포함** — G5 전에 필요. 형식은 Quark 0.11 `AWQConfig`(name · scaling_layers · model_decoder_layers) 기준, G5에서 적용 확인(U4) |
 | `requirements-quark.txt` | `.venv-quark` 패키지 고정 | 새 파일 |
@@ -313,7 +313,7 @@ D3(r1)은 같은 형식 인자로 `pipeline/quantize_quark.py`가 돌린다. 입
 `decisions.md` 기록 예시(승인 시):
 
 > ### 2026-09-XX · 배포 경량화 트랙 조건부 추가 (PM 결정)
-> - r1(qlora_final, `adapter_sha256` `a9a32341…`)을 `nf4dq`로 병합한 뒤 AMD Quark AWQ int4(`w_uint4_per_group_asym`, group 128, v → o 스케일링 제외)로 양자화해 val 10건에서 품질 유지 여부를 본다. 작업은 RTX 5070 기기, 기준선은 D0 재현 결과로 정한다. G1~G3(Ryzen AI 지원 · 컨텍스트 한도 · Qwen3-4B 지원) 중 하나라도 막히면 코드 작업 없이 종료한다. 계획: `docs/deploy_quant_plan.md`
+> - r1(qlora_final, `adapter_sha256` `a9a32341…`)을 `nf4dq`로 병합한 뒤 AMD Quark AWQ int4(`uint4_wo_128`: UINT4 · group 128 · 비대칭, v → o 스케일링 제외)로 양자화해 val 10건에서 품질 유지 여부를 본다. 작업은 RTX 5070 기기, 기준선은 D0 재현 결과로 정한다. G1~G3(Ryzen AI 지원 · 컨텍스트 한도 · Qwen3-4B 지원) 중 하나라도 막히면 코드 작업 없이 종료한다. 계획: `docs/deploy_quant_plan.md`
 > - 본 비교표 · test 평가에 넣지 않는다. 결과는 `report/deploy/`에 "배포 경량화 결과"로 따로 적는다. 보정 데이터는 train만 쓴다.
 
 ## 10. 확인하지 않은 것
