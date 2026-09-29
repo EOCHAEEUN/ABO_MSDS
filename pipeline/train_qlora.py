@@ -48,7 +48,7 @@ VAL_JSONL = ROOT / "data" / "val.jsonl"
 SPLITS_CSV = ROOT / "data" / "splits.csv"
 BUILD_REPORT = ROOT / "data" / "build_report.json"   # 설정의 build_report로 바꿀 수 있다(train_jsonl을 바꿀 때 같이)
 SMOKE_ROOT = Path("/tmp/msds_smoke")
-RESERVED_NAMES = {"r1", "r2", "final"}        # 스모크 · 부분 실행에 쓰면 안 되는 이름
+RESERVED_NAMES = {"r1", "r2", "r3", "final"}        # 스모크 · 부분 실행에 쓰면 안 되는 이름
 DEFAULTS = {"warmup_ratio": 0.03, "weight_decay": 0.0, "max_grad_norm": 1.0, "seed": 42, "gradient_checkpointing": True}
 
 

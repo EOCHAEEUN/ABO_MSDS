@@ -201,7 +201,7 @@
 |---|---|---|
 | Base zero-shot | `outputs/base_zs/` | 출발선 |
 | Base few-shot (k=2, train에서 추출) | `outputs/base_fs/` | 프롬프트 엔지니어링 대조군 |
-| QLoRA 1차 · 2차 · 최종 | `outputs/qlora_r1/` · `qlora_r2/` · `qlora_final/` | 본 과업 결과물. r1 · r2는 val에서 비교하고, test에는 `qlora_final`(r1과 r2 중 고른 것)만 돌림 |
+| QLoRA 1차 · 2차 · 3차 · 최종 | `outputs/qlora_r1/` · `qlora_r2/` · `qlora_r3/` · `qlora_final/` | 본 과업 결과물. r1 · r2 · r3는 val에서 비교하고, test에는 `qlora_final`(셋 중 고른 것)만 돌림. r3는 PM 결정 추가 학습(2026-09-29, `report/decisions.md`) |
 
 - **효율:** 문서 1건당 평균 생성 시간 · 입력 · 출력 토큰
 - **짝 비교:** 같은 문서에서 두 조건의 승 · 패 · 무, 제조사 그룹 단위 부트스트랩 95% 신뢰구간. 문서 수와 그룹 수를 함께 적습니다.
@@ -217,7 +217,7 @@
 | 최대 길이 | **4096에서 시작**, gradient checkpointing | 파일럿에서 1536이면 정답 JSON 끝이 잘렸음. 새 라벨로 P50/P90/P95/MAX를 다시 재고 입력 + 정답 길이를 함께 봄. 초과 샘플은 목록화(조용히 버리지 않음) |
 | batch / accum / epoch | 1 / 8 / 2 | effective batch · 총 step · 학습 시간을 run 설정에 기록 |
 | 2차 학습 | r1에서 조건 1개만 변경(epoch / 증강 배수 / 학습률 중 하나) | `pipeline/configs/r2.yaml`. 증강 배수를 바꾸면 step 수도 함께 바뀜 — 보고에 밝힘 |
-| 학습 상한 | **2회** (r1 · r2) | 추가 학습은 PM 결정 + 사유 기록 |
+| 학습 상한 | **2회** (r1 · r2) | 추가 학습은 PM 결정 + 사유 기록. 2026-09-29: r2 = epoch 2 → 1, 추가 r3 = 프롬프트 v2_1(각각 r1에서 조건 1개만 변경) |
 | 디코딩 | greedy, seed 고정, `max_new_tokens` = train · val 정답 JSON 최장 토큰 × 1.3 | 비교군 전부 동일. 새 라벨로 실측해 실험 고정 전에 정함. **실험 고정 전 임시 기본값(2026-09-28): 2048**(`eval/infer.py`의 `DEFAULT_MAX_NEW_TOKENS`, test에는 미적용). 옛 라벨 기준 최장 975토큰 × 1.3 ≈ 1,268인데도 임시값 1024에서 fixture 문서가 잘려 2048로 올림. 학습 `max_length`(4096, 입력+정답 합계용)를 그대로 쓰지 않은 이유는 EOS 없이 도는 실패 사례가 그 값까지 다 채워 진단 단계 생성 시간을 크게 늘릴 수 있어서임 |
 | 입력 전처리 | pdfplumber → 4항 제목 이전까지 절단 → 2항 P문구 블록 제거 | 학습 · 평가 · 서빙이 `core/`의 같은 추출기를 씀 |
 | 서빙 | FastAPI + transformers + peft, 베이스 · 어댑터 동시 보유 | `/extract` `/compare` `/confirm` `/documents` |
