@@ -6,7 +6,7 @@ import { ROUTES, applyReview, canConfirmMatched, count, current, download, downl
 function initialState() {
   return {
     view: ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : "review",
-    documents: [], selectedId: null, field: "hazard_statements", sourceTab: "original", resultTab: "fields",
+    documents: [], selectedId: null, field: "hazard_statements", expandedField: "hazard_statements", sourceTab: "original", resultTab: "fields",
     page: 1, zoom: "fit", query: new URLSearchParams(location.search).get("search") || "",
     filters: { supplier: "", language: "", status: "", split: "" },
     checked: new Set(), columns: { submission: true, language: true, pages: true, owner: true },
@@ -49,18 +49,23 @@ export function useWorkspaceController() {
     update(next => {
       if (next.selectedId !== id) { next.experiments = []; next.compareAt = ""; }
       next.selectedId = id;
+      next.expandedField = next.field;
       // 문서를 바꾸면 지금 보고 있는 필드의 근거 쪽으로 연다
       const doc = next.documents.find(item => item.id === id);
       next.page = doc?.reviews?.[next.field]?.evidence?.page || doc?.rule_results?.[next.field]?.page || 1;
     });
   }, [update]);
 
-  const selectField = useCallback(key => {
+  const selectField = useCallback((key, toggle = false) => {
     const doc = current(latest.current);
     update(next => {
+      const collapse = toggle && next.field === key && next.expandedField === key;
       next.field = key;
-      next.page = doc?.reviews?.[key]?.evidence?.page || doc?.rule_results?.[key]?.page || 1;
-      next.scrollRequest += 1;
+      next.expandedField = collapse ? null : key;
+      if (!collapse) {
+        next.page = doc?.reviews?.[key]?.evidence?.page || doc?.rule_results?.[key]?.page || 1;
+        next.scrollRequest += 1;
+      }
     });
   }, [update]);
 
@@ -77,6 +82,7 @@ export function useWorkspaceController() {
         const retainedSelection = docs.some(doc => doc.id === next.selectedId);
         next.selectedId = retainedSelection ? next.selectedId : docs[0]?.id;
         if (!retainedSelection && source.mode === "results") next.field = "product_name";
+        next.expandedField = next.field;
         next.error = "";
         next.dirtyDocuments.clear();
         next.checked = new Set([...next.checked].filter(id => docs.some(doc => doc.id === id)));
@@ -177,6 +183,11 @@ export function useWorkspaceController() {
       update(next => {
         next.documents.unshift(doc);
         next.selectedId = doc.id;
+        next.field = "product_name";
+        next.expandedField = "product_name";
+        next.resultTab = "fields";
+        next.sourceTab = "original";
+        next.onlyPending = false;
         next.experiments = [];
         next.compareAt = "";
         next.page = 1;
@@ -202,7 +213,7 @@ export function useWorkspaceController() {
         case "close-modal": closeModal(); break;
         case "source-tab": patch({ sourceTab: props["data-tab"] }); break;
         case "result-tab": patch({ resultTab: props["data-tab"] }); break;
-        case "field": selectField(props["data-field"]); break;
+        case "field": selectField(props["data-field"], true); break;
         case "prev-field": case "next-field": {
           const index = FIELD_DEFS.findIndex(field => field.key === snapshot.field);
           selectField(FIELD_DEFS[Math.max(0, Math.min(4, index + (action === "prev-field" ? -1 : 1)))].key); break;
@@ -223,13 +234,13 @@ export function useWorkspaceController() {
         case "confirm-matched": {
           if (!doc || snapshot.busy || doc.pending_extraction) break;
           const keys = FIELD_DEFS.filter(field => canConfirmMatched(doc, field.key)).map(field => field.key);
-          if (!keys.length) { notify("근거가 제공된 검사 통과 항목이 없습니다."); break; }
+          if (!keys.length) { notify("근거가 제공된 사전 점검 항목이 없습니다."); break; }
           update(next => {
             const target = next.documents.find(item => item.id === doc.id);
             const values = effective(target);
             for (const key of keys) applyReview(next, doc.id, key, values[key], Array.isArray(values[key]) ? { list_status: values.list_status[key] } : {});
           });
-          notify(`근거가 제공된 검사 통과 항목 ${keys.length}개를 확정했습니다.`);
+          notify(`근거가 제공된 사전 점검 항목 ${keys.length}개를 확정했습니다.`);
           break;
         }
         case "delete-hazard": {
