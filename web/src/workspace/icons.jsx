@@ -14,6 +14,7 @@ export const iconPaths = {
   download: <><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></>,
   document: <><path d="M5 2h9l5 5v15H5zM14 2v6h5M8 12h8M8 16h8M8 19h6"/></>,
   check: <><path d="m5 12 4 4L19 6"/></>,
+  edit: <><path d="M4 20l4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20zM14.5 7.5l3 3"/></>,
   checklist: <><rect x="4" y="2" width="16" height="20" rx="1"/><path d="m8 8 2 2 5-5m-7 10 2 2 5-5"/></>,
   target: <><circle cx="11" cy="13" r="9"/><circle cx="11" cy="13" r="5"/><path d="m11 13 9-9m-4 0h4v4"/></>,
   clock: <><circle cx="12" cy="12" r="10"/><path d="M12 5v7l5 3"/></>,

@@ -80,7 +80,7 @@ function UploadForm() {
     finally { setSubmitting(false); }
   }
   return <form id="upload-form" onSubmit={submit}>
-    <p className="modal-description">텍스트가 포함된 PDF 문서를 선택해 주세요.</p>
+    <p className="modal-description">{API_MODE ? "PDF의 1~3항 텍스트와 필드를 추출한 뒤 검토 화면으로 이동합니다." : "텍스트가 포함된 PDF 문서를 선택해 주세요."}</p>
     <label className="upload-dropzone" htmlFor="pdf-file"><Icon name="upload" /><b>PDF 파일 선택</b><span>문서 1개 · 최대 30MB</span><input id="pdf-file" name="file" type="file" accept=".pdf,application/pdf" required onChange={event => setFile(event.target.files[0] || null)} /></label>
     <label className="form-label" htmlFor="upload-model">추출 모델</label><select id="upload-model" name="model" value={model} onChange={event => setModel(event.target.value)}><option value="qlora">QLoRA</option><option value="base">Base</option></select>
     {!API_MODE && <div className="inline-notice">예시 모드에서는 PDF를 브라우저에서 미리 봅니다. 추출하려면 실제 API를 연결해 주세요.</div>}
