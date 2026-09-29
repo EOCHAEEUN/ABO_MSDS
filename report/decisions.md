@@ -110,3 +110,23 @@
   - 그런데 val에서 Base few-shot 실제 출력이 KR-NEOGEN-002에서 1,372토큰까지 나왔다(`outputs/base_fs/val/_log.jsonl`). 1,260으로 낮추면 비교군 출력이 test에서 잘릴 위험이 있어, 계획대로 규칙값을 쓰지 않고 임시값 2,048을 그대로 예외로 유지한다.
 - **`eval/experiment.json` 커밋:** `max_new_tokens: 2048`, `adapter_sha256: a9a323416bc2548f44852458bd0afc2882be7b214b7c39205529a7a08c937547`(runs/0928_r1/adapter와 일치 확인), `prompt_version: "v1"`.
 - 이걸로 test 추론(`eval/infer.py --split test`)이 코드적으로 가능해진다. 아직 test 담당의 텍스트 인계 · 별칭표 보강 · 서식 목록 확정은 남아 있다.
+
+## 배포 경량화 (본 비교 밖)
+
+### 2026-09-29 · 배포 경량화 트랙 조건부 추가 (PM 결정)
+
+- r1(qlora_final, `adapter_sha256` `a9a32341…`)을 `nf4dq`로 병합한 뒤 AMD Quark 0.11 AWQ int4(`uint4_wo_128` = UINT4 · group 128 · 비대칭, 제외 층 없음, `bfloat16`, v → o 스케일링 제외)로 양자화해 val 10건에서 품질 유지 여부를 본다. 계획: `docs/deploy_quant_plan.md`(v2 + 점검 반영)
+- plan 1절 제외 목록("Ollama · GGUF 변환")과 겹치는 범위 추가다. **G1~G3**(Ryzen AI hybrid 지원 · 컨텍스트 한도 · Qwen3-4B 지원) 중 하나라도 막히면 코드 작업 없이 종료하고 여기에 한 줄 남긴다.
+- 병합 · 양자화 · val 확인은 RTX 5070 기기, 후처리 · OGA 추론은 NPU 노트북(AMD Ryzen AI 9 365)에서 한다. 기준선은 D0(5070에서 r1 재현) 결과로 정한다.
+- 결과 보기 전에 고정한 것: 보정 데이터는 train만, 최대 3,200토큰(자르지 않음) · 128개(메모리 부족 시 64개). 잡음 바닥 k = D0과 r1 기록 사이에 문서 완전 정답 판정이 바뀐 문서 수. D4r(양자화 전 병합본 생성)은 필수. 판정 기준은 계획 5절.
+- 본 비교표(`report/scores.csv` · `report/final_table.md`) · test 평가에 넣지 않는다. 결과는 `report/deploy/`에 "배포 경량화 결과"로 따로 적는다.
+- 본 과제 필수 작업(test 평가 등) 뒤에 진행하고, 일정이 겹치면 이 트랙이 밀린다.
+
+### 2026-09-29 · 배포 경량화 G1~G4 통과
+
+- 근거: Ryzen AI 1.8.0 문서(LLM Overview · Pre-optimized Models · Preparing OGA Models · OGA Flow · 설치 안내)와 Hugging Face `amd/ryzen-ai-180-hybrid` 모음.
+- **G1:** NPU 노트북 AMD Ryzen AI 9 365 = Ryzen AI 300 (STX/KRK), hybrid 지원. NPU 드라이버 요구 32.0.203.280 이상, 현재 32.0.203.329.
+- **G2:** 입력 + 출력 ≤ 모델 `genai_config.json`의 `context_length`, hybrid는 설정으로 16K. val 최장 4,064토큰이라 4,096이어도 넘는 문서 없음.
+- **G3:** `amd/Qwen3-4B_rai_1.8.0_hybrid` 있음(AWQ · group 128 · 비대칭 · UINT4). 지원 모델의 파인튜닝 버전은 공식 준비 절차 대상.
+- **G4 → 계획 3.3절 수정(결과 보기 전):** Quark 0.11 · `transformers==4.57.6`, `uint4_wo_128`, `--data_type bfloat16`, 제외 층 lm_head → 없음(`--exclude_layers []`, AMD 안내 명령). Quark 0.11은 `qwen3` AWQ 설정이 비어 있어(None) 3쌍 매핑을 `--quant_algo_config_file`로 반드시 넘긴다. 스모크 모델은 hybrid 목록의 가장 작은 Qwen3인 1.7B로 바꾼다.
+- 다음: 5070 기기 점검(어댑터 해시 · 패키지 · 입력 복원 · 메모리) → G5 스모크.
