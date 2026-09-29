@@ -7,7 +7,7 @@ function initialState() {
   return {
     view: ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : "review",
     documents: [], selectedId: null, field: "hazard_statements", sourceTab: "original", resultTab: "fields",
-    page: 1, zoom: 100, query: new URLSearchParams(location.search).get("search") || "",
+    page: 1, zoom: "fit", query: new URLSearchParams(location.search).get("search") || "",
     filters: { supplier: "", language: "", status: "", split: "" },
     checked: new Set(), columns: { submission: true, language: true, pages: true, owner: true },
     onlyPending: false, experiments: [], selectedExperiment: "qlora_r2", metric: "parsing", trend: "parsing",
@@ -49,7 +49,9 @@ export function useWorkspaceController() {
     update(next => {
       if (next.selectedId !== id) { next.experiments = []; next.compareAt = ""; }
       next.selectedId = id;
-      next.page = 1;
+      // 문서를 바꾸면 지금 보고 있는 필드의 근거 쪽으로 연다
+      const doc = next.documents.find(item => item.id === id);
+      next.page = doc?.reviews?.[next.field]?.evidence?.page || doc?.rule_results?.[next.field]?.page || 1;
     });
   }, [update]);
 
@@ -205,9 +207,10 @@ export function useWorkspaceController() {
           const index = FIELD_DEFS.findIndex(field => field.key === snapshot.field);
           selectField(FIELD_DEFS[Math.max(0, Math.min(4, index + (action === "prev-field" ? -1 : 1)))].key); break;
         }
-        case "zoom-in": patch({ zoom: Math.min(150, snapshot.zoom + 10) }); break;
-        case "zoom-out": patch({ zoom: Math.max(70, snapshot.zoom - 10) }); break;
-        case "zoom-reset": patch({ zoom: 100 }); break;
+        // "fit"은 PDF 폭 맞춤(기본). 확대 · 축소를 누르면 100%에서 10%씩 움직이고, 가운데 버튼은 폭 맞춤으로 되돌린다
+        case "zoom-in": patch({ zoom: snapshot.zoom === "fit" ? 110 : Math.min(150, snapshot.zoom + 10) }); break;
+        case "zoom-out": patch({ zoom: snapshot.zoom === "fit" ? 90 : Math.max(70, snapshot.zoom - 10) }); break;
+        case "zoom-reset": patch({ zoom: "fit" }); break;
         case "first-page": patch({ page: 1 }); break;
         case "page": patch({ page: Number(props["data-page"]) }); break;
         case "prev-page": patch({ page: Math.max(1, snapshot.page - 1) }); break;

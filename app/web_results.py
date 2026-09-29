@@ -8,6 +8,8 @@
 - 모델 출력 원문을 파싱해 extraction으로 쓰고, Rule Engine(app/rules)을 돌려 핵심 5필드의 검토 상태를 붙인다.
 - 파싱에 실패했거나 필수 키가 없는 출력은 목록에 넣지 않고 skipped에 사유와 함께 남긴다(조용히 버리지 않음).
 - val만 다룬다. test는 저장소 밖이며 여기서 읽지 않는다.
+- 원본 PDF는 커밋하지 않는다(data/raw/, 저작권). pdf_url은 "./pdfs/{doc_id}.pdf"로만 적고, 개발 · 미리보기 서버
+  (web/vite.config.js)가 이 결과 파일에 있는 문서만 로컬 data/raw/에서 찾아 보여 준다. 쪽수는 로컬에 PDF가 있을 때만 센다.
 나중에 app/main.py의 GET /documents · POST /compare가 같은 함수를 쓰면 된다.
 """
 from __future__ import annotations
@@ -29,11 +31,12 @@ if str(ROOT) not in sys.path:
 from app.rules.engine import run_rules  # noqa: E402
 from core.schema import extract_json  # noqa: E402
 
-CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_final")
+CONDITIONS = ("base_zs", "base_fs", "qlora_r1", "qlora_r2", "qlora_r3", "qlora_final")
 LABEL = {"base_zs": ("Base Zero-shot", "Base ZS"), "base_fs": ("Base Few-shot (k=2)", "Base FS"),
          "qlora_r1": ("QLoRA r1", "QLoRA r1"), "qlora_r2": ("QLoRA r2", "QLoRA r2"),
+         "qlora_r3": ("QLoRA r3", "QLoRA r3"),
          "qlora_final": ("QLoRA 최종", "QLoRA 최종")}
-DOC_ORDER = ("qlora_final", "qlora_r2", "qlora_r1", "base_fs", "base_zs")  # 문서 목록 순서: 후보 모델 먼저
+DOC_ORDER = ("qlora_final", "qlora_r3", "qlora_r2", "qlora_r1", "base_fs", "base_zs")  # 문서 목록 순서: 후보 모델 먼저
 CORE_FIELDS = ("product_name", "ingredients", "ghs_classification", "signal_word", "hazard_statements")
 SECTION = {"product_name": "1항 가.", "ingredients": "3항", "ghs_classification": "2항 가.",
            "signal_word": "2항 나.", "hazard_statements": "2항 나."}
@@ -64,7 +67,7 @@ def _top_field(path: Optional[str]) -> Optional[str]:
 
 def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> dict:
     """run_rules() 결과를 핵심 5필드별 {review_status, reason_code, page, section, source_text}로 바꾼다.
-    page는 전처리 텍스트에 쪽 경계가 없어 null로 둔다."""
+    source_text는 값이 들어 있는 원문 줄 전체(값이 없으면 항목 제목 줄과 다음 줄), page는 원본 PDF에서 찾은 쪽."""
     rules = run_rules(label, source_text, doc_id)
     per: dict[str, list[dict]] = {f: [] for f in CORE_FIELDS}
     for f in rules["findings"]:
@@ -98,6 +101,18 @@ def field_rule_results(label: dict, source_text: Optional[str], doc_id: str) -> 
     return out
 
 
+def _pdf_pages(pdf: Path) -> Optional[list[str]]:
+    """원본 PDF 쪽별 텍스트(쪽수 · 근거 쪽 찾기용). 로컬에 없거나 읽지 못하면 None."""
+    if not pdf.is_file():
+        return None
+    try:
+        import pdfplumber
+        with pdfplumber.open(pdf) as doc:
+            return [page.extract_text() or "" for page in doc.pages]
+    except Exception:  # noqa: BLE001 — 표시용이라 실패해도 결과 생성은 계속한다
+        return None
+
+
 def _missing_keys(obj: Any) -> list[str]:
     if not isinstance(obj, dict):
         return ["(JSON 객체 아님)"]
@@ -112,6 +127,7 @@ def build_documents(root: Path = ROOT) -> dict:
         sources = {r["doc_id"]: r for r in csv.DictReader(open(root / "data/sources.csv", encoding="utf-8-sig"))}
     val_ids = sorted(d for d, r in splits.items() if r["split"] == "val")
     docs, skipped, n = [], [], 0
+    pages: dict[str, Optional[list[str]]] = {}
     for cond in DOC_ORDER:
         out_dir = root / "outputs" / cond / "val"
         if not (out_dir / "_run.jsonl").exists():
@@ -134,17 +150,20 @@ def build_documents(root: Path = ROOT) -> dict:
             text = text_path.read_text(encoding="utf-8") if text_path.exists() else None
             n += 1
             when = _fmt_time(rec.get("created_at"))
+            source_file = sources.get(doc_id, {}).get("source_file")
+            if source_file and doc_id not in pages:
+                pages[doc_id] = _pdf_pages(root / "data" / "raw" / source_file)
             docs.append({
                 "id": f"{doc_id}__{cond}", "number": n, "doc_id": doc_id, "condition": cond,
-                "file_name": sources.get(doc_id, {}).get("source_file") or f"{doc_id}.pdf",
+                "file_name": source_file or f"{doc_id}.pdf",
                 "language": "한국어" if splits[doc_id].get("lang") == "ko" else "영어",
-                "page_count": None, "submission_number": doc_id, "revision_date": None,
+                "page_count": len(pages[doc_id]) if pages.get(doc_id) else None, "submission_number": doc_id, "revision_date": None,
                 "extracted_at": when, "updated_at": when, "owner": "미지정",
                 "split": f"val · {name}", "form": splits[doc_id].get("form"), "model_name": name,
                 "generation_seconds": rec.get("gen_time_sec"), "output_tokens": rec.get("output_tokens"),
-                "pdf_url": None, "source": None, "source_text": text,
+                "pdf_url": f"./pdfs/{doc_id}.pdf" if source_file else None, "source": None, "source_text": text,
                 "extraction": obj, "reviews": {}, "confirmed_fields": [],
-                "rule_results": field_rule_results(obj, text, doc_id),
+                "rule_results": field_rule_results(obj, text, doc_id, pages.get(doc_id)),
             })
     stamp = hashlib.sha256(json.dumps(docs, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:16]
     return {"generated_from": "outputs/*/val · data/text · app/rules", "split": "val", "stamp": stamp,

@@ -47,7 +47,7 @@ export default function DocumentsPage() {
       <div className="panel-toolbar"><div className="panel-title"><h2>문서 목록</h2><span>총 {docs.length}건{state.checked.size ? ` · ${state.checked.size}건 선택` : ""}</span></div><div className="toolbar-actions">
         <Button action="refresh" disabled={state.busy}><Icon name="refresh" /> 새로고침</Button><Button action="download-list"><Icon name="download" /> 목록 다운로드 (CSV)</Button><Button action="columns">표시 항목 설정 <Icon name="chevron" /></Button>
       </div></div>
-      <div className="table-scroll"><table className="document-table">
+      <div className="table-scroll" role="region" aria-label="문서 목록 표" tabIndex={0}><table className="document-table">
         <thead><tr><th className="checkbox-cell"><input type="checkbox" id="check-all" aria-label="검색 결과 전체 선택" checked={allChecked} disabled={!docs.length} ref={element => { if (element) element.indeterminate = !allChecked && docs.some(doc => state.checked.has(doc.id)); }} onChange={event => { const checked = event.target.checked; update(next => { docs.forEach(doc => checked ? next.checked.add(doc.id) : next.checked.delete(doc.id)); }); }} /></th>
           <th>No.</th><th>문서명</th><th>제품명</th><th>모델</th><th>공급자</th>{state.columns.submission && <th>제출번호</th>}{state.columns.language && <th>언어</th>}{state.columns.pages && <th>페이지</th>}<th>상태</th><th>검토 진행</th><th>최근 수정일</th>{state.columns.owner && <th>담당자</th>}
         </tr></thead>

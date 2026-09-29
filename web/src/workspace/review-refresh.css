@@ -120,7 +120,7 @@ body {
 /* Source and review work area */
 .view-review .review-layout {
   display: grid;
-  grid-template-columns: minmax(440px, .92fr) minmax(0, 1.08fr);
+  grid-template-columns: minmax(0, 1.22fr) minmax(420px, 1fr);
   gap: 20px;
   flex: 1;
   min-height: 0;
@@ -145,6 +145,9 @@ body {
 .preview-zoom-control .zoom-label { padding: 3px 9px; border-left: 1px solid #e7edf2; border-right: 1px solid #e7edf2; font-size: 13px; }
 .preview-expand { width: 30px; min-height: 30px; padding: 5px; background: transparent; border: 0; color: #426888; }
 .preview-expand .icon { width: 18px; height: 18px; }
+.preview-open-tab { display: inline-flex; align-items: center; justify-content: center; }
+.preview-title { font-size: 14px; font-weight: 650; color: #24405d; padding: 0 4px; }
+.review-source-text { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 .preview-panel:fullscreen { border-radius: 0; background: #fff; }
 .view-review .pdf-workspace { min-height: 0; background: #edf1f4; }
 .view-review .thumbnails { width: 101px; padding: 10px 8px; background: linear-gradient(90deg, #e9eef2, #f6f8f9); border-right-color: #d8e2e8; }
@@ -248,7 +251,7 @@ body {
   .review-document-header { padding-left: 25px; }
   .review-header-tools { flex-basis: 330px; }
   .review-document-meta > span { padding: 0 13px; }
-  .view-review .review-layout { grid-template-columns: minmax(390px,.88fr) minmax(0,1.12fr); gap: 12px; padding: 0 16px; }
+  .view-review .review-layout { grid-template-columns: minmax(0, 1.15fr) minmax(400px, 1fr); gap: 12px; padding: 0 16px; }
   .review-panel-heading p { display: none; }
   .review-field-card { grid-template-columns: 22px 96px minmax(0,1fr) 52px 26px; gap: 5px; }
   .view-review .review-footer { padding: 0 16px; }
@@ -335,11 +338,12 @@ body {
 .review-match-badge.is-passed { color: #426c6d; background: #edf6f5; }
 .review-match-badge.is-confirmed { color: #177668; background: #dff3ea; }
 .review-ingredients { display: grid; gap: 5px; }
-.review-ingredient { display: grid; grid-template-columns: minmax(60px, 1fr) auto minmax(35px, auto); gap: 2px 8px; padding-bottom: 5px; border-bottom: 1px solid #eef2f5; }
+/* 성분 한 건: 1줄 성분명(전체 폭), 2줄 CAS · 함유량 — 필드 검토 폭이 좁아도 이름이 글자 단위로 꺾이지 않게 */
+.review-ingredient { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 8px; padding-bottom: 5px; border-bottom: 1px solid #eef2f5; }
 .review-ingredient:last-child { border-bottom: 0; padding-bottom: 0; }
-.review-ingredient > span:first-child { color: #314c66; }
-.review-ingredient code { color: #3a6380; font: 11px/1.5 ui-monospace, monospace; padding: 2px 5px; border-radius: 4px; background: #f2f6f9; align-self: start; }
-.review-ingredient > span:last-child { color: #8190a0; font-size: 11px; align-self: center; text-align: right; }
+.review-ingredient > span:first-child { grid-column: 1 / -1; color: #314c66; overflow-wrap: anywhere; }
+.review-ingredient code { color: #3a6380; font: 11px/1.5 ui-monospace, monospace; padding: 2px 5px; border-radius: 4px; background: #f2f6f9; align-self: start; justify-self: start; white-space: nowrap; }
+.review-ingredient > span:last-child { color: #8190a0; font-size: 11px; align-self: center; text-align: left; }
 .review-field-meta { margin-top: 7px; }
 .review-field-evidence { display: block; }
 .review-field-evidence > b { display: block; margin-bottom: 7px; }
@@ -366,7 +370,7 @@ body {
   .review-title-row h1 { font-size: 22px; }
   .review-document-meta { font-size: 11px; margin-top: 10px; }
   .review-document-meta > span { padding-inline: 11px; }
-  .view-review .review-layout { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 16px; padding: 0 20px 12px; }
+  .view-review .review-layout { grid-template-columns: minmax(0, 1.22fr) minmax(420px, 1fr); gap: 16px; padding: 0 20px 12px; }
   .review-field-card { grid-template-columns: 20px 75px minmax(0, 1fr) 46px 22px; padding: 12px 10px; gap: 7px; }
   .review-field-label { font-size: 12px; }
   .review-field-value { font-size: 12px; line-height: 1.65; }
@@ -382,6 +386,7 @@ body {
 @media (min-width: 801px) and (max-width: 1120px) {
   .review-document-header { flex-wrap: wrap; gap: 10px; }
   .review-header-tools { flex-basis: 100%; flex-direction: row; align-items: center; }
+  .view-review .review-layout { grid-template-columns: minmax(0, 1.05fr) minmax(360px, 1fr); }
   .review-search { flex: 1; }
   .review-field-card { grid-template-columns: 18px minmax(0, 1fr) 44px 22px; }
   .review-field-label { grid-column: 2; }
@@ -405,3 +410,38 @@ body {
 }
 .review-field-evidence > .multiline { display: block; max-height: 82px; overflow: auto; scrollbar-width: thin; line-height: 1.8; }
 .hazard-source { max-height: 170px; overflow: auto; scrollbar-width: thin; }
+
+/* 필드 검토 가독성 보정(2026-09-29): 801px 이상 규칙이 글자를 10~12px로 줄이던 것을 키우고 간격을 넓힌다.
+   파일 끝에 두어 앞의 규칙을 덮어쓴다. 글자 크기를 조절할 때는 이 블록만 고친다. */
+@media (min-width: 801px) {
+  .review-panel-heading h2 { font-size: 18px; }
+  .review-utility-button { padding: 5px 9px; font-size: 13px; }
+  .review-confirm-all { min-height: 36px; font-size: 13px; }
+  .review-field-card { margin-top: 9px; padding: 14px 12px; }
+  .review-field-label { font-size: 14px; }
+  .review-field-value { font-size: 15px; line-height: 1.6; }
+  .review-field-meta { gap: 6px; margin-top: 6px; font-size: 12px; }
+  .review-match-badge { min-height: 24px; padding: 2px 8px; font-size: 12px; }
+  .review-edit-button { font-size: 13px; }
+  .review-field-evidence { grid-template-columns: 1fr; gap: 6px; padding: 12px 14px; font-size: 13.5px; line-height: 1.75; }
+  .review-ingredients { gap: 8px; }
+  .review-ingredient code { font-size: 13px; }
+  .review-ingredient > span:last-child { font-size: 13px; }
+  .hazard-card-title { font-size: 15px; }
+  .hazard-confirm { font-size: 13px; }
+  .hazard-warning-count { font-size: 13px; }
+  .hazard-table { font-size: 13px; }
+  .hazard-action { font-size: 12px; }
+  .hazard-evidence-grid { grid-template-columns: 1fr; }
+  .hazard-evidence-grid h3 { font-size: 13.5px; }
+  .hazard-source { font-size: 13.5px; line-height: 1.75; }
+  .hazard-result p { font-size: 13px; line-height: 1.65; }
+  .review-json-panel > div { font-size: 13px; }
+  .review-json-panel pre { font-size: 13px; }
+  .source-focus > div { font-size: 12.5px; }
+  .source-focus pre, .source-transcript pre { font-size: 13.5px; }
+  .source-transcript h3 { font-size: 14px; }
+}
+@media (min-width: 1121px) {
+  .review-field-card { grid-template-columns: 20px 92px minmax(0, 1fr) 54px 24px; gap: 10px; }
+}

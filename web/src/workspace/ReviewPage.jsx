@@ -1,9 +1,26 @@
+import { useEffect, useRef } from "react";
 import { API_MODE, source } from "./api.js";
-import { FIELD_DEFS } from "./data.js";
+import { FIELD_DEFS, sourceText } from "./data.js";
 import { canConfirmMatched, count, effective, reviewBadge, unverifiedHazard } from "./model.js";
 import { useWorkspace } from "./WorkspaceContext.jsx";
 import { Button, FieldValue, Icon, Multiline, Progress } from "./ui.jsx";
 import PreviewPanel from "./PreviewPanel.jsx";
+
+// 추출 텍스트(모델이 읽은 1~3항 원문)는 필드 검토의 "원문 텍스트"에서만 본다. 왼쪽 패널은 원본 PDF 전용
+function SourceText({ doc }) {
+  const { state } = useWorkspace();
+  const body = useRef(null);
+  const field = FIELD_DEFS.find(item => item.key === state.field);
+  const rule = doc.rule_results?.[state.field];
+  const snippet = doc.reviews?.[state.field]?.evidence?.source_text || rule?.source_text;
+  useEffect(() => { if (body.current) body.current.scrollTop = 0; }, [doc.id]);
+  return <div className="source-text-view review-source-text" ref={body}>
+    <div className="source-reading-note"><Icon name="document" /><div><strong>추출된 원문 · 1~3항</strong><p>모델이 읽은 텍스트입니다. 필드를 고르면 그 근거가 위에 표시되고, 왼쪽 PDF는 근거 쪽으로 이동합니다.</p></div></div>
+    {snippet && <section className="source-focus" data-source={state.field}><div><span>선택한 필드의 근거</span><b>{field?.label} · {rule?.page ? `원문 ${rule.page}쪽` : rule?.section || "위치 미제공"}</b></div><pre>{snippet}</pre></section>}
+    {doc.source_text?.trim() ? <article className="source-transcript"><header><h3>원문 전체</h3><span>추출 결과와 대조해 주세요</span></header><pre>{doc.source_text}</pre></article> : <div className="extracted-text">{FIELD_DEFS.map(item => <section data-source={item.key} key={item.key} className={`text-section ${item.key === state.field ? "highlighted" : ""}`}><h3>{item.section} · {item.label}</h3><p>{doc.rule_results?.[item.key]?.source_text || (doc.source ? sourceText(doc.source, item.key) : "원문 텍스트가 제공되지 않았습니다.")}</p></section>)}</div>}
+  </div>;
+}
+
 
 const displayName = { ingredients: "CAS 번호", ghs_classification: "GHS 분류", hazard_statements: "유해 · 위험 문구" };
 const fieldName = field => displayName[field.key] || field.label;
@@ -86,9 +103,9 @@ function HazardReview({ doc }) {
 function ReviewPanel({ doc }) {
   const { state, patch } = useWorkspace();
   return <section className="review-panel-refresh" aria-label="필드 검토">
-    <div className="review-panel-heading"><div className="review-panel-heading-copy"><h2>필드 검토</h2><span aria-hidden="true">›</span><p>1~3항의 핵심 정보를 확인하고 필요 시 수정하세요.</p></div><div className="review-panel-actions"><Button action="result-tab" data-tab={state.resultTab === "fields" ? "json" : "fields"} className="review-utility-button">{state.resultTab === "fields" ? "JSON 보기" : "필드 보기"}</Button><button type="button" className="review-utility-button" aria-pressed={state.onlyPending} onClick={() => patch({ onlyPending: !state.onlyPending })}>{state.onlyPending ? "전체 보기" : "미확정만"}</button><Button action="confirm-matched" className="review-confirm-all" disabled={state.busy || !FIELD_DEFS.some(field => canConfirmMatched(doc, field.key))}><Icon name="check" /> 검사 통과 항목 확정</Button></div></div>
+    <div className="review-panel-heading"><div className="review-panel-heading-copy"><h2>필드 검토</h2><span aria-hidden="true">›</span><p>1~3항의 핵심 정보를 확인하고 필요 시 수정하세요.</p></div><div className="review-panel-actions"><Button action="result-tab" data-tab={state.resultTab === "text" ? "fields" : "text"} className="review-utility-button" aria-pressed={state.resultTab === "text"}>{state.resultTab === "text" ? "필드 보기" : "원문 텍스트"}</Button><Button action="result-tab" data-tab={state.resultTab === "json" ? "fields" : "json"} className="review-utility-button" aria-pressed={state.resultTab === "json"}>{state.resultTab === "json" ? "필드 보기" : "JSON 보기"}</Button><button type="button" className="review-utility-button" aria-pressed={state.onlyPending} onClick={() => patch({ onlyPending: !state.onlyPending })}>{state.onlyPending ? "전체 보기" : "미확정만"}</button><Button action="confirm-matched" className="review-confirm-all" disabled={state.busy || !FIELD_DEFS.some(field => canConfirmMatched(doc, field.key))}><Icon name="check" /> 검사 통과 항목 확정</Button></div></div>
     {doc.pending_extraction && <div className="inline-notice">업로드한 PDF의 로컬 미리보기입니다. 실제 추출에는 API 연결이 필요합니다.</div>}
-    {state.resultTab === "json" ? <div className="review-json-panel"><div><span>담당자 수정값을 반영한 JSON</span><Button action="download-raw" className="review-utility-button">모델 원본 다운로드</Button></div><pre>{JSON.stringify(effective(doc), null, 2)}</pre></div> : <div className="review-cards">{FIELD_DEFS.filter(field => field.key !== "hazard_statements" && (!state.onlyPending || !doc.confirmed_fields.includes(field.key))).map(field => <ReviewField key={field.key} doc={doc} field={field} />)}{(!state.onlyPending || !doc.confirmed_fields.includes("hazard_statements")) && <HazardReview doc={doc} />}{state.onlyPending && count(doc) === 5 && <div className="review-all-done">모든 핵심 필드의 검토가 완료되었습니다.</div>}</div>}
+    {state.resultTab === "text" ? <SourceText doc={doc} /> : state.resultTab === "json" ? <div className="review-json-panel"><div><span>담당자 수정값을 반영한 JSON</span><Button action="download-raw" className="review-utility-button">모델 원본 다운로드</Button></div><pre>{JSON.stringify(effective(doc), null, 2)}</pre></div> : <div className="review-cards">{FIELD_DEFS.filter(field => field.key !== "hazard_statements" && (!state.onlyPending || !doc.confirmed_fields.includes(field.key))).map(field => <ReviewField key={field.key} doc={doc} field={field} />)}{(!state.onlyPending || !doc.confirmed_fields.includes("hazard_statements")) && <HazardReview doc={doc} />}{state.onlyPending && count(doc) === 5 && <div className="review-all-done">모든 핵심 필드의 검토가 완료되었습니다.</div>}</div>}
   </section>;
 }
 
