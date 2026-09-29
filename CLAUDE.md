@@ -19,7 +19,7 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
   - 평가가 끝나기 전에는 test 문서의 파일명 · 제조사 · 정답에서 나온 값(성분 수 · 신호어 등)을 어떤 파일에도 적지 않는다. data/sources.csv도 마찬가지다.
   - 커밋한 값은 지워도 공개 이력과 PR 기록에 남는다.
 - **데이터 용도는 data/splits.csv가 유일한 기준:**
-  - 학습(증강 · JSONL) · few-shot은 split=train만 쓴다. 조건 선택(r1 · r2 비교, 모델 고정)은 split=val만 쓴다.
+  - 학습(증강 · JSONL) · few-shot은 split=train만 쓴다. 조건 선택(r1 · r2 · r3 비교, 모델 고정)은 split=val만 쓴다.
   - splits.csv는 PM 승인 없이 바꾸지 않는다.
 - **정답은 사람이 확정한다.**
   - LLM 초안을 쓰면 원문과 모두 대조한 뒤 확정한다. 요청받지 않은 정답 값 수정은 하지 않는다.
@@ -53,12 +53,13 @@ MSDS 1~3항 → 핵심 5필드 고정 JSON 추출(Qwen3-4B QLoRA) + Rule Engine 
 
 ## 규약
 - doc_id는 `KR|EN-제조사약칭-번호`, 정답 · 출력 파일명은 `{doc_id}.json`이다.
-- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_final}/val/{doc_id}.json`. test는 저장소 밖 `--out-root` 아래 `{base_zs,base_fs,qlora_final}/test/`(infer · score가 강제, `.gitignore`에도 `outputs/*/test/`)
+- 모델 출력: `outputs/{base_zs,base_fs,qlora_r1,qlora_r2,qlora_r3,qlora_final}/val/{doc_id}.json`. test는 저장소 밖 `--out-root` 아래 `{base_zs,base_fs,qlora_final}/test/`(infer · score가 강제, `.gitignore`에도 `outputs/*/test/`)
   - 이 파일에는 모델이 낸 JSON만 둔다. 파싱 실패도 모델 출력 그대로 저장해 실패로 집계한다.
   - 시간 · 토큰 · 원문 로그는 `.jsonl`로, 채점 상세는 `*.json`이 아닌 이름으로 둔다. 검사기가 폴더의 `*.json`을 모두 검사한다.
+- 프롬프트 버전(`core/prompt.py`의 `PROMPTS`: v1 · v2 · v2_1, 기본 v1): 결과를 만든 버전의 문구는 바꾸지 않고, 고칠 때는 새 버전을 추가한다. v1 밖의 버전은 v1 자리를 덮어쓰지 않도록 따로 둔다 — 출력 `outputs/prompt_{버전}/{조건}/val/`, 점수 `report/scores_prompt_{버전}.csv`, 학습셋 `data/prompt_{버전}/`. 스크립트는 `--prompt {버전}`(학습은 설정 `prompt:`)으로 쓰고, 폴더 · JSONL의 버전이나 문구 해시가 다르면 거부한다.
 - 전처리: `data/text/{doc_id}.txt`. 실패 기록은 `data/text/_cut_log.csv` + `data/text/review_required/`
 - 점수: `report/scores.csv` (condition, split, subset, metric, value). 평가셋별로 행을 나누고 합산하지 않는다.
-- 학습: `pipeline/configs/r1.yaml`이 기준이고, r2는 조건 1개만 바꾼다. 기록은 `runs/{날짜}_{r1|r2}/`
+- 학습: `pipeline/configs/r1.yaml`이 기준이고, r2 · r3는 각각 r1에서 조건 1개만 바꾼다(r2 = 프롬프트 v2, r3 = 프롬프트 v2_1, 3회째 학습은 PM 결정 2026-09-29). 기록은 `runs/{날짜}_{r1|r2|r3}/`
 - 결정 기록: report/decisions.md
 - 커밋 prefix: `feat:` / `fix:` / `fix(label):` / `docs:` / `chore:`
 - Git 태그: `label-rules-frozen`(라벨 규칙 동결) → `split-frozen`(train · val 분할 확정) → `test-sealed`(test 정답 확정 · 봉인 해시 커밋 직후)

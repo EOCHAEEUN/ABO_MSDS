@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 import pipeline.train_qlora as tq  # noqa: E402
-from core.prompt import build_messages, format_target  # noqa: E402
+from core.prompt import PROMPTS, build_messages, format_target  # noqa: E402
 from pipeline.guard import GuardError  # noqa: E402
 
 FIX = ROOT / "test" / "fixtures"
@@ -54,6 +54,17 @@ class ConfigTest(unittest.TestCase):
             self.assertEqual(cfg["num_epochs"], 3)
             self.assertEqual(cfg["learning_rate"], tq.load_config(tq.BASE_CONFIG)["learning_rate"])
 
+    def test_r2_r3_change_only_prompt(self):
+        """r2(v2) · r3(v2_1)는 각각 r1에서 프롬프트 하나만 바꾼다(데이터 경로는 그 버전의 학습셋)."""
+        base = tq.load_config(tq.BASE_CONFIG)
+        for name, ver in (("r2", "v2"), ("r3", "v2_1")):
+            cfg = tq.load_config(tq.BASE_CONFIG.parent / f"{name}.yaml")
+            diff = {k for k in cfg if cfg[k] != base.get(k)}
+            self.assertEqual(diff, {"prompt", "train_jsonl", "val_jsonl", "build_report"}, name)
+            self.assertEqual(cfg["prompt"], ver)
+            self.assertTrue(cfg["train_jsonl"].startswith(f"data/prompt_{ver}/"), name)
+        self.assertIn("r3", tq.RESERVED_NAMES)
+
 
 class DataGuardTest(unittest.TestCase):
     """학습 데이터에 train이 아닌 문서가 섞이면 모델을 불러오기 전에 멈춘다."""
@@ -65,10 +76,11 @@ class DataGuardTest(unittest.TestCase):
     def tearDown(self):
         tq.SPLITS_CSV = self.orig
 
-    def write(self, d, name, doc_ids):
+    def write(self, d, name, doc_ids, prompt="v1"):
         p = Path(d) / name
-        p.write_text("".join(json.dumps({"doc_id": x, "variant": "orig", "messages": []}) + "\n" for x in doc_ids),
-                     encoding="utf-8")
+        msgs = [{"role": "system", "content": PROMPTS[prompt]}]
+        p.write_text("".join(json.dumps({"doc_id": x, "variant": "orig", "messages": msgs}, ensure_ascii=False) + "\n"
+                             for x in doc_ids), encoding="utf-8")
         return p
 
     def test_train_only_passes(self):
@@ -148,6 +160,22 @@ class PrecheckTest(unittest.TestCase):
         rep["inputs"]["splits_sha256"] = "0" * 64
         self.report.write_text(json.dumps(rep), encoding="utf-8")
         self.stops("splits_unchanged_since_build")
+
+    def test_prompt_version_mismatch_stops(self):
+        """JSONL은 v1인데 설정은 v2 → 학습 v1 · 추론 v2 불일치를 모델을 올리기 전에 막는다"""
+        with self.assertRaises(SystemExit) as cm:
+            tq.precheck(self.train, self.val, self.report, "v2")
+        self.assertIn("시스템 프롬프트", str(cm.exception))
+        aug = tq.precheck(self.train, self.val, self.report, "v1")
+        self.assertEqual(aug["prompt"]["version"], "v1")
+
+    def test_data_paths_follow_prompt_version(self):
+        cfg = tq.load_config(tq.BASE_CONFIG)
+        self.assertEqual(cfg["prompt"], "v1")
+        self.assertEqual(tq.data_paths(cfg), (tq.TRAIN_JSONL, tq.VAL_JSONL, tq.BUILD_REPORT))
+        v2 = tq.data_paths({**cfg, "prompt": "v2"})
+        self.assertEqual(v2, tuple(p.parent / "prompt_v2" / p.name for p in (tq.TRAIN_JSONL, tq.VAL_JSONL, tq.BUILD_REPORT)))
+        self.assertEqual(tq.data_paths({**cfg, "train_jsonl": "x/t.jsonl"})[0], tq.ROOT / "x/t.jsonl")
 
     def test_current_repo_data_passes(self):
         tq.SPLITS_CSV = self.orig

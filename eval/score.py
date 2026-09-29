@@ -5,8 +5,11 @@ outputs/{condition}/{split}/{doc_id}.json(infer.py가 저장한 모델 출력 �
 report/scores.csv에 (condition, split, subset, metric, value)로 기록한다.
 subset은 val·val_en은 언어(ko/en), test는 test 담당이 넘긴 서식 목록(--subset-csv)으로 나누고 합산하지 않는다.
 시간·토큰은 같은 폴더의 _log.jsonl에서 읽는다. 문서별 상세는 _score_detail.jsonl(*.json이 아닌 이름, CLAUDE.md 규약).
+--prompt v2: outputs/prompt_v2/{condition}/{split}/을 채점해 report/scores_prompt_v2.csv에 쓴다(v1 기록을 덮어쓰지 않음).
+출력 폴더의 _run.jsonl에 적힌 프롬프트 버전이 --prompt와 다르면 거부한다.
 
   python3 eval/score.py --condition base_zs --split val
+  python3 eval/score.py --condition base_fs --split val --prompt v2
   python3 eval/score.py --split val --self-check                  # 정답을 예측으로 넣어 1.0이 나오는지 점검
   python3 eval/score.py --condition qlora_final --split test --allow-test --out-root <저장소 밖> \
                          --label-dir <저장소 밖> --subset-csv <저장소 밖> --text-dir <저장소 밖>
@@ -67,10 +70,19 @@ from core.normalize import (  # noqa: E402
     split_hcodes,
     squash,
 )
+from core.prompt import DEFAULT_PROMPT, PROMPTS, prompt_sha256, prompt_subdir, recorded_prompt_version  # noqa: E402
 from core.schema import check_schema, extract_json  # noqa: E402
 
 SPLITS_CSV = ROOT / "data" / "splits.csv"
-SCORES_CSV = ROOT / "report" / "scores.csv"
+SCORES_CSV = ROOT / "report" / "scores.csv"  # v1. 다른 프롬프트 버전은 scores_csv_for()
+
+
+def scores_csv_for(version):
+    """프롬프트 버전별 점수 파일. v1은 report/scores.csv(기존), 그 밖은 report/scores_prompt_{버전}.csv."""
+    sub = prompt_subdir(version)
+    return SCORES_CSV if not sub else SCORES_CSV.with_name(f"scores_{sub}.csv")
+
+
 OUTPUT_ROOT = ROOT / "outputs"
 EXPERIMENT_JSON = ROOT / "eval" / "experiment.json"  # 단계 7(모델·실험 고정)에서 PM이 커밋
 # train: Base 난이도 진단 전용 — scores.csv에 쓰지 않는다. test: 정답은 저장소 밖(--label-dir 필수)
@@ -506,6 +518,21 @@ def outside_repo(path):
         return True
 
 
+def check_prompt_version(pred_dir, version):
+    """출력 폴더를 만든 프롬프트(_run.jsonl 첫 줄)가 --prompt와 같아야 한다. 기록이 없으면(출력 없음) 넘어간다."""
+    run_path = Path(pred_dir) / "_run.jsonl"
+    if not run_path.exists():
+        return
+    lines = run_path.read_text(encoding="utf-8").splitlines()
+    run = json.loads(lines[0]) if lines else {}
+    got = recorded_prompt_version(run)
+    if got != version:
+        sys.exit(f"[거부] {pred_dir}의 출력은 프롬프트 {got}로 만든 것이다(--prompt {version}). "
+                 "버전이 다른 점수를 섞지 않는다")
+    if run.get("prompt_text_sha256") and run["prompt_text_sha256"] != prompt_sha256(version):
+        sys.exit(f"[거부] {pred_dir}를 만든 뒤 프롬프트 {version}의 문구가 바뀌었다. 새 버전으로 다시 돌릴 것")
+
+
 def gate_test(args, pred_dir):
     """test 채점 전 확인. 통과하기 전에는 정답 폴더를 열지 않는다. → 채점할 doc_id 목록"""
     if not args.allow_test:
@@ -544,6 +571,9 @@ def main(argv=None):
     ap.add_argument("--text-dir", help="무근거 생성 대조용 1~3항 텍스트 폴더(기본 data/text, test는 저장소 밖 필수)")
     ap.add_argument("--subset-csv", help="test 전용: (doc_id, subset) 목록(test 담당이 넘김)")
     ap.add_argument("--out-root", help="출력 루트(기본 outputs/, test는 저장소 밖 필수 — infer.py와 같은 폴더)")
+    ap.add_argument("--prompt", choices=sorted(PROMPTS), default=DEFAULT_PROMPT,
+                    help=f"프롬프트 버전(기본 {DEFAULT_PROMPT}). v1이 아니면 <out-root>/prompt_<버전>/을 채점하고 "
+                         "report/scores_prompt_<버전>.csv에 쓴다")
     args = ap.parse_args(argv)
 
     if not args.self_check and not args.condition:
@@ -552,7 +582,11 @@ def main(argv=None):
         args.text_dir = args.text_dir or TEXT_DIR
         args.out_root = args.out_root or OUTPUT_ROOT
     is_test = args.split == "test"
-    pred_dir = Path(args.out_root or OUTPUT_ROOT) / (args.condition or "_self_check") / args.split
+    pred_dir = (Path(args.out_root or OUTPUT_ROOT) / prompt_subdir(args.prompt) / (args.condition or "_self_check")
+                / args.split)
+    scores_csv = scores_csv_for(args.prompt)
+    if not args.self_check:
+        check_prompt_version(pred_dir, args.prompt)
 
     if is_test:
         subset_of = gate_test(args, pred_dir)
@@ -595,14 +629,14 @@ def main(argv=None):
 
     if not args.no_write:
         if args.split != "train":  # 진단 점수는 보고용 scores.csv와 섞지 않는다
-            upsert_scores(args.condition, args.split, rows)
+            upsert_scores(args.condition, args.split, rows, scores_csv)
         detail_path = pred_dir / DETAIL_FILE
         with open(detail_path, "w", encoding="utf-8") as f:
             f.write(json.dumps({"include_non_ghs": args.include_non_ghs,
                                 "unknown_hazard_classes": sorted(unknown)}, ensure_ascii=False) + "\n")
             for d in details.values():
                 f.write(json.dumps(d, ensure_ascii=False, default=list) + "\n")
-        where = "scores.csv에는 안 씀(진단 전용)" if args.split == "train" else f"기록: {SCORES_CSV}"
+        where = "scores.csv에는 안 씀(진단 전용)" if args.split == "train" else f"기록: {scores_csv}"
         print(f"\n{where}  /  문서별 상세: {detail_path}")
         if is_test:
             write_test_extras(args, pred_dir, rows, unknown_lines, detail_path)

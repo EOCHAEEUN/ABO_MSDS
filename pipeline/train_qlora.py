@@ -1,10 +1,10 @@
 """
-[강덕우] + 양세윤 — QLoRA 학습, runs/{날짜}_{r1|r2}/에 config.json·loss 기록
+[강덕우] + 양세윤 — QLoRA 학습, runs/{날짜}_{r1|r2|r3}/에 config.json·loss 기록
 
   python3 pipeline/train_qlora.py --config pipeline/configs/r1.yaml --memcheck   # 가장 긴 예시로 1 step, 최대 메모리만 확인
   python3 pipeline/train_qlora.py --config pipeline/configs/r1.yaml --smoke 10   # 스모크: 10 step, runs/ 밖(/tmp)에 기록
   python3 pipeline/train_qlora.py --config pipeline/configs/r1.yaml              # 학습(PM 승인 후)
-  python3 pipeline/train_qlora.py --config pipeline/configs/r2.yaml              # r1.yaml 위에 r2.yaml 값만 덮어씀
+  python3 pipeline/train_qlora.py --config pipeline/configs/r2.yaml              # r1.yaml 위에 r2.yaml 값만 덮어씀(r3.yaml도 같음)
 
 입력: data/train.jsonl, data/val.jsonl (pipeline/build_jsonl.py 결과, 한 줄 = {"doc_id", "split", "variant", "messages"})
 출력: runs/{MMDD}_{이름}/
@@ -18,9 +18,13 @@
   loss는 정답 토큰에만 건다(프롬프트는 -100).
 
 모델을 올리기 전에 멈추는 경우(precheck): train · val JSONL이 없거나 빔, 데이터 용도 위반, 증강 보고서 없음,
-보고서와 지금의 train · val JSONL · 라벨 · 분할표가 다름. --memcheck는 여유 5% 미만이면 실패로 끝난다(종료 코드 1).
+보고서와 지금의 train · val JSONL · 라벨 · 분할표가 다름, JSONL의 시스템 프롬프트가 설정의 prompt 버전과 다름
+(학습은 v1, 추론은 v2처럼 어긋나는 것을 막음).
 
-스모크(--smoke)는 동작 · 메모리 · 속도 확인용이다. runs/에 쓰지 않고 r1 · r2 이름을 쓰지 않으며, 결과를 조건 선택에 쓰지 않는다.
+프롬프트 버전: 설정의 prompt(기본 v1, core/prompt.py PROMPTS). v1이 아니면 데이터 기본 경로가 data/prompt_<버전>/
+(pipeline/build_jsonl.py --prompt <버전>의 출력)이다. r2를 프롬프트 v2로 하면 r2.yaml에 prompt: v2 한 줄만 적는다(r3 = v2_1도 같은 방식). --memcheck는 여유 5% 미만이면 실패로 끝난다(종료 코드 1).
+
+스모크(--smoke)는 동작 · 메모리 · 속도 확인용이다. runs/에 쓰지 않고 r1 · r2 · r3 이름을 쓰지 않으며, 결과를 조건 선택에 쓰지 않는다.
 """
 import argparse
 import csv
@@ -39,7 +43,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from core.prompt import CHAT_TEMPLATE_KWARGS  # noqa: E402
+from core.prompt import CHAT_TEMPLATE_KWARGS, DEFAULT_PROMPT, PROMPTS, prompt_sha256, prompt_subdir  # noqa: E402
 from pipeline.guard import load_splits, refuse_sealed, require_splits  # noqa: E402
 
 BASE_CONFIG = ROOT / "pipeline" / "configs" / "r1.yaml"
@@ -48,8 +52,9 @@ VAL_JSONL = ROOT / "data" / "val.jsonl"
 SPLITS_CSV = ROOT / "data" / "splits.csv"
 BUILD_REPORT = ROOT / "data" / "build_report.json"   # 설정의 build_report로 바꿀 수 있다(train_jsonl을 바꿀 때 같이)
 SMOKE_ROOT = Path("/tmp/msds_smoke")
-RESERVED_NAMES = {"r1", "r2", "final"}        # 스모크 · 부분 실행에 쓰면 안 되는 이름
-DEFAULTS = {"warmup_ratio": 0.03, "weight_decay": 0.0, "max_grad_norm": 1.0, "seed": 42, "gradient_checkpointing": True}
+RESERVED_NAMES = {"r1", "r2", "r3", "final"}        # 스모크 · 부분 실행에 쓰면 안 되는 이름
+DEFAULTS = {"warmup_ratio": 0.03, "weight_decay": 0.0, "max_grad_norm": 1.0, "seed": 42, "gradient_checkpointing": True,
+            "prompt": DEFAULT_PROMPT}
 
 
 # ---------------------------------------------------------------- 설정 · 기록
@@ -60,6 +65,13 @@ def load_config(path):
     if Path(path).resolve() != BASE_CONFIG.resolve():
         cfg.update(yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {})
     return cfg
+
+
+def data_paths(cfg):
+    """→ (train JSONL, val JSONL, 증강 보고서). 설정에 경로가 없으면 프롬프트 버전의 기본 위치(v1은 data/ 그대로)."""
+    sub = prompt_subdir(cfg["prompt"])
+    return tuple(ROOT / cfg[k] if cfg.get(k) else p.parent / sub / p.name
+                 for k, p in (("train_jsonl", TRAIN_JSONL), ("val_jsonl", VAL_JSONL), ("build_report", BUILD_REPORT)))
 
 
 def sha256(path):
@@ -146,12 +158,27 @@ PRECHECK_KEYS = ("matches_train_jsonl", "labels_unchanged_since_build", "splits_
                  "matches_val_jsonl", "val_labels_unchanged_since_build")
 
 
-def precheck(train_path, val_path, report_path=None):
+def prompt_mismatches(path, version):
+    """JSONL에서 시스템 프롬프트가 PROMPTS[version]과 다른 예시 → ["doc_id/variant", ...]"""
+    expected = PROMPTS[version]
+    bad = []
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        r = json.loads(line)
+        msgs = r.get("messages") or [{}]
+        if msgs[0].get("role") != "system" or msgs[0].get("content") != expected:
+            bad.append(f"{r.get('doc_id')}/{r.get('variant')}")
+    return bad
+
+
+def precheck(train_path, val_path, report_path=None, prompt=DEFAULT_PROMPT):
     """GPU에 모델을 올리기 전에 멈출 것들 → 증강 보고서 요약(config.json에 남긴다).
     - train · val JSONL이 없거나 비었다
     - 데이터 용도 위반(check_data)
     - 증강 보고서(data/build_report.json)가 없다
-    - 보고서와 지금의 train · val JSONL · 라벨 · 분할표가 다르다(보고서를 만든 뒤 무언가 바뀜)"""
+    - 보고서와 지금의 train · val JSONL · 라벨 · 분할표가 다르다(보고서를 만든 뒤 무언가 바뀜)
+    - JSONL의 시스템 프롬프트가 prompt 버전의 문구와 다르다"""
     for p in (train_path, val_path):
         if not Path(p).exists() or not Path(p).stat().st_size:
             sys.exit(f"[중단] {p}가 없거나 비었다 — pipeline/build_jsonl.py로 만들 것")
@@ -162,6 +189,12 @@ def precheck(train_path, val_path, report_path=None):
     bad = [k for k in PRECHECK_KEYS if not aug.get(k)]
     if bad:
         sys.exit(f"[중단] 증강 보고서와 지금의 데이터가 다르다: {bad} — pipeline/build_jsonl.py로 다시 만들 것")
+    for p in (train_path, val_path):
+        wrong = prompt_mismatches(p, prompt)
+        if wrong:
+            sys.exit(f"[중단] {p}의 시스템 프롬프트가 설정의 prompt {prompt} 문구와 다르다({len(wrong)}건, 예: {wrong[:3]}) "
+                     f"— pipeline/build_jsonl.py --prompt {prompt}로 다시 만들 것")
+    aug["prompt"] = {"version": prompt, "text_sha256": prompt_sha256(prompt)}
     return aug
 
 
@@ -290,10 +323,11 @@ def memcheck(cfg):
     """가장 긴 train 예시 1건으로 forward+backward+optimizer step 1회 → 최대 GPU 메모리."""
     import torch
 
-    train_path = ROOT / cfg.get("train_jsonl", TRAIN_JSONL)
-    precheck(train_path, ROOT / cfg.get("val_jsonl", VAL_JSONL), ROOT / cfg.get("build_report", BUILD_REPORT))
+    train_path, val_path, report_path = data_paths(cfg)
+    precheck(train_path, val_path, report_path, cfg["prompt"])
     tok, model = load_model(cfg)
     rows, _ = load_split(tok, train_path, cfg["max_length"])
+    val_rows, _ = load_split(tok, val_path, cfg["max_length"])
     longest = max(rows, key=lambda r: len(r[0]))
     print(f"가장 긴 예시: {len(longest[0])} 토큰 (정답 {sum(x != -100 for x in longest[1])} 토큰), "
           f"max_length {cfg['max_length']}, gradient_checkpointing {cfg['gradient_checkpointing']}")
@@ -309,6 +343,12 @@ def memcheck(cfg):
     m = peak_mem()
     total = torch.cuda.get_device_properties(0).total_memory / 2**30
     print(f"loss {loss.item():.4f} · 1 step {time.perf_counter() - t0:.1f}s")
+    if val_rows:  # val loss 계산(역전파 없음)도 같은 GPU 상태(옵티마이저 상태가 올라간 뒤)에서 가장 긴 예시로 확인.
+        v_longest = max(val_rows, key=lambda r: len(r[0]))  # val 예시는 train보다 길 수 있다(v2: train 3,551 · val ~4,096)
+        print(f"가장 긴 val 예시: {len(v_longest[0])} 토큰(역전파 없음)")
+        evaluate(model, [v_longest], tok.pad_token_id)
+        torch.cuda.synchronize()
+        m = peak_mem()
     ok = mem_verdict(m["reserved_gib"], total)
     print(f"최대 메모리 allocated {m['allocated_gib']:.2f} GiB / reserved {m['reserved_gib']:.2f} GiB / GPU {total:.2f} GiB "
           f"→ {'통과' if ok else '위험: 여유 5% 미만'}")
@@ -332,9 +372,8 @@ def evaluate(model, rows, pad_id):
 def train(cfg, name, run_dir, max_steps=None, smoke=False):
     import torch
 
-    train_path = ROOT / cfg.get("train_jsonl", TRAIN_JSONL)
-    val_path = ROOT / cfg.get("val_jsonl", VAL_JSONL)
-    aug = precheck(train_path, val_path, ROOT / cfg.get("build_report", BUILD_REPORT))
+    train_path, val_path, report_path = data_paths(cfg)
+    aug = precheck(train_path, val_path, report_path, cfg["prompt"])
     if (run_dir / "adapter").exists():
         sys.exit(f"이미 있음: {run_dir} — 지우거나 이름을 바꿀 것(--name)")
     run_dir.mkdir(parents=True, exist_ok=True)

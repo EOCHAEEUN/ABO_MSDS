@@ -126,7 +126,7 @@
 | split | 위치 | 구성 | 용도 |
 |---|---|---|---|
 | train | `data/labels/` | 노출 문서 중 국문 35건(9개 그룹) | 증강 → 학습. few-shot 예시 |
-| val | `data/labels/` | 노출 문서 중 국문 10건(8개 그룹, 현행 5 · 수입품 국문판 5). train과 제조사 불겹침. 구서식은 전부 노루 계열이라 val에 넣지 않음 | 조건 선택(r1 · r2 비교, 모델 고정) |
+| val | `data/labels/` | 노출 문서 중 국문 10건(8개 그룹, 현행 5 · 수입품 국문판 5). train과 제조사 불겹침. 구서식은 전부 노루 계열이라 val에 넣지 않음 | 조건 선택(r1 · r2 · r3 비교, 모델 고정) |
 | test | 저장소 밖(PM 로컬) | 노출 문서 중 국문 18건. train · val과 제조사(관계사 포함)가 겹치지 않아야 함. splits.csv에 넣지 않음 | 모델 고정 뒤 비교군마다 1회. **봉인** |
 | val_en | `eval/val_en/` | 노출 문서 중 영문 (선택) | 영문 정규화 점검. 보고 수치로 쓰지 않음 |
 
@@ -201,7 +201,7 @@
 |---|---|---|
 | Base zero-shot | `outputs/base_zs/` | 출발선 |
 | Base few-shot (k=2, train에서 추출) | `outputs/base_fs/` | 프롬프트 엔지니어링 대조군 |
-| QLoRA 1차 · 2차 · 최종 | `outputs/qlora_r1/` · `qlora_r2/` · `qlora_final/` | 본 과업 결과물. r1 · r2는 val에서 비교하고, test에는 `qlora_final`(r1과 r2 중 고른 것)만 돌림 |
+| QLoRA 1차 · 2차 · 3차 · 최종 | `outputs/qlora_r1/` · `qlora_r2/` · `qlora_r3/` · `qlora_final/` | 본 과업 결과물. r1 · r2 · r3는 val에서 비교하고, test에는 `qlora_final`(그중 고른 것)만 돌림 |
 
 - **효율:** 문서 1건당 평균 생성 시간 · 입력 · 출력 토큰
 - **짝 비교:** 같은 문서에서 두 조건의 승 · 패 · 무, 제조사 그룹 단위 부트스트랩 95% 신뢰구간. 문서 수와 그룹 수를 함께 적습니다.
@@ -216,8 +216,8 @@
 | QLoRA | rank 16 / alpha 32 / dropout 0.05, q · k · v · o_proj | `pipeline/configs/r1.yaml` |
 | 최대 길이 | **4096에서 시작**, gradient checkpointing | 파일럿에서 1536이면 정답 JSON 끝이 잘렸음. 새 라벨로 P50/P90/P95/MAX를 다시 재고 입력 + 정답 길이를 함께 봄. 초과 샘플은 목록화(조용히 버리지 않음) |
 | batch / accum / epoch | 1 / 8 / 2 | effective batch · 총 step · 학습 시간을 run 설정에 기록 |
-| 2차 학습 | r1에서 조건 1개만 변경(epoch / 증강 배수 / 학습률 중 하나) | `pipeline/configs/r2.yaml`. 증강 배수를 바꾸면 step 수도 함께 바뀜 — 보고에 밝힘 |
-| 학습 상한 | **2회** (r1 · r2) | 추가 학습은 PM 결정 + 사유 기록 |
+| 2차 학습 | r1에서 조건 1개만 변경(epoch / 증강 배수 / 학습률 / 프롬프트 버전 중 하나) | `pipeline/configs/r2.yaml`. 증강 배수를 바꾸면 step 수도 함께 바뀜 — 보고에 밝힘. 프롬프트 v2(2026-09-29 추가)는 학습셋을 `--prompt v2`로 다시 만들어 씀. 3차 학습 r3(`pipeline/configs/r3.yaml`)도 r1에서 프롬프트만 v2_1로 바꾸고 학습셋을 `--prompt v2_1`로 만듦 |
+| 학습 상한 | **2회** (r1 · r2) → r3 추가(PM 결정 2026-09-29, `report/decisions.md`) | 추가 학습은 PM 결정 + 사유 기록 |
 | 디코딩 | greedy, seed 고정, `max_new_tokens` = train · val 정답 JSON 최장 토큰 × 1.3 | 비교군 전부 동일. 새 라벨로 실측해 실험 고정 전에 정함. **실험 고정 전 임시 기본값(2026-09-28): 2048**(`eval/infer.py`의 `DEFAULT_MAX_NEW_TOKENS`, test에는 미적용). 옛 라벨 기준 최장 975토큰 × 1.3 ≈ 1,268인데도 임시값 1024에서 fixture 문서가 잘려 2048로 올림. 학습 `max_length`(4096, 입력+정답 합계용)를 그대로 쓰지 않은 이유는 EOS 없이 도는 실패 사례가 그 값까지 다 채워 진단 단계 생성 시간을 크게 늘릴 수 있어서임 |
 | 입력 전처리 | pdfplumber → 4항 제목 이전까지 절단 → 2항 P문구 블록 제거 | 학습 · 평가 · 서빙이 `core/`의 같은 추출기를 씀 |
 | 서빙 | FastAPI + transformers + peft, 베이스 · 어댑터 동시 보유 | `/extract` `/compare` `/confirm` `/documents` |
