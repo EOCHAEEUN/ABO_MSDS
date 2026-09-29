@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile  # noqa: E402
+from fastapi import Body, FastAPI, File, Form, HTTPException, Query, UploadFile  # noqa: E402
 from fastapi.responses import FileResponse  # noqa: E402
 
 from app.db import connect, init_db, save_confirmation, save_extraction  # noqa: E402
@@ -182,6 +182,41 @@ def documents():
     finally:
         conn.close()
     return {"documents": docs, "skipped": skipped}
+
+
+DATA_TABLES = ("msds_documents", "msds_ingredients", "msds_classifications",
+               "msds_hazard_statements", "msds_reviews")
+
+
+@app.get("/data")
+def database_rows(table: str = "msds_documents", limit: int = Query(25, ge=1, le=100),
+                  offset: int = Query(0, ge=0)):
+    """SQLite 적재 상태를 읽기 전용으로 표시한다. 봉인된 test 파일 해시는 제외한다."""
+    if table not in DATA_TABLES:
+        raise HTTPException(422, f"조회할 수 있는 테이블: {', '.join(DATA_TABLES)}")
+    blocked = sorted(sealed_hashes())
+    where = f" WHERE d.file_hash NOT IN ({','.join('?' for _ in blocked)})" if blocked else ""
+    tables = []
+    conn = db()
+    try:
+        for name in DATA_TABLES:
+            joined = ("msds_documents AS d" if name == "msds_documents"
+                      else f"{name} AS t JOIN msds_documents AS d ON t.document_id = d.id")
+            count = conn.execute(f"SELECT COUNT(*) FROM {joined}{where}", blocked).fetchone()[0]
+            tables.append({"name": name, "count": count})
+        columns = [{"name": row["name"], "type": row["type"]}
+                   for row in conn.execute(f"PRAGMA table_info({table})")]
+        joined = ("msds_documents AS d" if table == "msds_documents"
+                  else f"{table} AS t JOIN msds_documents AS d ON t.document_id = d.id")
+        alias = "d" if table == "msds_documents" else "t"
+        rows = [dict(row) for row in conn.execute(
+            f"SELECT {alias}.* FROM {joined}{where} ORDER BY {alias}.id DESC LIMIT ? OFFSET ?",
+            [*blocked, limit, offset])]
+    finally:
+        conn.close()
+    return {"table": table, "tables": tables, "columns": columns, "rows": rows,
+            "total": next(item["count"] for item in tables if item["name"] == table),
+            "limit": limit, "offset": offset}
 
 
 @app.post("/extract")

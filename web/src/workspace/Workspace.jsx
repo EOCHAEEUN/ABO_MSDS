@@ -4,6 +4,7 @@ import { Button, Icon } from "./ui.jsx";
 import ReviewPage from "./ReviewPage.jsx";
 import DocumentsPage from "./DocumentsPage.jsx";
 import ComparePage from "./ComparePage.jsx";
+import DataPage from "./DataPage.jsx";
 import WorkspaceDialogs from "./WorkspaceDialogs.jsx";
 import capybaraMsds from "./capybara-msds.png";
 import msdsLabMark from "./msds-lab-mark.svg";
@@ -14,6 +15,7 @@ const menu = [
   { id: "review", label: "문서 검토", icon: "document" },
   { id: "documents", label: "문서 목록", icon: "list" },
   { id: "compare", label: "실험 비교", icon: "chart" },
+  { id: "data", label: "데이터", icon: "database" },
 ];
 
 function Sidebar({ view }) {
@@ -32,10 +34,10 @@ export default function Workspace() {
   const controller = useWorkspaceController();
   const { state, doc } = controller;
   let content;
-  if (state.loading) content = <main id="main" className="loading-state"><span className="spinner" />문서를 불러오고 있습니다.</main>;
-  else if (state.error && !doc) content = <main id="main" className="empty-state error-state"><h1>문서를 불러오지 못했습니다.</h1><p>{state.error}</p><Button action="refresh">다시 시도</Button></main>;
-  else if (!doc && state.view !== "documents") content = <main id="main" className="empty-state"><h1>등록된 문서가 없습니다.</h1><p>PDF를 업로드하여 문서 검토를 시작하세요.</p><Button action="upload" className="primary">문서 업로드</Button></main>;
-  else content = state.view === "review" ? <ReviewPage doc={doc} /> : state.view === "documents" ? <DocumentsPage /> : <ComparePage doc={doc} />;
+  if (state.loading && state.view !== "data") content = <main id="main" className="loading-state"><span className="spinner" />문서를 불러오고 있습니다.</main>;
+  else if (state.error && !doc && state.view !== "data") content = <main id="main" className="empty-state error-state"><h1>문서를 불러오지 못했습니다.</h1><p>{state.error}</p><Button action="refresh">다시 시도</Button></main>;
+  else if (!doc && !["documents", "data"].includes(state.view)) content = <main id="main" className="empty-state"><h1>등록된 문서가 없습니다.</h1><p>PDF를 업로드하여 문서 검토를 시작하세요.</p><Button action="upload" className="primary">문서 업로드</Button></main>;
+  else content = state.view === "review" ? <ReviewPage doc={doc} /> : state.view === "documents" ? <DocumentsPage /> : state.view === "data" ? <DataPage /> : <ComparePage doc={doc} />;
   return <WorkspaceContext.Provider value={controller}>
     <a className="skip-link" href="#main">본문으로 이동</a>
     <div id="app" className={`app-shell view-${state.view}`}><Sidebar view={state.view} /><div className="workspace-main">{content}</div></div>

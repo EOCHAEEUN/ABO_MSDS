@@ -44,6 +44,7 @@ function localPdfs() {
 const API = process.env.MSDS_API || "http://127.0.0.1:8000";
 const apiProxy = {
   "^/(documents|extract|confirm|compare)$": { target: API, changeOrigin: true },
+  "^/data(?:\\?|$)": { target: API, changeOrigin: true },
   "^/files/\\d+\\.pdf$": { target: API, changeOrigin: true },
 };
 
