@@ -1,0 +1,111 @@
+a,b,split,source,subset,metric,n_docs,n_groups,win,loss,tie,mean_diff,ci_low,ci_high,n_boot,seed
+qlora_final,base_fs,test,first,all,parse_rate,31,18,0,0,31,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,all,schema_rate,31,18,1,1,29,0,-0.0833,0.1071,10000,42
+qlora_final,base_fs,test,first,all,product_name_acc,31,18,1,0,30,0.0323,0.0000,0.1154,10000,42
+qlora_final,base_fs,test,first,all,signal_word_acc,31,18,0,0,31,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,all,ghs_classification,31,18,5,0,26,0.1613,0.0513,0.3000,10000,42
+qlora_final,base_fs,test,first,all,hazard_statements,31,18,4,1,26,0.0968,-0.0345,0.2581,10000,42
+qlora_final,base_fs,test,first,all,cas,31,18,2,3,26,-0.0323,-0.1892,0.1429,10000,42
+qlora_final,base_fs,test,first,all,pair,31,18,2,4,25,-0.0645,-0.2258,0.1154,10000,42
+qlora_final,base_fs,test,first,all,nocas,31,18,5,4,22,0.0323,-0.1724,0.2368,10000,42
+qlora_final,base_fs,test,first,all,doc_exact,31,18,3,4,24,-0.0323,-0.2069,0.1613,10000,42
+qlora_final,base_fs,test,first,all,doc_exact_ext,31,18,4,3,24,0.0323,-0.1379,0.2000,10000,42
+qlora_final,base_fs,test,first,구서식,parse_rate,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,schema_rate,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,product_name_acc,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,signal_word_acc,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,ghs_classification,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,hazard_statements,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,cas,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,pair,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,nocas,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,doc_exact,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,구서식,doc_exact_ext,1,1,0,0,1,0,,,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,parse_rate,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,schema_rate,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,product_name_acc,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,signal_word_acc,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,ghs_classification,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,hazard_statements,2,2,0,1,1,-0.5000,-1.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,cas,2,2,1,0,1,0.5000,0.0000,1.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,pair,2,2,1,0,1,0.5000,0.0000,1.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,nocas,2,2,1,0,1,0.5000,0.0000,1.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,doc_exact,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,수입품 국문판,doc_exact_ext,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,영문,parse_rate,13,11,0,0,13,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,영문,schema_rate,13,11,1,1,11,0,-0.2000,0.2500,10000,42
+qlora_final,base_fs,test,first,영문,product_name_acc,13,11,1,0,12,0.0769,0.0000,0.2500,10000,42
+qlora_final,base_fs,test,first,영문,signal_word_acc,13,11,0,0,13,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,영문,ghs_classification,13,11,4,0,9,0.3077,0.0769,0.5714,10000,42
+qlora_final,base_fs,test,first,영문,hazard_statements,13,11,4,0,9,0.3077,0.0714,0.6364,10000,42
+qlora_final,base_fs,test,first,영문,cas,13,11,1,0,12,0.0769,0.0000,0.2500,10000,42
+qlora_final,base_fs,test,first,영문,pair,13,11,1,1,11,0,-0.2308,0.2308,10000,42
+qlora_final,base_fs,test,first,영문,nocas,13,11,2,1,10,0.0769,-0.1538,0.3333,10000,42
+qlora_final,base_fs,test,first,영문,doc_exact,13,11,2,1,10,0.0769,-0.1538,0.3636,10000,42
+qlora_final,base_fs,test,first,영문,doc_exact_ext,13,11,2,0,11,0.1538,0.0000,0.4167,10000,42
+qlora_final,base_fs,test,first,현행,parse_rate,15,7,0,0,15,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,schema_rate,15,7,0,0,15,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,product_name_acc,15,7,0,0,15,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,signal_word_acc,15,7,0,0,15,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,ghs_classification,15,7,1,0,14,0.0667,0.0000,0.2143,10000,42
+qlora_final,base_fs,test,first,현행,hazard_statements,15,7,0,0,15,0,0.0000,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,cas,15,7,0,3,12,-0.2000,-0.4118,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,pair,15,7,0,3,12,-0.2000,-0.4118,0.0000,10000,42
+qlora_final,base_fs,test,first,현행,nocas,15,7,2,3,10,-0.0667,-0.3333,0.2308,10000,42
+qlora_final,base_fs,test,first,현행,doc_exact,15,7,1,3,11,-0.1333,-0.4000,0.1667,10000,42
+qlora_final,base_fs,test,first,현행,doc_exact_ext,15,7,2,3,10,-0.0667,-0.3529,0.2000,10000,42
+qlora_final,base_zs,test,first,all,parse_rate,31,18,1,0,30,0.0323,0.0000,0.1071,10000,42
+qlora_final,base_zs,test,first,all,schema_rate,31,18,11,2,18,0.2903,0.0968,0.4828,10000,42
+qlora_final,base_zs,test,first,all,product_name_acc,31,18,1,0,30,0.0323,0.0000,0.1071,10000,42
+qlora_final,base_zs,test,first,all,signal_word_acc,31,18,7,0,24,0.2258,0.0769,0.4286,10000,42
+qlora_final,base_zs,test,first,all,ghs_classification,31,18,14,0,17,0.4516,0.2667,0.6538,10000,42
+qlora_final,base_zs,test,first,all,hazard_statements,31,18,5,0,26,0.1613,0.0541,0.3077,10000,42
+qlora_final,base_zs,test,first,all,cas,31,18,2,2,27,0,-0.1613,0.1538,10000,42
+qlora_final,base_zs,test,first,all,pair,31,18,3,3,25,0,-0.1613,0.1471,10000,42
+qlora_final,base_zs,test,first,all,nocas,31,18,3,4,24,-0.0323,-0.2500,0.1538,10000,42
+qlora_final,base_zs,test,first,all,doc_exact,31,18,11,1,19,0.3226,0.1000,0.5385,10000,42
+qlora_final,base_zs,test,first,all,doc_exact_ext,31,18,11,1,19,0.3226,0.1000,0.5385,10000,42
+qlora_final,base_zs,test,first,구서식,parse_rate,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,schema_rate,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,product_name_acc,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,signal_word_acc,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,ghs_classification,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,hazard_statements,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,cas,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,pair,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,nocas,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,doc_exact,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,구서식,doc_exact_ext,1,1,0,0,1,0,,,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,parse_rate,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,schema_rate,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,product_name_acc,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,signal_word_acc,2,2,1,0,1,0.5000,0.0000,1.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,ghs_classification,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,hazard_statements,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,cas,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,pair,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,nocas,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,doc_exact,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,수입품 국문판,doc_exact_ext,2,2,0,0,2,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,영문,parse_rate,13,11,0,0,13,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,영문,schema_rate,13,11,5,2,6,0.2308,-0.1538,0.6154,10000,42
+qlora_final,base_zs,test,first,영문,product_name_acc,13,11,0,0,13,0,0.0000,0.0000,10000,42
+qlora_final,base_zs,test,first,영문,signal_word_acc,13,11,5,0,8,0.3846,0.1538,0.6667,10000,42
+qlora_final,base_zs,test,first,영문,ghs_classification,13,11,9,0,4,0.6923,0.5000,0.9167,10000,42
+qlora_final,base_zs,test,first,영문,hazard_statements,13,11,4,0,9,0.3077,0.0769,0.5714,10000,42
+qlora_final,base_zs,test,first,영문,cas,13,11,1,0,12,0.0769,0.0000,0.2500,10000,42
+qlora_final,base_zs,test,first,영문,pair,13,11,1,1,11,0,-0.2308,0.2308,10000,42
+qlora_final,base_zs,test,first,영문,nocas,13,11,1,2,10,-0.0769,-0.4000,0.2500,10000,42
+qlora_final,base_zs,test,first,영문,doc_exact,13,11,4,0,9,0.3077,0.0769,0.5714,10000,42
+qlora_final,base_zs,test,first,영문,doc_exact_ext,13,11,4,0,9,0.3077,0.0769,0.5714,10000,42
+qlora_final,base_zs,test,first,현행,parse_rate,15,7,1,0,14,0.0667,0.0000,0.2500,10000,42
+qlora_final,base_zs,test,first,현행,schema_rate,15,7,6,0,9,0.4000,0.2143,0.5882,10000,42
+qlora_final,base_zs,test,first,현행,product_name_acc,15,7,1,0,14,0.0667,0.0000,0.2500,10000,42
+qlora_final,base_zs,test,first,현행,signal_word_acc,15,7,1,0,14,0.0667,0.0000,0.2500,10000,42
+qlora_final,base_zs,test,first,현행,ghs_classification,15,7,5,0,10,0.3333,0.1111,0.6364,10000,42
+qlora_final,base_zs,test,first,현행,hazard_statements,15,7,1,0,14,0.0667,0.0000,0.2500,10000,42
+qlora_final,base_zs,test,first,현행,cas,15,7,1,2,12,-0.0667,-0.3333,0.2308,10000,42
+qlora_final,base_zs,test,first,현행,pair,15,7,2,2,11,0,-0.3125,0.3125,10000,42
+qlora_final,base_zs,test,first,현행,nocas,15,7,2,2,11,0,-0.3125,0.3077,10000,42
+qlora_final,base_zs,test,first,현행,doc_exact,15,7,7,1,7,0.4000,0.0000,0.8182,10000,42
+qlora_final,base_zs,test,first,현행,doc_exact_ext,15,7,7,1,7,0.4000,0.0000,0.8182,10000,42
