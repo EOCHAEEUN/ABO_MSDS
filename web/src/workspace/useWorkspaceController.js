@@ -9,8 +9,8 @@ function initialState() {
     documents: [], selectedId: null, field: "hazard_statements", expandedField: "hazard_statements", sourceTab: "original", resultTab: "fields",
     page: 1, zoom: "fit", query: new URLSearchParams(location.search).get("search") || "",
     filters: { supplier: "", language: "", status: "", split: "" },
-    checked: new Set(), columns: { submission: true, language: true, pages: true, owner: true },
-    onlyPending: false, experiments: [], selectedExperiment: "qlora_r2", metric: "parsing", trend: "parsing",
+    checked: new Set(), columns: { submission: false, language: false, pages: false, owner: false },
+    onlyPending: false, experiments: [], selectedExperiment: "", metric: "parsing", trend: "parsing",
     compareAt: "", compareSplit: API_MODE ? "val" : "예시", compareSubset: "all",
     loading: true, busy: false, error: "", dirtyDocuments: new Set(), modal: null, notice: null, scrollRequest: 0,
   };
@@ -116,7 +116,7 @@ export function useWorkspaceController() {
         next.compareAt = result.executed_at || "—";
         next.compareSplit = result.split || next.compareSplit;
         next.compareSubset = result.subset || next.compareSubset;
-        if (!result.experiments.some(item => item.id === next.selectedExperiment)) next.selectedExperiment = result.experiments.at(-1)?.id;
+        if (!result.experiments.some(item => item.id === next.selectedExperiment)) next.selectedExperiment = (result.experiments.find(item => item.final) || result.experiments.at(-1))?.id;
       });
       compareAttempt.current = `${doc.id}|${latest.current.compareSplit}|${latest.current.compareSubset}`;
     } catch (error) {
@@ -169,6 +169,21 @@ export function useWorkspaceController() {
     } catch (error) { notify(`저장하지 못했습니다. ${error.message}`, true); }
     finally { patch({ busy: false }); }
   }, [notify, patch, selectField, update]);
+
+  const setOwner = useCallback(async (id, owner) => {
+    const doc = latest.current.documents.find(item => item.id === id);
+    if (!doc || doc.owner === owner) return;
+    const previous = doc.owner;
+    const assign = value => update(next => { const target = next.documents.find(item => item.id === id); if (target) target.owner = value; });
+    assign(owner);
+    try {
+      await api.setOwner(doc, owner);
+      notify(`${doc.file_name} 담당자: ${owner}${API_MODE ? "" : " (이 브라우저에 저장)"}`);
+    } catch (error) {
+      assign(previous);
+      notify(`담당자를 바꾸지 못했습니다. ${error.message}`, true);
+    }
+  }, [notify, update]);
 
   const uploadFile = useCallback(async (file, model) => {
     if (!file?.size || !/\.pdf$/i.test(file.name)) throw new Error("PDF 파일을 선택해 주세요.");
@@ -314,5 +329,5 @@ export function useWorkspaceController() {
     return () => cancelAnimationFrame(frame);
   }, [state.scrollRequest, state.field, state.view]);
 
-  return { state, doc: current(state), update, patch, navigate, notify, closeModal, selectDocument, commitReview, toggleConfirm, uploadFile, loadCompare, onAction };
+  return { state, doc: current(state), update, patch, navigate, notify, closeModal, selectDocument, commitReview, toggleConfirm, setOwner, uploadFile, loadCompare, onAction };
 }

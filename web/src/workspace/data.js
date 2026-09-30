@@ -4,6 +4,10 @@
 // 원문 전체가 들어 있어 PreviewPanel이 "원문 전체 / 추출 결과와 대조" 화면으로 보여준다.
 import demoDocumentsData from './demo-documents.json';
 
+// 문서 담당자로 고를 수 있는 팀원(app/main.py TEAM과 같게 유지)
+export const TEAM = ['어채은', '양세윤', '강덕우', '김건하'];
+export const NO_OWNER = '미지정';
+
 export const FIELD_DEFS = [
   { key: 'product_name', label: '제품명', section: '1항 가.' },
   { key: 'ingredients', label: '구성성분 · CAS 번호', section: '3항' },

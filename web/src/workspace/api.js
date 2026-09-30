@@ -85,6 +85,25 @@ export const api = {
       body: JSON.stringify({ document_id: document.id, reviews, confirmed_fields: confirmedFields }),
     });
   },
+  async setOwner(document, owner) {
+    if (API_MODE) {
+      return request('/owner', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document_id: document.id, owner }),
+      });
+    }
+    // 서버가 없으면 이 브라우저에만 저장한다. 담당자만 바꿔 저장해 확정하지 않은 검토값은 섞지 않는다.
+    if (document.local_upload) return;
+    const apply = docs => docs.map(doc => doc.id === document.id ? { ...doc, owner } : doc);
+    try {
+      if (source.mode === 'results') {
+        source.docs = apply(source.docs);
+        localStorage.setItem(RESULTS_KEY, JSON.stringify({ stamp: source.stamp, documents: source.docs }));
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(apply(readDemo())));
+      }
+    } catch { /* 저장소를 쓸 수 없으면 화면에서만 바뀜 */ }
+  },
   saveDemo(document) {
     if (API_MODE) return;
     // Browser PDF object URLs expire on reload. Store only built-in demo documents.
@@ -107,7 +126,7 @@ export const api = {
     return {
       id: `upload-${crypto.randomUUID()}`, file_name: file.name, number: '—', language: '미확인',
       page_count: null, submission_number: '—', revision_date: '—',
-      updated_at: new Date().toLocaleString('ko-KR'), extracted_at: '추출 전', owner: '검토 담당자',
+      updated_at: new Date().toLocaleString('ko-KR'), extracted_at: '추출 전', owner: '미지정',
       split: '미지정', model_name: '미실행', generation_seconds: null, output_tokens: null,
       extraction: emptyExtraction(), source: null, reviews: {}, confirmed_fields: [], rule_results: {},
       local_upload: true, pdf_url: URL.createObjectURL(file), pending_extraction: true,
@@ -120,9 +139,11 @@ export const api = {
       if (Array.isArray(result?.experiments) && result.experiments.length) { source.note = result.note || ''; return result; }
       return { experiments: structuredClone(DEMO_EXPERIMENTS), split: '예시', subset: '예시', executed_at: '2025.08.12 10:24' };
     }
-    return request('/compare', {
+    const result = await request('/compare', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ document_id: documentId, split, subset }),
     });
+    source.note = result?.note || '';
+    return result;
   },
 };
