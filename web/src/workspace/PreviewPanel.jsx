@@ -57,7 +57,8 @@ export default function PreviewPanel({ doc, compact = false }) {
         <button type="button" className="preview-expand" aria-label="원문 화면 확대" onClick={toggleFullscreen}><Icon name="expand" /></button>
       </div>
     </div>
-    {doc.pdf_url ? (pdf ? <iframe key={`${doc.id}:${state.page}:${state.zoom}`} className="pdf-frame" src={`${pdf}#page=${state.page}&toolbar=0&navpanes=0&${pdfView}`} title={`${doc.file_name} 원본 PDF ${state.page}쪽`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :
+    {/* scrollRequest: 필드를 누를 때마다 늘어난다. 근거가 지금과 같은 쪽이어도(사용자가 PDF 안에서 스크롤해 둔 경우) 다시 그 쪽으로 연다 */}
+    {doc.pdf_url ? (pdf ? <iframe key={`${doc.id}:${state.page}:${state.zoom}:${state.scrollRequest}`} className="pdf-frame" src={`${pdf}#page=${state.page}&toolbar=0&navpanes=0&${pdfView}`} title={`${doc.file_name} 원본 PDF ${state.page}쪽`} /> : <div className="empty-state">PDF 주소를 확인해 주세요.</div>) :
       !hasOriginal ? <div className="empty-state">원본 PDF가 연결되지 않았습니다.<br />근거 원문은 오른쪽 필드 검토의 "원문 텍스트"에서 확인하세요.</div> :
       <div className="pdf-workspace"><aside className="thumbnails" aria-label="페이지 목록">{Array.from({ length: Math.min(doc.page_count || 1, 4) }, (_, i) => <Button action="page" data-page={i + 1} key={i} className={`thumbnail ${state.page === i + 1 ? "active" : ""}`} aria-label={`${i + 1}쪽 보기`} aria-pressed={state.page === i + 1}><span className="mini-paper">{Array.from({ length: 8 }, (_, j) => <i key={j} />)}</span><span>{i + 1}</span></Button>)}</aside><div className="paper-scroll"><Paper doc={doc} /></div></div>}
   </section>;

@@ -3,6 +3,7 @@
 
   python3 -m app.main load-val     # 저장된 val 출력(qlora_r1 · base_fs)을 DB에 적재 — "재생 결과", 이미 있으면 건너뜀
   python3 -m app.main serve        # http://127.0.0.1:8000
+  python3 -m app.main serve --preload   # 시연용: 켤 때 모델을 미리 올려 첫 업로드가 모델 적재를 기다리지 않게
   cd web && npm run dev            # → http://localhost:5173/workspace.html?mode=api (vite가 API 경로를 8000으로 넘김)
 
 엔드포인트(plan 7절)
@@ -402,12 +403,19 @@ def main(argv=None):
     ap.add_argument("command", choices=["serve", "load-val"])
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--preload", action="store_true",
+                    help="serve: 켤 때 모델(베이스 + r1 어댑터)을 미리 올린다. 첫 업로드 대기를 없애는 시연용")
     args = ap.parse_args(argv)
     if args.command == "load-val":
         load_val()
     else:
         import uvicorn
 
+        if args.preload:
+            from app.model import warm_up
+
+            print("모델을 미리 올리는 중(베이스 4bit + r1 어댑터)…", flush=True)
+            print(f"모델 준비 완료 {warm_up()}초 — 첫 업로드부터 생성 시간만 걸린다", flush=True)
         uvicorn.run(app, host=args.host, port=args.port)
 
 

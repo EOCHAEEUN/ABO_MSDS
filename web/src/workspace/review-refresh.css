@@ -554,7 +554,7 @@ dialog:has(#upload-form.is-previewing) { width: min(900px, calc(100vw - 32px)); 
 #upload-form .modal-description { color: #526477; font-size: 14px; }
 #upload-form .form-label { margin-top: 18px; font-size: 13px; }
 #upload-form .form-error:empty { display: none; }
-#upload-form .modal-footer { margin-top: 22px; }
+#upload-form .modal-footer { margin-top: 22px; flex-wrap: wrap; }
 #upload-form .upload-dropzone {
   position: relative; min-height: 164px; justify-content: center; gap: 8px;
   padding: 22px; border: 1px dashed #a9b9c8; border-radius: 6px;
@@ -572,15 +572,15 @@ dialog:has(#upload-form.is-previewing) { width: min(900px, calc(100vw - 32px)); 
 #upload-form .upload-preview-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 #upload-form .upload-preview-heading strong { min-width: 0; overflow-wrap: anywhere; font-size: 14px; font-weight: 600; }
 #upload-form .upload-preview-heading button { flex: 0 0 auto; border: 0; background: transparent; color: #285b88; cursor: pointer; }
-#upload-form .upload-preview iframe { display: block; width: 100%; height: min(62vh, 680px); border: 1px solid #d9e1e8; border-radius: 4px; background: #f5f7f9; }
+#upload-form .upload-preview iframe { display: block; width: 100%; height: min(50vh, 560px); border: 1px solid #d9e1e8; border-radius: 4px; background: #f5f7f9; }
 @media (max-width: 600px) {
   #upload-form .upload-preview-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
-  #upload-form .upload-preview iframe { height: 56vh; }
+  #upload-form .upload-preview iframe { height: 42vh; }
 }
 
 /* Document list: keep the table as the main workspace. */
 .view-documents .documents-content { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; max-width: none; padding: 14px 24px 24px; }
-.view-documents .documents-content.has-detail { grid-template-columns: minmax(0, 1fr) 300px; align-items: start; }
+.view-documents .documents-content.has-detail { grid-template-columns: minmax(0, 1fr) 420px; align-items: start; }
 .view-documents .documents-table-panel { min-width: 0; }
 .view-documents .documents-table-panel > .table-scroll { height: calc(100vh - 220px); min-height: 360px; max-height: none; overflow: auto; }
 .view-documents .document-table { min-width: 710px; table-layout: fixed; white-space: nowrap; font-size: 12px; }
@@ -641,7 +641,7 @@ dialog:has(#upload-form.is-previewing) { width: min(900px, calc(100vw - 32px)); 
 }
 
 /* Keep the selected document's extraction summary in the detail panel. */
-.view-documents .documents-content.has-detail { grid-template-columns: minmax(0, 1fr) 350px; }
+.view-documents .documents-content.has-detail { grid-template-columns: minmax(0, 1fr) 420px; }
 .view-documents .document-list-detail { max-height: calc(100vh - 164px); }
 .view-documents .document-list-summary { margin-top: 20px; border-top: 1px solid #e3e9ee; }
 .view-documents .document-list-summary h3 { padding: 16px 0 8px; color: #283f56; font-size: 14px; }
@@ -653,7 +653,7 @@ dialog:has(#upload-form.is-previewing) { width: min(900px, calc(100vw - 32px)); 
 .view-documents .document-list-summary .ingredient-detail { display: block; color: #758394; font-size: 11px; }
 @media (max-width: 1150px) {
   .view-documents .documents-content.has-detail { grid-template-columns: minmax(0, 1fr); }
-  .view-documents .document-list-detail { width: min(350px, calc(100vw - 24px)); }
+  .view-documents .document-list-detail { width: min(420px, calc(100vw - 24px)); }
 }
 @media (max-width: 600px) {
   .view-documents .document-list-detail { width: 100%; }
