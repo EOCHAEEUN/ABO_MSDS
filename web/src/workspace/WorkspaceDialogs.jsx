@@ -70,8 +70,37 @@ function UploadForm() {
   const [model, setModel] = useState("qlora");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const previewUrlRef = useRef(null);
+  useEffect(() => () => { if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current); }, []);
+
+  function selectFile(nextFile) {
+    if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+    previewUrlRef.current = null;
+    setPreviewUrl(null);
+    setFile(nextFile);
+    setError("");
+  }
+  function handleDrop(event) {
+    event.preventDefault();
+    setDragging(false);
+    selectFile(event.dataTransfer.files[0] || null);
+  }
   async function submit(event) {
     event.preventDefault();
+    if (!file || submitting) return;
+    setError("");
+    try {
+      if (!/\.pdf$/i.test(file.name)) throw new Error("PDF 파일을 선택해 주세요.");
+      if (file.size > 30 * 1024 * 1024) throw new Error("30MB 이하의 PDF 파일을 선택해 주세요.");
+      if (new TextDecoder().decode(await file.slice(0, 5).arrayBuffer()) !== "%PDF-") throw new Error("유효한 PDF 파일이 아닙니다. 파일 내용을 확인해 주세요.");
+      const url = URL.createObjectURL(file);
+      previewUrlRef.current = url;
+      setPreviewUrl(url);
+    } catch (issue) { setError(issue.message); }
+  }
+  async function extract() {
     if (submitting) return;
     setSubmitting(true);
     setError("");
@@ -79,13 +108,16 @@ function UploadForm() {
     catch (issue) { setError(issue.message); }
     finally { setSubmitting(false); }
   }
-  return <form id="upload-form" onSubmit={submit}>
-    <p className="modal-description">{API_MODE ? "PDF의 1~3항 텍스트와 필드를 추출한 뒤 검토 화면으로 이동합니다." : "텍스트가 포함된 PDF 문서를 선택해 주세요."}</p>
-    <label className="upload-dropzone" htmlFor="pdf-file"><Icon name="upload" /><b>PDF 파일 선택</b><span>문서 1개 · 최대 30MB</span><input id="pdf-file" name="file" type="file" accept=".pdf,application/pdf" required onChange={event => setFile(event.target.files[0] || null)} /></label>
-    <label className="form-label" htmlFor="upload-model">추출 모델</label><select id="upload-model" name="model" value={model} onChange={event => setModel(event.target.value)}><option value="qlora">QLoRA</option><option value="base">Base</option></select>
-    {!API_MODE && <div className="inline-notice">예시 모드에서는 PDF를 브라우저에서 미리 봅니다. 추출하려면 실제 API를 연결해 주세요.</div>}
+  return <form id="upload-form" className={previewUrl ? "is-previewing" : ""} onSubmit={submit}>
+    {previewUrl ? <div className="upload-preview"><div className="upload-preview-heading"><strong>{file.name}</strong><button type="button" onClick={() => selectFile(file)}>다른 파일 선택</button></div><iframe src={previewUrl + "#view=FitH"} title={file.name + " PDF 미리보기"} /></div> : <>
+      <p className="modal-description">PDF 파일을 선택하거나 아래에 끌어다 놓으세요.</p>
+      <label className={"upload-dropzone" + (dragging ? " is-dragging" : "")} htmlFor="pdf-file" onDragEnter={event => { event.preventDefault(); setDragging(true); }} onDragOver={event => { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; }} onDragLeave={event => { if (!event.currentTarget.contains(event.relatedTarget)) setDragging(false); }} onDrop={handleDrop}>
+        <Icon name="upload" /><b>{file ? file.name : "PDF 파일 선택"}</b><span>{file ? (file.size / 1024 / 1024).toFixed(1) + " MB · 다른 파일을 선택하려면 클릭" : "클릭하거나 PDF를 여기에 놓으세요"}</span><small>PDF 1개 · 최대 30MB</small><input id="pdf-file" name="file" type="file" accept=".pdf,application/pdf" onChange={event => selectFile(event.target.files[0] || null)} />
+      </label>
+      {API_MODE && <><label className="form-label" htmlFor="upload-model">추출 모델</label><select id="upload-model" name="model" value={model} onChange={event => setModel(event.target.value)}><option value="qlora">QLoRA</option><option value="base">Base</option></select></>}
+    </>}
     <p id="upload-error" className="form-error" role="alert">{error}</p>
-    <div className="modal-footer"><Button action="close-modal" disabled={state.busy || submitting}>취소</Button><button type="submit" className="primary" disabled={state.busy || submitting}>{submitting ? (API_MODE ? "추출 중…" : "파일을 여는 중…") : (API_MODE ? "업로드하고 추출" : "PDF 미리보기")}</button></div>
+    <div className="modal-footer"><Button action="close-modal" disabled={state.busy || submitting}>{previewUrl ? "닫기" : "취소"}</Button>{previewUrl ? API_MODE && <button type="button" className="primary" onClick={extract} disabled={state.busy || submitting}>{submitting ? "추출 중…" : "업로드하고 추출"}</button> : <button type="submit" className="primary" disabled={state.busy || submitting || !file}>PDF 미리보기</button>}</div>
   </form>;
 }
 

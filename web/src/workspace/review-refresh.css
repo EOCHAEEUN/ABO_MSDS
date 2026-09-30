@@ -547,3 +547,33 @@ body {
 .review-field-evidence > .multiline { padding: 8px 11px; border-radius: 4px; background: #eaf6f4; color: #26495a; }
 .hazard-review-card.is-open:not(.needs-review) { border-color: #3987b1; box-shadow: 0 0 0 2px #3987b12e; }
 .hazard-source { background: #f2faf8; color: #26495a; }
+
+/* PDF upload */
+dialog:has(#upload-form) { width: min(640px, calc(100vw - 32px)); }
+dialog:has(#upload-form.is-previewing) { width: min(900px, calc(100vw - 32px)); }
+#upload-form .modal-description { color: #526477; font-size: 14px; }
+#upload-form .form-label { margin-top: 18px; font-size: 13px; }
+#upload-form .form-error:empty { display: none; }
+#upload-form .modal-footer { margin-top: 22px; }
+#upload-form .upload-dropzone {
+  position: relative; min-height: 164px; justify-content: center; gap: 8px;
+  padding: 22px; border: 1px dashed #a9b9c8; border-radius: 6px;
+  background: #fafbfd; color: #263d56; text-align: center;
+}
+#upload-form .upload-dropzone:hover,
+#upload-form .upload-dropzone.is-dragging,
+#upload-form .upload-dropzone:focus-within { border-color: #35658f; background: #f1f6fa; }
+#upload-form .upload-dropzone:focus-within { outline: 2px solid #35658f; outline-offset: 2px; }
+#upload-form .upload-dropzone .icon { width: 24px; height: 24px; color: #416b91; }
+#upload-form .upload-dropzone b { max-width: 100%; overflow-wrap: anywhere; font-size: 15px; font-weight: 600; }
+#upload-form .upload-dropzone span { color: #607287; font-size: 13px; }
+#upload-form .upload-dropzone small { color: #8290a0; font-size: 12px; }
+#upload-form .upload-dropzone input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+#upload-form .upload-preview-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+#upload-form .upload-preview-heading strong { min-width: 0; overflow-wrap: anywhere; font-size: 14px; font-weight: 600; }
+#upload-form .upload-preview-heading button { flex: 0 0 auto; border: 0; background: transparent; color: #285b88; cursor: pointer; }
+#upload-form .upload-preview iframe { display: block; width: 100%; height: min(62vh, 680px); border: 1px solid #d9e1e8; border-radius: 4px; background: #f5f7f9; }
+@media (max-width: 600px) {
+  #upload-form .upload-preview-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
+  #upload-form .upload-preview iframe { height: 56vh; }
+}
