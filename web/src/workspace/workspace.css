@@ -313,6 +313,8 @@ th, td { padding: 9px 12px; text-align: left; }
 .experiment-button { background: transparent; border: 0; padding: 0; min-height: 20px; color: #102951; font-size: 12px; font-weight: 650; }
 .experiment-button:hover { background: transparent; color: #2567b1; }
 .selected-chip { background: #255387; color: #fff; border-radius: 3px; font-size: 9px; padding: 1px 4px; font-weight: 400; }
+.final-chip { background: #1f7a4d; }
+.prompt-chip { background: #a15c00; }
 .bar-panel { padding: 9px 16px 10px; }
 .chart-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .chart-toolbar label { display: flex; align-items: center; gap: 8px; color: #637b99; font-size: 12px; }
@@ -619,3 +621,13 @@ form .modal-footer { margin-left: -22px; margin-right: -22px; }
 }
 
 .multiline { white-space: pre-line; }
+
+/* 문서 담당자 선택 */
+.owner-select { min-height: 28px; width: 100%; min-width: 84px; padding: 2px 6px; border: 1px solid transparent; border-radius: 3px; background: transparent; color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
+.owner-select:hover, .owner-select:focus-visible { border-color: #b6d0f5; background: #f0f6ff; }
+.owner-select:disabled { cursor: default; opacity: .7; }
+.view-documents .document-table td.owner-cell { padding-top: 2px; padding-bottom: 2px; }
+.view-documents .document-table .col-submission { width: 130px; }
+.view-documents .document-table .col-language { width: 80px; }
+.view-documents .document-table .col-pages { width: 72px; }
+.view-documents .document-table .col-owner { width: 118px; overflow: visible; text-overflow: clip; }

@@ -9,6 +9,7 @@
   GET  /documents       DB 문서 → 화면 Document 모양(extraction · rule_results · reviews · confirmed_fields)
   POST /extract         PDF 업로드 → 1~3항 텍스트 → 모델(r1 QLoRA 또는 Base few-shot, app/model.py) → Rule Engine → 4개 테이블 적재
   POST /confirm         담당자 확정값 → msds_reviews
+  POST /owner           문서 담당자 지정(팀원 목록 TEAM 또는 미지정) → meta/{document_id}.json의 owner
   POST /compare         val 실험 비교표(app/web_results.build_compare — test 수치 아님)
   GET  /files/{id}.pdf  업로드한 PDF(원문 보기)
 
@@ -64,6 +65,10 @@ def db():
     conn = connect(DB_PATH)
     init_db(conn)
     return conn
+
+
+TEAM = ("어채은", "양세윤", "강덕우", "김건하")  # 문서 담당자로 고를 수 있는 사람(plan 11절 역할표)
+NO_OWNER = "미지정"
 
 
 def write_meta(document_id: int, meta: dict) -> None:
@@ -151,7 +156,7 @@ def to_document(conn, row) -> tuple[Optional[dict], Optional[str]]:
         "language": meta.get("language") or "미확인", "page_count": meta.get("page_count"),
         "submission_number": key or "—", "revision_date": None, "revision": row["revision"],
         "extracted_at": _fmt(meta.get("generated_at") or row["extracted_at"]),
-        "updated_at": _fmt(saved_at or row["extracted_at"]), "owner": "미지정",
+        "updated_at": _fmt(saved_at or row["extracted_at"]), "owner": meta.get("owner") or NO_OWNER,
         "split": "val · 재생 결과" if replay else "업로드", "form": meta.get("form"),
         "model_name": f"{label} (저장된 val 출력)" if replay else label, "replay": replay,
         "generation_seconds": meta.get("seconds"), "output_tokens": meta.get("output_tokens"),
@@ -298,6 +303,30 @@ def confirm(body: dict = Body(...)):
     finally:
         conn.close()
     return {"document_id": document_id, "saved_rows": n, "confirmed_fields": keys, "confirmed_at": at}
+
+
+@app.post("/owner")
+def set_owner(body: dict = Body(...)):
+    try:
+        document_id = int(body.get("document_id"))
+    except (TypeError, ValueError):
+        raise HTTPException(422, "document_id가 필요합니다.") from None
+    owner = body.get("owner") or NO_OWNER
+    if owner != NO_OWNER and owner not in TEAM:
+        raise HTTPException(422, f"담당자는 {' · '.join(TEAM)} 또는 {NO_OWNER}만 지정할 수 있습니다.")
+    conn = db()
+    try:
+        if conn.execute("SELECT 1 FROM msds_documents WHERE id = ?", (document_id,)).fetchone() is None:
+            raise HTTPException(404, f"문서가 없습니다: {document_id}")
+    finally:
+        conn.close()
+    meta = read_meta(document_id)
+    if owner == NO_OWNER:
+        meta.pop("owner", None)
+    else:
+        meta["owner"] = owner
+    write_meta(document_id, meta)
+    return {"document_id": document_id, "owner": owner}
 
 
 @app.post("/compare")

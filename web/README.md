@@ -67,6 +67,7 @@ FastAPI는 `web/dist/`만 공개합니다. 다른 정적 서버를 사용한다�
 | `GET /documents` | 없음 | `{ "documents": [Document, ...] }` |
 | `POST /extract` | `multipart/form-data`: `file` PDF, `model` (`base`/`qlora`) | `{ "document": Document }` |
 | `POST /confirm` | `{ "document_id": id, "reviews": {...}, "confirmed_fields": [...] }` | 성공 시 JSON 또는 204 |
+| `POST /owner` | `{ "document_id": id, "owner": "어채은" }` (팀원 4명 또는 `"미지정"`) | `{ "document_id": id, "owner": "..." }` |
 | `POST /compare` | `{ "document_id": id, "split": "val", "subset": "all" }` | 아래 비교 응답 |
 
 모든 경로는 같은 origin의 루트입니다. 백엔드 라우터는 `app/main.py`의 정적 파일 mount **앞에** 등록하세요. 기존 서버의 응답 구조가 다르면 `src/workspace/api.js`에서 변환합니다. 백엔드는 `src/schema.py`로 검증하며 프런트 입력 검사는 사용 편의용입니다.
