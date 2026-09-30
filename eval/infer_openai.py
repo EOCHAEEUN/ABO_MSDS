@@ -14,8 +14,8 @@ final_table.md에 넣지 않고 따로 둔다. 입력(1~3항 텍스트) · 프�
   - 이미 출력이 있으면 건너뛴다(--overwrite로 다시). API 오류는 출력 없이 _log.jsonl에 skipped로 남는다(채점에선 실패)
   - 토큰 수는 OpenAI 토크나이저 기준이라 Qwen 토큰 수와 직접 비교하지 않는다
 
-  python3 eval/infer_openai.py --mode zs
-  python3 eval/infer_openai.py --mode fs
+  python3 eval/infer_openai.py --mode zs --text-dir runs/deploy/text_r1   # r1 val과 같은 입력
+  python3 eval/infer_openai.py --mode fs --text-dir runs/deploy/text_r1
   python3 eval/score.py --condition gpt-5-mini_zs --split val --out-root outputs/api --scores-csv report/api/scores_openai.csv
   python3 eval/compare_api.py
 """
@@ -108,6 +108,9 @@ def main(argv=None):
                     help="gpt-5 · o 계열만. 기본 medium(API 기본값과 같음)")
     ap.add_argument("--max-completion-tokens", type=int, default=16000,
                     help="gpt-5 계열은 추론 토큰 포함 한도. 도달하면 hit_max_new_tokens로 기록")
+    ap.add_argument("--text-dir", default=TEXT_DIR,
+                    help="1~3항 텍스트 폴더. 본 비교군과 비교하려면 그 _run.jsonl의 inputs_sha256과 같은 입력을 준다"
+                         "(r1 val = runs/deploy/text_r1, data/text는 268e4e4로 바뀜)")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument("--timeout", type=float, default=300)
@@ -124,10 +127,11 @@ def main(argv=None):
     splits = read_splits(SPLITS_CSV)
     all_ids = sorted(d for d, r in splits.items() if r["split"] == args.split)
     doc_ids = all_ids[: args.limit] if args.limit else all_ids
-    cut = read_cut_status(TEXT_DIR)
+    text_dir = Path(args.text_dir)
+    cut = read_cut_status(text_dir)
     fewshot_ids, fewshot = load_fewshot(splits, TEXT_DIR, LABEL_DIR) if args.mode == "fs" else ([], [])
     out_dir = Path(args.out_root) / condition / args.split
-    missing = [d for d in doc_ids if cut.get(d) != "NOT_FOUND" and not (TEXT_DIR / f"{d}.txt").exists()]
+    missing = [d for d in doc_ids if cut.get(d) != "NOT_FOUND" and not (text_dir / f"{d}.txt").exists()]
     if missing:
         sys.exit(f"전처리 텍스트 없음: {missing}")
 
@@ -138,7 +142,7 @@ def main(argv=None):
         "max_new_tokens": args.max_completion_tokens,
         "fewshot_doc_ids": fewshot_ids,
         "prompt_version": args.prompt, "prompt_text_sha256": prompt_sha256(args.prompt),
-        "n_docs": len(all_ids), "inputs_sha256": inputs_digest(all_ids, TEXT_DIR, cut),
+        "text_dir": str(text_dir), "n_docs": len(all_ids), "inputs_sha256": inputs_digest(all_ids, text_dir, cut),
     }
     check_resume(out_dir, run)
     todo = [d for d in doc_ids if args.overwrite or not (out_dir / f"{d}.json").exists()]
@@ -159,7 +163,7 @@ def main(argv=None):
                 print(f"  ({n}/{len(todo)}) {doc_id}  건너뜀: _cut_log NOT_FOUND")
                 append_log(out_dir, rec)
                 continue
-            text = (TEXT_DIR / f"{doc_id}.txt").read_text(encoding="utf-8")
+            text = (text_dir / f"{doc_id}.txt").read_text(encoding="utf-8")
             body = request_body(model, build_messages(text, fewshot, prompt=args.prompt), args)
             try:
                 resp, sec = call(client, key, body)

@@ -130,6 +130,15 @@
 - **PM 승인(2026-09-30):** 평가 종료. plan 3.1 · 3.2 · 3.3 · 9절, CLAUDE.md, data/README.md의 test 건수 표기를 31건(국문 18 · 영문 13)으로 고쳤다. plan 10절 결론 문구 표의 "18건" 문구는 결과 보기 전에 고정한 틀이라 그대로 두었다(해당 행은 이번 결론이 아님).
 - **남은 확인:** 저장소 `data/sources.csv` · `docs/labeling_review_notes.md`에 test 문서 목록 · 서식 정보가 들어 있다(CLAUDE.md 공개 저장소 규칙과 충돌 가능). 평가가 끝났으므로 정리 여부는 PM이 정한다.
 
+### 2026-09-30 · test 결과 문서가 개발 AI 세션에 첨부됨 (평가 종료 전, CLAUDE.md test 봉인 위반)
+
+- **무엇:** qlora_final test 결과 정리 문서(서식별 점수 · 문서별 ID · 오류 내용 포함)가 개발 작업을 하던 AI 세션(Claude Code — 채점기 `--scores-csv` 옵션, 외부 API 비교군, 검토 화면 작업)에 첨부됐다. base_zs · base_fs의 test 실행 전이라 평가가 끝나지 않은 상태다.
+- **즉시 조치:** 세션은 결과 정리 작업을 멈추고 PM에게 알렸다. 이 세션은 test 문서 ID · 제조사 · 값을 저장소 파일에 적지 않는다.
+- **남은 비교군 보호:** base_zs · base_fs는 첨부 전에 고정된 설정(`eval/experiment.json` · `eval/fewshot.json` · 프롬프트 v1 · 채점기 · 별칭표)으로 돈다. 첨부 이후 이 설정을 바꾸지 않는다. 바꾸면 모든 비교군을 다시 돌리고 여기에 적는다.
+- **채점기 해시 주의:** `feat/api-baseline`의 `eval/score.py` 수정(`--scores-csv`, 점수 파일 경로만 바꾸는 옵션)은 qlora_final test 채점 뒤의 변경이다. 남은 비교군 채점 전에 main에 병합되면 `_score_first.jsonl`의 `scorer_sha256`이 비교군 사이에 달라진다. test 평가가 끝난 뒤 병합한다.
+- **보고:** 결론에 파일럿 노출 이력과 함께 이 노출을 밝힌다.
+- **평가 종료 뒤 확인(2026-09-30):** 봉인(`f15f4ee`) 이후 main에서 바뀐 평가 관련 파일은 `eval/score.py`(`--scores-csv`, PR #55) 하나뿐이다. `experiment.json` · `fewshot.json` · 프롬프트 · 별칭표 · `core/` 전처리 · 정규화 · 스키마는 바뀌지 않았다. PR #55가 test 결과(PR #56)보다 먼저 병합됐지만 세 비교군 모두 병합 전 채점기(`fa4390dd…`, `f15f4ee` 기준으로 다시 계산해 일치 확인)로 채점됐다(`report/test_analysis.md`). 첨부로 인한 설정 변경은 없었다.
+
 ## 배포 경량화 (본 비교 밖)
 
 ### 2026-09-29 · 배포 경량화 트랙 조건부 추가 (PM 결정)
@@ -149,3 +158,22 @@
 - **G3:** `amd/Qwen3-4B_rai_1.8.0_hybrid` 있음(AWQ · group 128 · 비대칭 · UINT4). 지원 모델의 파인튜닝 버전은 공식 준비 절차 대상.
 - **G4 → 계획 3.3절 수정(결과 보기 전):** Quark 0.11 · `transformers==4.57.6`, `uint4_wo_128`, `--data_type bfloat16`, 제외 층 lm_head → 없음(`--exclude_layers []`, AMD 안내 명령). Quark 0.11은 `qwen3` AWQ 설정이 비어 있어(None) 3쌍 매핑을 `--quant_algo_config_file`로 반드시 넘긴다. 스모크 모델은 hybrid 목록의 가장 작은 Qwen3인 1.7B로 바꾼다.
 - 다음: 5070 기기 점검(어댑터 해시 · 패키지 · 입력 복원 · 메모리) → G5 스모크.
+
+### 2026-09-30 · r1 병합본을 4bit(NF4)로 올려 서빙 속도 확인 (PM 승인, 기준은 결과 보기 전 고정)
+
+- **이유:** 어댑터를 얹어 돌리면 같은 입력의 Base zero-shot보다 출력 토큰당 약 1.43배 느리다(val 10건 모두 1.33~1.48배, `outputs/*/val/_log.jsonl`). 병합하면 속도가 돌아오는지, 품질이 유지되는지 본다.
+- **대상:** `runs/deploy_r1/merged_nf4dq`(r1 어댑터 `a9a32341…`를 NF4 복원 가중치에 병합, bf16 8.04GB). 8GB GPU에 bf16이 올라가지 않아 불러올 때 학습 · 추론과 같은 NF4 설정(double quant, compute bf16)으로 다시 양자화한다. 이때 LoRA 변화분 일부가 반올림으로 사라질 수 있다.
+- **같게 둔 것:** val 10건, 입력 텍스트(r1 val 기록과 같은 `runs/deploy/text_r1`, `inputs_sha256` `6536e4c4…` — 지금 `data/text`는 `268e4e4`로 바뀌어 r1 입력과 다르다), 프롬프트 v1, greedy, max_new_tokens 2048, 베이스 토크나이저(리비전 `1cfa9a72…`), 같은 기기(RTX 5070 Laptop).
+- **기록 위치:** 출력 `outputs/deploy/deploy_r1_merged_nf4/val/`, 점수 `report/deploy/scores_deploy.csv`. `report/scores.csv`에는 넣지 않는다.
+- **채택 기준:** 서빙에 병합본을 쓰려면 val에서 파싱률 · 스키마 준수율 · 제품명 · 신호어 · GHS F1 · H코드 F1 · CAS F1 · pair F1이 모두 r1 이상이어야 한다. 하나라도 낮으면 어댑터를 얹는 현재 방식을 유지한다. 속도(출력 토큰당 시간)와 최대 GPU 메모리는 채택 조건이 아니라 보고 항목이다.
+- **범위:** 공식 최종 모델(`qlora_final` = r1 어댑터)과 test 결과는 바뀌지 않는다. 병합본은 test에서 평가하지 않고 서빙 · 배포 변형으로 따로 보고한다.
+- **결과(2026-09-30): 기준 미달 → 채택하지 않음.** 속도는 출력 토큰당 50.8 → 33.7 ms(Base zero-shot 수준), GPU 메모리 적재 2.49 · 최대 3.17 GiB. 그러나 스키마 0.80 → 0.50, GHS F1 0.976 → 0.373, CAS · pair F1 0.970 → 0.921로 떨어졌다(Base zero-shot과 같은 오류 모양). bf16 병합본 1건은 r1과 같았으므로 원인은 병합 뒤 NF4 재양자화로 본다. 서빙은 어댑터를 얹는 방식을 유지한다. 상세: `report/deploy/merged_nf4_val.md`
+
+## 외부 API 비교군 (본 비교 밖)
+
+### 2026-09-30 · gpt-5-mini val 비교 — 입력 불일치로 재실행
+
+- **무엇이 틀렸나:** PR #55의 GPT 결과는 지금 `data/text`(`inputs_sha256` `4566ab6a…`)로 돌았고, 비교 대상(base_zs · base_fs · qlora_r1)은 `268e4e4` 이전 텍스트(`6536e4c4…`)로 돌았다. val 3건(KR-3DSYS-001 · KR-NEOGEN-001 · KR-SOTL-001)에서 GPT가 PDF 추출 오류를 손으로 고친 입력을 받았다.
+- **조치:** `runs/deploy/text_r1`(r1 입력과 해시 일치)로 zero-shot · few-shot을 다시 돌려 `outputs/api/` · `report/api/`를 바꿨다. `eval/compare_api.py`는 입력 해시가 기준 조건과 다르면 거부하고, `eval/infer_openai.py`에 `--text-dir`을 넣었다.
+- **실행 간 흔들림:** gpt-5 계열은 temperature를 고정할 수 없다. 입력이 같은 7건에서도 이전 실행과 비교해 문서 완전 정답(확장) 판정이 zero-shot 1건 · few-shot 2건 바뀌었고, 출력 문자열이 같은 문서는 7건 중 3건이었다. 1회 실행 수치는 문서 1~2건(0.1~0.2) 정도 흔들린다고 보고 읽는다.
+- **재실행 결과(val 10건):** 문서 완전 정답(확장) r1 0.5 · gpt-5-mini few-shot 0.4 · zero-shot 0.2, GHS F1 0.976 · 0.907 · 0.731, CAS F1 0.970 · 1.0 · 1.0. r1 대비 짝 비교 구간은 모두 0을 포함한다. 상세: `report/api/openai_val.md`
