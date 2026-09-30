@@ -1,0 +1,288 @@
+```json
+{
+  "product_name": {
+    "value": "신너 (자동차용 수용성 세정신너)",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "용도 : 신너 (자동차용 수용성 세정신너)",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": "용도외의 사용을 금함",
+    "source_status": "기재"
+  },
+  "supplier": {
+    "company_name": {
+      "value": "(주)케이씨씨 울산공장",
+      "source_status": "기재"
+    },
+    "address": {
+      "value": "울산광역시 동구 방어진순환도로 30(방어동)",
+      "source_status": "기재"
+    },
+    "emergency_phone": {
+      "value": "052-280-1717",
+      "source_status": "기재"
+    }
+  },
+  "ingredients": [
+    {
+      "chemical_name": {
+        "value": "피부 부식성/피부 자극성",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "글라이콜 모노부틸 에테르 ; 모노부틸 글라이콜 에테르 ;",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "2-프로판올 아이소프로파놀 ; 다이메틸카르비놀 ; 아이소프로필 알코",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "2-다이메틸아미노에탄올 ; N,N-다이메틸-2-하이드록시에틸아민 ; 다이메틸(하이드록시에틸)아민 ;",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "N,N-다이메틸-2-하이드록시에틸아민 ; 다이메틸(하이드록시에틸)아민 ;",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "N,N-다이메틸-2-하이드록시에틸아민 ; 다이메틸(하이드록시에틸)아민 ;",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "ghs_classification": [
+    {
+      "chemical_name": {
+        "value": "구분 2",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "구분 3(마취영향)",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "구분 2",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "구분 3(마취영향)",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "111-76-2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "KE-04134",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "59~60",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "hazard_statements": [
+    {
+      "code": {
+        "value": "H225",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "피부 부식성/피부 자극성",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "H302",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "삼키면 유해함",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "H315",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "피부 자극성",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "H332",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "유해함",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "H336",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "눈에 심한 자극성",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "H351",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "암을 일으킴",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "hazard_statements": [
+    {
+      "code": {
+        "value": "H225",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "피부 부식성/피부 자극성",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "H

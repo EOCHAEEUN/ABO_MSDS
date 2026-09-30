@@ -1,0 +1,271 @@
+```json
+{
+  "product_name": {
+    "value": "7 BLUE 1 15W-40",
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "value": "자동차용 디젤엔진오일",
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "value": "자료없음",
+    "source_status": "기재"
+  },
+  "supplier": {
+    "company_name": {
+      "value": "에쓰-오일토탈윤활유㈜",
+      "source_status": "기재"
+    },
+    "address": {
+      "value": "서울특별시 중구 통일로 92, 3층 (순화동 에이스타워 3층)",
+      "source_status": "기재"
+    },
+    "emergency_phone": {
+      "value": "02) 6320-2000",
+      "source_status": "기재"
+    }
+  },
+  "ingredients": [
+    {
+      "chemical_name": {
+        "value": "심하게 히드로처리된 파라핀 증류액",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "64742-54-7",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "70.5 ~ 80.19",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "자료없음",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "복합성능첨가제",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "9.3 ~ 13.6",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "122-39-4",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "자료없음",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "긴 연결고리의 메타 크릴릭산에스테르계 폴리머 고정제 광유",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "0.1∼0.5",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "122-39-4",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "자료없음",
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "value": "디메틸 실리콘계 폴리머 용액",
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "value": "0.01∼0.2",
+        "source_status": "기재"
+      },
+      "ke_number": {
+        "value": "122-39-4",
+        "source_status": "기재"
+      },
+      "content": {
+        "value": "자료없음",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "ghs_classification": [
+    {
+      "code": {
+        "value": "SEVERELY HYDROTREATED HEAVY PARAFFINIC DISTILLATE",
+        "source_status": "기재"
+      },
+      "category": {
+        "value": "70.5 ~ 80.19",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "MIXED PERFORMANCE ADDITIVE",
+        "source_status": "기재"
+      },
+      "category": {
+        "value": "9.3 ~ 13.6",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMER, ESTERS OF METHACRYLIC ACID AND MIXED LONG CHAIN ALCOHOLS",
+        "source_status": "기재"
+      },
+      "category": {
+        "value": "0.1∼0.5",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMERIZED DIMETHYL SILICONE FLUID",
+        "source_status": "기재"
+      },
+      "category": {
+        "value": "0.01∼0.2",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "hazard_statements": [
+    {
+      "code": {
+        "value": "SEVERELY HYDROTREATED HEAVY PARAFFINIC DISTILLATE",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "심하게 히드로처리된 파라핀 증류액",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "MIXED PERFORMANCE ADDITIVE",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "복합성능첨가제",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMER, ESTERS OF METHACRYLIC ACID AND MIXED LONG CHAIN ALCOHOLS",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "긴 연결고리의 메타 크릴릭산에스테르계 폴리머 고정제 광유",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMERIZED DIMETHYL SILICONE FLUID",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "디메틸 실리콘계 폴리머 용액",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재",
+    "use_restrictions": "기재",
+    "use_restrictions": "기재"
+  },
+  "signal_statements": [
+    {
+      "code": {
+        "value": "SEVERELY HYDROTREATED HEAVY PARAFFINIC DISTILLATE",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "심하게 히드로처리된 파라핀 증류액",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "MIXED PERFORMANCE ADDITIVE",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "복합성능첨가제",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMER, ESTERS OF METHACRYLIC ACID AND MIXED LONG CHAIN ALCOHOLS",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "긴 연결고리의 메타 크릴릭산에스테르계 폴리머 고정제 광유",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMERIZED DIMETHYL SILICONE FLUID",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "디메틸 실리콘계 폴리머 용액",
+        "source_status": "기재"
+      }
+    }
+  ],
+  "signal_statements": [
+    {
+      "code": {
+        "value": "SEVERELY HYDROTREATED HEAVY PARAFFINIC DISTILLATE",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "심하게 히드로처리된 파라핀 증류액",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "MIXED PERFORMANCE ADDITIVE",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "복합성능첨가제",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMER, ESTERS OF METHACRYLIC ACID AND MIXED LONG CHAIN ALCOHOLS",
+        "source_status": "기재"
+      },
+      "text": {
+        "value": "긴 연결고리의 메타 크릴릭산에스터계 폴리머 고정제 광유",
+        "source_status": "기재"
+      }
+    },
+    {
+      "code": {
+        "value": "POLYMERIZED DIMETHYL SILICONE FLUID",
+        "source_status": "기재"
+      },

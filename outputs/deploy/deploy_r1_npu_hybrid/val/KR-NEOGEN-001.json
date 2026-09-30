@@ -1,0 +1,73 @@
+```json
+{
+  "product_name": {
+    "source_status": "기재"
+  },
+  "recommended_use": {
+    "source_status": "기재"
+  },
+  "use_restrictions": {
+    "source_status": "기재"
+  },
+  "supplier": {
+    "company_name": {
+      "source_status": "기재"
+    },
+    "address": {
+      "source_status": "기재"
+    },
+    "phone": {
+      "source_status": "기재"
+    }
+  },
+  "ingredients": [
+    {
+      "chemical_name": {
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "source_status": "기재"
+      },
+      "content": {
+        "source_status": "기재"
+      }
+    },
+    {
+      "chemical_name": {
+        "source_status": "기재"
+      },
+      "cas_number": {
+        "source Status": "기재"
+      },
+      "content": {
+        "source_status": "기재"
+      }
+    }
+  ],
+  "ghs_classification": [
+    {
+      "hazard_classification": {
+        "source_status": "기재"
+      },
+      "category": {
+        "source_status": "기재"
+      }
+    }
+  ],
+  "hazard_statements": [
+    {
+      "code": {
+        "source_status": "기재"
+      },
+      "text": {
+        "source_status": "기재"
+      }
+    }
+  ],
+  "list_status": {
+    "ingredients": "기재",
+    "ghs_classification": "기재",
+    "hazard_statements": "기재"
+  }
+}
+```
