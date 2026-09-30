@@ -7,6 +7,8 @@ subset은 val·val_en은 언어(ko/en), test는 test 담당이 넘긴 서식 목
 시간·토큰은 같은 폴더의 _log.jsonl에서 읽는다. 문서별 상세는 _score_detail.jsonl(*.json이 아닌 이름, CLAUDE.md 규약).
 --prompt v2: outputs/prompt_v2/{condition}/{split}/을 채점해 report/scores_prompt_v2.csv에 쓴다(v1 기록을 덮어쓰지 않음).
 출력 폴더의 _run.jsonl에 적힌 프롬프트 버전이 --prompt와 다르면 거부한다.
+--scores-csv: 점수를 다른 파일에 쓴다(기본값 · 동작 불변). 본 비교군이 아닌 결과(외부 API 비교군 · 배포 경량화)가
+report/scores.csv에 섞이지 않게(docs/deploy_quant_plan.md 6절). test에는 쓰지 않는다.
 
   python3 eval/score.py --condition base_zs --split val
   python3 eval/score.py --condition base_fs --split val --prompt v2
@@ -577,7 +579,11 @@ def main(argv=None):
     ap.add_argument("--prompt", choices=sorted(PROMPTS), default=DEFAULT_PROMPT,
                     help=f"프롬프트 버전(기본 {DEFAULT_PROMPT}). v1이 아니면 <out-root>/prompt_<버전>/을 채점하고 "
                          "report/scores_prompt_<버전>.csv에 쓴다")
+    ap.add_argument("--scores-csv", help="점수 기록 파일(기본: --prompt에 따라 report/scores.csv 또는 "
+                                         "report/scores_prompt_<버전>.csv). 본 비교군이 아닌 결과를 따로 둘 때")
     args = ap.parse_args(argv)
+    if args.scores_csv and args.split == "test":
+        ap.error("--scores-csv는 test에 쓰지 않는다(test 점수는 기본 경로 · 최초 채점 기록으로 남긴다)")
 
     if not args.self_check and not args.condition:
         ap.error("--condition이 필요함(--self-check일 때만 생략 가능)")
@@ -587,7 +593,7 @@ def main(argv=None):
     is_test = args.split == "test"
     pred_dir = (Path(args.out_root or OUTPUT_ROOT) / prompt_subdir(args.prompt) / (args.condition or "_self_check")
                 / args.split)
-    scores_csv = scores_csv_for(args.prompt)
+    scores_csv = Path(args.scores_csv) if args.scores_csv else scores_csv_for(args.prompt)
     if not args.self_check:
         check_prompt_version(pred_dir, args.prompt)
 
@@ -632,6 +638,7 @@ def main(argv=None):
 
     if not args.no_write:
         if args.split != "train":  # 진단 점수는 보고용 scores.csv와 섞지 않는다
+            scores_csv.parent.mkdir(parents=True, exist_ok=True)
             upsert_scores(args.condition, args.split, rows, scores_csv)
         detail_path = pred_dir / DETAIL_FILE
         with open(detail_path, "w", encoding="utf-8") as f:

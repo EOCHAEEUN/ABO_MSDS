@@ -328,6 +328,15 @@ class PromptVersionTest(unittest.TestCase):
             self.run_score("--prompt", "v2")
         self.assertIn("문구가 바뀌었다", str(cm.exception))
 
+    def test_scores_csv_option_writes_elsewhere_only(self):
+        """--scores-csv: 지정한 파일에만 쓰고 report/scores.csv는 그대로(본 비교군이 아닌 결과 분리)"""
+        before = self.scores.read_text(encoding="utf-8")
+        self.write_outputs("", "v1")
+        other = self.tmp / "report" / "api" / "scores_openai.csv"
+        self.run_score("--scores-csv", str(other))
+        self.assertEqual(self.scores.read_text(encoding="utf-8"), before)
+        self.assertIn("base_zs,val,ko,n_docs,2", other.read_text(encoding="utf-8"))
+
     def test_version_mismatch_refused(self):
         self.write_outputs("prompt_v2", "v1")   # v2 자리에 v1 출력
         self.write_outputs("", "v2")            # v1 자리에 v2 출력
