@@ -37,3 +37,11 @@ wandb/
 data/db/
 outputs/exports/
 
+# 배포 경량화 트랙
+.venv-quark/
+runs/deploy/
+runs/deploy_smoke/
+# 병합본 · 양자화본 · 어댑터 폴더째 제외(기록 json · log만 커밋, docs/deploy_quant_plan.md 6절)
+runs/**/merged*/
+runs/**/quark_*/
+runs/**/adapter/
