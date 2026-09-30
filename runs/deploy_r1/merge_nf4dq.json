@@ -1,0 +1,10 @@
+{
+ "method": "nf4dq",
+ "base": "Qwen/Qwen3-4B",
+ "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+ "adapter_sha256": "a9a323416bc2548f44852458bd0afc2882be7b214b7c39205529a7a08c937547",
+ "n_dequantized_linear": 252,
+ "torch": "2.14.0+cu130",
+ "bitsandbytes": "0.50.2",
+ "seconds": 110
+}
