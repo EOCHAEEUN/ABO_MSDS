@@ -36,6 +36,9 @@ LABEL = {"base_zs": ("Base Zero-shot", "Base ZS"), "base_fs": ("Base Few-shot (k
          "qlora_r1": ("QLoRA r1", "QLoRA r1"), "qlora_r2": ("QLoRA r2", "QLoRA r2"),
          "qlora_r3": ("QLoRA r3", "QLoRA r3"),
          "qlora_final": ("QLoRA 최종", "QLoRA 최종")}
+# v1이 아닌 프롬프트로 만든 조건: 출력 outputs/prompt_{버전}/, 점수 report/scores_prompt_{버전}.csv(CLAUDE.md 규약).
+# 비교표에는 "프롬프트 다름"으로 표시해 함께 보여 준다. r3 = r1에서 프롬프트만 v2_1(plan 6절)
+OTHER_PROMPT = {"qlora_r3": "v2_1"}
 DOC_ORDER = ("qlora_final", "qlora_r3", "qlora_r2", "qlora_r1", "base_fs", "base_zs")  # 문서 목록 순서: 후보 모델 먼저
 CORE_FIELDS = ("product_name", "ingredients", "ghs_classification", "signal_word", "hazard_statements")
 SECTION = {"product_name": "1항 가.", "ingredients": "3항", "ghs_classification": "2항 가.",
@@ -207,6 +210,17 @@ def build_compare(root: Path = ROOT) -> dict:
         if r["split"] == "val" and r["subset"] == "ko":
             scores.setdefault(r["condition"], {})[r["metric"]] = r["value"]
     runs = {c: _read_jsonl(root / "outputs" / c / "val" / "_run.jsonl")[:1] for c in CONDITIONS}
+    for cond, ver in OTHER_PROMPT.items():
+        score_csv, run_path = root / f"report/scores_prompt_{ver}.csv", root / f"outputs/prompt_{ver}/{cond}/val/_run.jsonl"
+        if cond in scores or not score_csv.exists():
+            continue
+        for r in csv.DictReader(open(score_csv, encoding="utf-8-sig")):
+            if r["condition"] == cond and r["split"] == "val" and r["subset"] == "ko":
+                scores.setdefault(cond, {})[r["metric"]] = r["value"]
+        runs[cond] = _read_jsonl(run_path)[:1]
+    # 최종 모델(단계 7 모델 고정) = eval/experiment.json의 어댑터 해시와 같은 어댑터로 만든 조건
+    exp_path = root / "eval/experiment.json"
+    final_sha = json.loads(exp_path.read_text(encoding="utf-8")).get("adapter_sha256") if exp_path.exists() else None
     exps, times = [], []
     for cond in CONDITIONS:
         s = scores.get(cond)
@@ -223,6 +237,9 @@ def build_compare(root: Path = ROOT) -> dict:
                          if c else "LoRA 어댑터")
         else:
             condition = "지시문 + 문서(예시 없음)"
+        prompt = run.get("prompt_version") or "v1"
+        if prompt != "v1":
+            condition += f" · 프롬프트 {prompt}"
         pct = lambda k: round(_num(s.get(k)) * 100, 1) if _num(s.get(k)) is not None else None  # noqa: E731
         exps.append({
             "id": cond, "name": LABEL[cond][0], "short": LABEL[cond][1], "condition": condition,
@@ -233,9 +250,16 @@ def build_compare(root: Path = ROOT) -> dict:
             "ghs": pct("ghs_f1"), "exact": pct("doc_exact_ext_rate"), "nocas": pct("nocas_f1"),
             "input_tokens": round(_num(s["input_tokens_mean"])), "n_docs": int(_num(s["n_docs"])),
             "base_revision": run.get("base_revision"), "max_new_tokens": run.get("max_new_tokens"),
+            "final": bool(final_sha) and run.get("adapter_sha256") == final_sha,
+            "prompt": prompt,
         })
+    other = [f"{e['name']}(프롬프트 {e['prompt']})" for e in exps if e["prompt"] != "v1"]
+    note = "val(조건 선택용) 결과이며 최종 보고 수치(test)가 아닙니다."
+    if other:
+        note += f" {' · '.join(other)}는 다른 조건(프롬프트 v1)과 지시문이 달라 프롬프트 차이가 함께 반영된 값입니다."
     return {"split": "val", "subset": "all", "executed_at": _fmt_time(max(t for t in times if t)) if times else None,
-            "note": "val(조건 선택용) 결과이며 최종 보고 수치(test)가 아닙니다.", "experiments": exps}
+            "note": note, "experiments": exps,
+            "final_id": next((e["id"] for e in exps if e["final"]), None)}
 
 
 def main(argv=None):

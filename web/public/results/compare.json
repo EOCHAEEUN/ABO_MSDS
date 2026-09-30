@@ -2,7 +2,7 @@
  "split": "val",
  "subset": "all",
  "executed_at": "2026.09.29 13:41",
- "note": "val(조건 선택용) 결과이며 최종 보고 수치(test)가 아닙니다.",
+ "note": "val(조건 선택용) 결과이며 최종 보고 수치(test)가 아닙니다. QLoRA r3(프롬프트 v2_1)는 다른 조건(프롬프트 v1)과 지시문이 달라 프롬프트 차이가 함께 반영된 값입니다.",
  "experiments": [
   {
    "id": "base_zs",
@@ -22,7 +22,9 @@
    "input_tokens": 1942,
    "n_docs": 10,
    "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-   "max_new_tokens": 2048
+   "max_new_tokens": 2048,
+   "final": false,
+   "prompt": "v1"
   },
   {
    "id": "base_fs",
@@ -42,7 +44,9 @@
    "input_tokens": 4282,
    "n_docs": 10,
    "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-   "max_new_tokens": 2048
+   "max_new_tokens": 2048,
+   "final": false,
+   "prompt": "v1"
   },
   {
    "id": "qlora_r1",
@@ -62,7 +66,9 @@
    "input_tokens": 1942,
    "n_docs": 10,
    "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-   "max_new_tokens": 2048
+   "max_new_tokens": 2048,
+   "final": true,
+   "prompt": "v1"
   },
   {
    "id": "qlora_r2",
@@ -82,7 +88,32 @@
    "input_tokens": 1942,
    "n_docs": 10,
    "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-   "max_new_tokens": 2048
+   "max_new_tokens": 2048,
+   "final": false,
+   "prompt": "v1"
+  },
+  {
+   "id": "qlora_r3",
+   "name": "QLoRA r3",
+   "short": "QLoRA r3",
+   "condition": "LoRA r16 · lr 2e-4 · 2 epoch · 프롬프트 v2_1",
+   "parsing": 90.0,
+   "schema": 60.0,
+   "cas": 83.3,
+   "pair": 83.3,
+   "hcode": 84.5,
+   "seconds": 49.1,
+   "tokens": 683,
+   "ghs": 63.3,
+   "exact": 30.0,
+   "nocas": 75.0,
+   "input_tokens": 2388,
+   "n_docs": 10,
+   "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+   "max_new_tokens": 2048,
+   "final": false,
+   "prompt": "v2_1"
   }
- ]
+ ],
+ "final_id": "qlora_r1"
 }
