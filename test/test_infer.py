@@ -178,6 +178,11 @@ class InferTest(unittest.TestCase):
             for d in VAL_IDS:
                 (text_dir / f"{d}.txt").write_text((FIX / "text" / f"{d}.txt").read_text(encoding="utf-8"),
                                                    encoding="utf-8")
+            # 추출 실패 문서: .txt 없이 _cut_log에만 있다. test에서도 대상에 넣고 건너뜀으로 남겨야 채점 분모에 들어간다
+            failed = "KR-FAILED-001"
+            (text_dir / "_cut_log.csv").write_text(
+                "doc_id,status\n" + "".join(f"{d},SUCCESS\n" for d in VAL_IDS) + f"{failed},NOT_FOUND\n",
+                encoding="utf-8")
             base = ["--split", "test", "--allow-test", "--text-dir", str(text_dir), "--base", "dummy", "--revision", "rev-x"]
             out = ["--out-root", str(tmp / "out")]
             manifest = write_manifest(tmp / "manifest.csv", text=text_dir)
@@ -208,6 +213,11 @@ class InferTest(unittest.TestCase):
                                 "--max-new-tokens", "1300"])
             run = json.loads((tmp / "out" / "qlora_final" / "test" / "_run.jsonl").read_text(encoding="utf-8"))
             self.assertEqual(run["max_new_tokens"], 1300)
+            out_dir = tmp / "out" / "qlora_final" / "test"
+            log = {r["doc_id"]: r for r in map(json.loads, (out_dir / "_log.jsonl").read_text(encoding="utf-8").splitlines())}
+            self.assertEqual(sorted(log), sorted([*VAL_IDS, failed]))
+            self.assertEqual(log[failed]["skipped"], "NOT_FOUND")
+            self.assertFalse((out_dir / f"{failed}.json").exists())
 
 
 class PromptVersionTest(unittest.TestCase):
