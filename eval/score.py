@@ -37,8 +37,8 @@ subset은 val·val_en은 언어(ko/en), test는 test 담당이 넘긴 서식 목
 - 무근거 생성: 원문 텍스트에 없는 H코드·CAS, 비어야 할 분류 목록을 채운 문서 → 건수.
 - 문서 완전 정답: 기존 기준(doc_exact_rate)과 확장 기준(doc_exact_ext_rate, + nocas · 오입력 없음)을 따로 낸다.
 - ke_number·chemical_name·supplier 등 참고 필드는 채점하지 않는다.
-- test는 --allow-test · 실험 고정(eval/experiment.json) · 저장소 밖 정답 · 서식 목록 · 텍스트 · 출력 폴더 · 모든 문서의
-  출력 존재를 확인한 뒤에만 정답을 읽는다. 문서별 상세(정답 값 포함)는 출력 폴더(저장소 밖)에만 쓴다.
+- test는 --allow-test · 실험 고정(eval/experiment.json) · 저장소 밖 정답 · 서식 목록 · 텍스트 · 출력 폴더 · 봉인 대조
+  (eval/seal.py) · 모든 문서의 출력 존재를 확인한 뒤에만 정답을 읽는다. 문서별 상세(정답 값 포함)는 출력 폴더(저장소 밖)에만 쓴다.
 - test 최초 채점: 비교군마다 처음 채점한 결과를 _score_first.jsonl(메타 + 지표)과 _score_detail_first.jsonl로
   따로 남기고 읽기 전용으로 둔다. 다시 채점해도(별칭표 보강 등) 이 두 파일은 바꾸지 않는다.
 """
@@ -72,6 +72,7 @@ from core.normalize import (  # noqa: E402
 )
 from core.prompt import DEFAULT_PROMPT, PROMPTS, prompt_sha256, prompt_subdir, recorded_prompt_version  # noqa: E402
 from core.schema import check_schema, extract_json  # noqa: E402
+from eval.seal import require_sealed  # noqa: E402
 
 SPLITS_CSV = ROOT / "data" / "splits.csv"
 SCORES_CSV = ROOT / "report" / "scores.csv"  # v1. 다른 프롬프트 버전은 scores_csv_for()
@@ -550,6 +551,8 @@ def gate_test(args, pred_dir):
         if not v or not outside_repo(v):
             sys.exit(f"[거부] test는 저장소 밖 --{name.replace('_', '-')}가 필요하다"
                      "(정답 · 서식 목록 · 텍스트는 test 담당이 보관, 출력 · 채점 상세도 저장소 밖에 둠)")
+    for kind, path in (("label", args.label_dir), ("text", args.text_dir), ("subset", args.subset_csv)):
+        require_sealed(kind, path)  # 봉인한 정답 · 텍스트 · 서식 목록으로만 채점(파일 해시만 보고, 정답은 아직 안 연다)
     subset_of = read_subset_csv(args.subset_csv)
     log = read_log(pred_dir)
     missing = [d for d in subset_of if not (pred_dir / f"{d}.json").exists() and not log.get(d, {}).get("skipped")]
