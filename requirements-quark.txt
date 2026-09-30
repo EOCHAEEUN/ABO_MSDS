@@ -1,9 +1,12 @@
+# .venv-quark (배포 경량화 D3 · G5 양자화 환경, 2026-09-30 pip freeze)
+# amd-quark 0.11은 PyPI가 아니라 AMD 배포 압축본 안의 wheel을 설치한다(docs/deploy_quant_plan.md G4):
+#   pip install <압축 해제 경로>/amd_quark-0.11-py3-none-any.whl  (sha256 2af8a359ed574cecb9cbfdb33134199fcd57ba2403f1030d718285a2e19df26e)
+# torch 2.14는 Quark import 실패, lm_eval 0.4.13은 load_yaml_config 부재 → 아래 버전으로 고정(report/deploy/g5_smoke.md)
 absl-py==2.5.0
 accelerate==1.15.0
 aiohappyeyeballs==2.7.1
 aiohttp==3.14.3
 aiosignal==1.4.0
-amd-quark @ file:///home/fish_is_eol/amd_quark-0.11/amd_quark-0.11-py3-none-any.whl#sha256=2af8a359ed574cecb9cbfdb33134199fcd57ba2403f1030d718285a2e19df26e
 annotated-types==0.8.0
 anyio==4.15.1
 attrs==26.1.0
@@ -32,7 +35,8 @@ huggingface_hub==0.36.2
 idna==3.20
 Jinja2==3.1.6
 joblib==1.6.0
-lm_eval==0.4.13
+jsonlines==4.0.0
+lm_eval==0.4.8
 lxml==6.1.3
 markdown-it-py==4.2.0
 MarkupSafe==3.0.3
@@ -47,6 +51,7 @@ narwhals==2.26.0
 networkx==3.6.1
 ninja==1.13.2
 nltk==3.10.3
+numexpr==2.14.2
 numpy==2.1.3
 nvidia-cublas==13.1.1.3
 nvidia-cublas-cu12==12.8.4.1
@@ -85,12 +90,14 @@ onnxslim==0.1.97
 packaging==26.3
 pandas==3.0.6
 pathvalidate==3.3.1
+peft==0.21.1
 plotly==7.1.0
 portalocker==4.4.0
 propcache==0.5.4
 protobuf==7.36.2
 psutil==7.2.2
 pyarrow==25.0.1
+pybind11==3.1.0
 pydantic==2.13.5
 pydantic_core==2.46.5
 Pygments==2.21.0
@@ -118,6 +125,7 @@ threadpoolctl==3.7.0
 tokenizers==0.22.2
 torch==2.9.1+cu128
 tqdm==4.70.1
+tqdm-multiprocess==0.0.11
 transformers==4.57.6
 triton==3.5.1
 typepy==1.3.5
