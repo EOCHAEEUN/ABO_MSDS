@@ -193,7 +193,14 @@ export function useWorkspaceController() {
     patch({ busy: true });
     try {
       const doc = await api.extract(file, model);
-      if (!alive.current) { if (doc.local_upload) URL.revokeObjectURL(doc.pdf_url); return; }
+      if (!alive.current) return;
+      if (!API_MODE) {
+        const destination = new URL(location.href);
+        destination.searchParams.set("mode", "api");
+        destination.hash = "review";
+        location.assign(destination.href);
+        return;
+      }
       compareAttempt.current = "";
       update(next => {
         next.documents.unshift(doc);
@@ -210,7 +217,7 @@ export function useWorkspaceController() {
         next.error = "";
       });
       navigate("review");
-      notify(API_MODE ? "문서를 추출했습니다." : "로컬 PDF를 열었습니다. 실제 추출에는 API 연결이 필요합니다.");
+      notify("문서를 추출했습니다.");
     } finally { patch({ busy: false }); }
   }, [navigate, notify, patch, update]);
 

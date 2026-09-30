@@ -1,4 +1,4 @@
-import { demoDocuments, DEMO_EXPERIMENTS, emptyExtraction } from './data.js';
+import { demoDocuments, DEMO_EXPERIMENTS } from './data.js';
 
 const params = new URLSearchParams(location.search);
 export const API_MODE = params.get('mode') === 'api';
@@ -16,10 +16,16 @@ async function readJson(name) {
   return response.json();
 }
 
-async function request(path, options = {}) {
-  const response = await fetch(path, { ...options, signal: AbortSignal.timeout(120000) });
+async function request(path, options = {}, timeoutMs = 120000) {
+  let response;
+  try {
+    response = await fetch(path, { ...options, signal: AbortSignal.timeout(timeoutMs) });
+  } catch (issue) {
+    if (path === '/extract') throw new Error(issue.name === 'TimeoutError' ? '추출 시간이 초과되었습니다. 서버 상태를 확인해 주세요.' : '추출 서버에 연결할 수 없습니다. 서버 실행 상태를 확인해 주세요.');
+    throw issue;
+  }
   if (!response.ok) {
-    let message = `API 요청 실패 (${response.status})`;
+    let message = path === '/extract' ? `추출 서버 오류 (${response.status}). 서버 실행 상태를 확인해 주세요.` : `API 요청 실패 (${response.status})`;
     try { const body = await response.json(); if (typeof body.detail === 'string') message = body.detail; } catch { /* Non-JSON server error. */ }
     throw new Error(message);
   }
@@ -117,20 +123,10 @@ export const api = {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
   },
   async extract(file, model) {
-    if (API_MODE) {
-      const data = new FormData(); data.append('file', file); data.append('model', model);
-      const result = await request('/extract', { method: 'POST', body: data });
-      if (!result.document?.extraction) throw new Error('추출 응답에 document.extraction이 필요합니다.');
-      return prepareDocument(result.document);
-    }
-    return {
-      id: `upload-${crypto.randomUUID()}`, file_name: file.name, number: '—', language: '미확인',
-      page_count: null, submission_number: '—', revision_date: '—',
-      updated_at: new Date().toLocaleString('ko-KR'), extracted_at: '추출 전', owner: '미지정',
-      split: '미지정', model_name: '미실행', generation_seconds: null, output_tokens: null,
-      extraction: emptyExtraction(), source: null, reviews: {}, confirmed_fields: [], rule_results: {},
-      local_upload: true, pdf_url: URL.createObjectURL(file), pending_extraction: true,
-    };
+    const data = new FormData(); data.append('file', file); data.append('model', model);
+    const result = await request('/extract', { method: 'POST', body: data }, 600000);
+    if (!result.document?.extraction) throw new Error('추출 응답에 document.extraction이 필요합니다.');
+    return prepareDocument(result.document);
   },
   async compare(documentId, split = 'val', subset = 'all') {
     if (!API_MODE) {

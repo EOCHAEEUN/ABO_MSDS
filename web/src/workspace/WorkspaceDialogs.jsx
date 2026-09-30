@@ -114,10 +114,10 @@ function UploadForm() {
       <label className={"upload-dropzone" + (dragging ? " is-dragging" : "")} htmlFor="pdf-file" onDragEnter={event => { event.preventDefault(); setDragging(true); }} onDragOver={event => { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; }} onDragLeave={event => { if (!event.currentTarget.contains(event.relatedTarget)) setDragging(false); }} onDrop={handleDrop}>
         <Icon name="upload" /><b>{file ? file.name : "PDF 파일 선택"}</b><span>{file ? (file.size / 1024 / 1024).toFixed(1) + " MB · 다른 파일을 선택하려면 클릭" : "클릭하거나 PDF를 여기에 놓으세요"}</span><small>PDF 1개 · 최대 30MB</small><input id="pdf-file" name="file" type="file" accept=".pdf,application/pdf" onChange={event => selectFile(event.target.files[0] || null)} />
       </label>
-      {API_MODE && <><label className="form-label" htmlFor="upload-model">추출 모델</label><select id="upload-model" name="model" value={model} onChange={event => setModel(event.target.value)}><option value="qlora">QLoRA</option><option value="base">Base</option></select></>}
     </>}
+    {file && <><label className="form-label" htmlFor="upload-model">추출 모델</label><select id="upload-model" name="model" value={model} onChange={event => setModel(event.target.value)}><option value="qlora">QLoRA</option><option value="base">Base</option></select></>}
     <p id="upload-error" className="form-error" role="alert">{error}</p>
-    <div className="modal-footer"><Button action="close-modal" disabled={state.busy || submitting}>{previewUrl ? "닫기" : "취소"}</Button>{previewUrl ? API_MODE && <button type="button" className="primary" onClick={extract} disabled={state.busy || submitting}>{submitting ? "추출 중…" : "업로드하고 추출"}</button> : <button type="submit" className="primary" disabled={state.busy || submitting || !file}>PDF 미리보기</button>}</div>
+    <div className="modal-footer"><Button action="close-modal" disabled={state.busy || submitting}>{previewUrl ? "닫기" : "취소"}</Button>{!previewUrl && <button type="submit" disabled={state.busy || submitting || !file}>PDF 미리보기</button>}<button type="button" className="primary" onClick={extract} disabled={state.busy || submitting || !file}>{submitting ? "추출 중…" : "업로드하고 추출"}</button></div>
   </form>;
 }
 
@@ -170,9 +170,9 @@ export default function WorkspaceDialogs() {
     case "upload": body = <UploadForm />; break;
     case "compare": body = <CompareForm />; break;
     case "columns": body = <><div className="column-options">{Object.entries({ submission: "제출번호", language: "언어", pages: "페이지", owner: "담당자" }).map(([key, label]) => <label key={key}><input type="checkbox" data-column={key} checked={state.columns[key]} onChange={event => { const checked = event.target.checked; update(next => { next.columns[key] = checked; }); }} /> {label}</label>)}</div><div className="modal-footer"><Button action="close-modal" className="primary">적용</Button></div></>; break;
-    case "refresh": body = <><p className="modal-description">저장하지 않은 수정값과 로컬 PDF 미리보기가 초기화됩니다. 새로고침할까요?</p><div className="modal-footer"><Button action="close-modal">취소</Button><Button action="reload-confirmed" className="primary">새로고침</Button></div></>; break;
+    case "refresh": body = <><p className="modal-description">저장하지 않은 수정값이 초기화됩니다. 새로고침할까요?</p><div className="modal-footer"><Button action="close-modal">취소</Button><Button action="reload-confirmed" className="primary">새로고침</Button></div></>; break;
     case "profile": body = <div className="help-content"><p>현재 문서 담당자: <b>{doc?.owner || "미지정"}</b></p><p>이 화면에는 사용자 인증 기능이 연결되어 있지 않습니다.</p></div>; break;
-    case "help": body = <div className="help-content"><p>원문과 추출 결과를 나란히 확인하고 핵심 5개 필드를 검토하는 작업 공간입니다.</p><ol><li><b>문서 목록</b>에서 문서를 선택하고 검토하기를 누릅니다.</li><li>필드를 누르면 해당 원문 근거가 강조됩니다.</li><li>원문 확인이 필요한 문구는 삭제하거나 근거 위치를 지정합니다.</li><li>필드별 담당자 확정을 완료한 뒤 <b>확정하고 저장</b>을 누릅니다.</li><li>확정된 값을 JSON으로 다운로드할 수 있습니다.</li></ol><div className="inline-notice">{API_MODE ? "실제 추출·저장·비교는 연결된 API를 사용합니다." : "현재 예시 모드입니다. PDF 업로드는 로컬 미리보기만 제공하며 모델 추론은 실행하지 않습니다. 변경값은 저장 버튼을 누른 후 이 브라우저에만 보관됩니다."}</div></div>; break;
+    case "help": body = <div className="help-content"><p>원문과 추출 결과를 나란히 확인하고 핵심 5개 필드를 검토하는 작업 공간입니다.</p><ol><li><b>문서 목록</b>에서 문서를 선택하고 검토하기를 누릅니다.</li><li>필드를 누르면 해당 원문 근거가 강조됩니다.</li><li>원문 확인이 필요한 문구는 삭제하거나 근거 위치를 지정합니다.</li><li>필드별 담당자 확정을 완료한 뒤 <b>확정하고 저장</b>을 누릅니다.</li><li>확정된 값을 JSON으로 다운로드할 수 있습니다.</li></ol><div className="inline-notice">{API_MODE ? "실제 추출·저장·비교는 연결된 API를 사용합니다." : "현재 예시 모드입니다. PDF를 선택한 뒤 바로 추출하거나 먼저 미리 볼 수 있습니다. 추출이 완료되면 API 모드에서 검토합니다."}</div></div>; break;
     default: return null;
   }
   return <ModalFrame key={`${modal.type}-${modal.documentId}-${modal.field}`} title={titles[modal.type]}>{body}</ModalFrame>;
