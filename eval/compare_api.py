@@ -101,6 +101,11 @@ def main(argv=None):
 
     group_of = {d: r["split_group"] for d, r in read_splits(SPLITS_CSV).items()}
     ref_head, ref_det = read_detail(ROOT / "outputs" / args.ref / "val" / DETAIL_FILE)
+    ref_run = json.loads((ROOT / "outputs" / args.ref / "val" / "_run.jsonl").read_text(encoding="utf-8").splitlines()[0])
+    for c in apis:  # 입력이 다르면 모델 차이와 입력 차이가 섞인다
+        if run_info(c)[0].get("inputs_sha256") != ref_run.get("inputs_sha256"):
+            sys.exit(f"[거부] {c}의 입력(inputs_sha256)이 {args.ref}와 다르다. "
+                     "infer_openai.py --text-dir로 같은 입력을 주고 다시 돌릴 것")
     lines += [f"## 짝 비교 (API − {args.ref}, 문서별 맞음/틀림, 제조사 그룹 부트스트랩 95% 구간)", ""]
     for c in apis:
         head, det = read_detail(API_ROOT / c / "val" / DETAIL_FILE)
@@ -122,7 +127,10 @@ def main(argv=None):
                   "- 문서 완전 정답(확장)이 갈린 문서: "
                   + (", ".join(f"{d}({'API만 정답' if doc_outcomes(det[d])[m] else args.ref + '만 정답'})" for d, m in changed)
                      or "없음"), ""]
-    lines += ["val 10건 · 8그룹이라 문서 1건 차이가 0.1이다. 구간이 0을 포함하면 차이를 확인하지 못한 것이다(동등하다는 뜻이 아니다)."]
+    lines += ["val 10건 · 8그룹이라 문서 1건 차이가 0.1이다. 구간이 0을 포함하면 차이를 확인하지 못한 것이다(동등하다는 뜻이 아니다).",
+              "",
+              "gpt-5 계열은 temperature를 고정할 수 없어 같은 입력에서도 실행마다 출력이 달라진다. 각 조건 1회 실행 결과다. "
+              "로컬 비교군은 greedy 디코딩이다."]
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
