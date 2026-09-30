@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "./api.js";
 import { Icon } from "./ui.jsx";
 import "./data-page.css";
@@ -32,6 +32,7 @@ export default function DataPage() {
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const inspector = useRef(null);
 
   useEffect(() => {
     let active = true;
@@ -55,6 +56,12 @@ export default function DataPage() {
   const rangeStart = result?.total ? offset + 1 : 0;
   const rangeEnd = result ? Math.min(offset + PAGE_SIZE, result.total) : 0;
   const chooseTable = name => { setTable(name); setOffset(0); setSelected(null); };
+  // 행을 누르면 행 상세에 보인다. 좁은 화면에서 행 상세가 표 아래로 내려가 있으면 그 위치까지 스크롤한다.
+  const selectRow = row => {
+    setSelected(row);
+    const box = inspector.current?.getBoundingClientRect();
+    if (box && (box.top > window.innerHeight - 80 || box.bottom < 0)) inspector.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return <main id="main" className="db-page">
     <header className="db-heading workspace-page-header">
@@ -76,12 +83,12 @@ export default function DataPage() {
         </button>)}
       </nav>
       <section className="db-results panel" aria-label={`${LABELS[table]} 행`}>
-        <div className="db-results-heading"><div><span className="db-table-name">{table}</span><h2>{LABELS[table]}</h2><p>저장된 행을 최신 순으로 표시합니다.</p></div><span className="db-row-count">{result?.total ?? "—"} rows</span></div>
+        <div className="db-results-heading"><div><span className="db-table-name">{table}</span><h2>{LABELS[table]}</h2><p>저장된 행을 최신 순으로 표시합니다. 행을 누르면 행 상세에 전체 값이 보입니다.</p></div><span className="db-row-count">{result?.total ?? "—"} rows</span></div>
         {loading ? <div className="db-message" role="status">DB 행을 불러오는 중…</div> : !result ? <div className="db-message">표시할 데이터가 없습니다.</div> : !result.rows.length ? <div className="db-message">이 테이블에 저장된 행이 없습니다.</div> :
-          <div className="db-table-scroll" role="region" aria-label={`${LABELS[table]} 데이터 표`} tabIndex={0}><table className="db-table"><thead><tr><th scope="col">보기</th>{result.columns.map(column => <th scope="col" key={column.name}><span>{column.name}</span><small>{column.type}</small></th>)}</tr></thead><tbody>{result.rows.map(row => <tr key={row.id} className={selected?.id === row.id ? "selected" : ""}><td><button type="button" className="db-view-row" aria-label={`${row.id}번 행 상세 보기`} onClick={() => setSelected(row)}>상세</button></td>{result.columns.map(column => <td key={column.name} title={row[column.name] == null ? "NULL" : String(row[column.name])}><span>{cellValue(row[column.name])}</span></td>)}</tr>)}</tbody></table></div>}
+          <div className="db-table-scroll" role="region" aria-label={`${LABELS[table]} 데이터 표`} tabIndex={0}><table className="db-table"><thead><tr>{result.columns.map(column => <th scope="col" key={column.name}><span>{column.name}</span><small>{column.type}</small></th>)}</tr></thead><tbody>{result.rows.map(row => <tr key={row.id} className={selected?.id === row.id ? "selected" : ""} tabIndex={0} aria-selected={selected?.id === row.id} aria-label={`${row.id}번 행 — 눌러서 상세 보기`} onClick={() => selectRow(row)} onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectRow(row); } }}>{result.columns.map(column => <td key={column.name} title={row[column.name] == null ? "NULL" : String(row[column.name])}><span>{cellValue(row[column.name])}</span></td>)}</tr>)}</tbody></table></div>}
         <div className="db-pagination"><span>{rangeStart}–{rangeEnd} / {result?.total ?? 0}행</span><div><button type="button" onClick={() => setOffset(value => Math.max(0, value - PAGE_SIZE))} disabled={loading || offset === 0} aria-label="이전 행"><Icon name="left" /></button><button type="button" onClick={() => setOffset(value => value + PAGE_SIZE)} disabled={loading || !result || offset + PAGE_SIZE >= result.total} aria-label="다음 행"><Icon name="right" /></button></div></div>
       </section>
-      <aside className="db-inspector panel" aria-label="선택한 행 상세">
+      <aside className="db-inspector panel" aria-label="선택한 행 상세" ref={inspector}>
         <div className="db-panel-heading"><span>행 상세</span>{selected && <b>#{selected.id}</b>}</div>
         {selected && result ? <dl>{result.columns.map(column => <div key={column.name}><dt>{column.name}<small>{column.type}</small></dt><dd><pre>{detailValue(selected[column.name])}</pre></dd></div>)}</dl> : <p className="db-inspector-empty">행을 선택하면 저장된 값을 볼 수 있습니다.</p>}
       </aside>

@@ -42,16 +42,17 @@
 .db-table th span, .db-table th small { display: block; }
 .db-table th small { color: #9aaaba; font-size: 10px; font-weight: 400; }
 .db-table td > span { display: block; overflow: hidden; text-overflow: ellipsis; }
+.db-table tbody tr { cursor: pointer; }
 .db-table tbody tr:hover { background: #f4f9fc; }
-.db-table tbody tr.selected { background: #ebf5fb; }
-.db-view-row { min-height: 24px; padding: 2px 8px; font-size: 11px; color: #21629a; border-color: #c8ddeb; }
+.db-table tbody tr.selected { background: #ebf5fb; box-shadow: inset 3px 0 0 #2f7ab8; }
+.db-table tbody tr:focus-visible { outline: 2px solid #4b7898; outline-offset: -2px; }
 .db-null { color: #a3b0bc; font-style: italic; }
 .db-message { padding: 44px 15px; text-align: center; color: #71859c; }
 .db-pagination { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-top: 1px solid #e2eaf0; color: #6d8296; font-size: 11px; }
 .db-pagination > div { display: flex; gap: 6px; }
 .db-pagination button { width: 28px; min-height: 27px; padding: 4px; }
 .db-pagination .icon { width: 13px; height: 13px; }
-.db-inspector { max-height: calc(62vh + 132px); overflow: auto; }
+.db-inspector { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; scroll-margin-top: 16px; }
 .db-inspector dl { margin: 0; }
 .db-inspector dl > div { padding: 9px 13px; border-bottom: 1px solid #edf2f5; }
 .db-inspector dt { display: flex; justify-content: space-between; gap: 8px; color: #667f96; font-size: 11px; }
