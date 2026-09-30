@@ -7,7 +7,8 @@
   어댑터 폴더 해시가 고정값과 다르면 올리지 않는다.
 - "base"는 Base few-shot(k=2, eval/fewshot.json의 train 문서)이다. val · test의 대조군(base_fs)과 같은 조건.
 - 로딩 · 생성 · 프롬프트는 eval/infer.py와 같은 함수를 쓴다(학습 · 평가 · 서빙이 한 경로).
-- 처음 부를 때 올린다(수십 초). 생성은 한 번에 하나씩(잠금) — GPU 하나에서 두 요청을 겹쳐 돌리지 않는다.
+- 처음 부를 때 올린다(수십 초). 시연 전에는 `python3 -m app.main serve --preload`로 서버를 켤 때 미리 올린다(warm_up).
+  생성은 한 번에 하나씩(잠금) — GPU 하나에서 두 요청을 겹쳐 돌리지 않는다.
 """
 from __future__ import annotations
 
@@ -51,6 +52,15 @@ def _load() -> dict:
     fewshot_ids, fewshot = infer.load_fewshot(splits, infer.TEXT_DIR, infer.LABEL_DIR)
     _state.update(tok=tok, model=model, exp=exp, base=f"{base_name}@{commit}", fewshot_ids=fewshot_ids, fewshot=fewshot)
     return _state
+
+
+def warm_up() -> float:
+    """모델을 미리 올리고 짧게 한 번 생성해 둔다 — 첫 업로드가 모델 적재 · CUDA 초기화를 기다리지 않게. → 걸린 초"""
+    t0 = time.perf_counter()
+    with _lock:
+        s = _load()
+        infer.generate(s["tok"], s["model"], [{"role": "user", "content": "warm-up"}], 8)
+    return round(time.perf_counter() - t0, 1)
 
 
 def predict_detail(text: str, model_name: str) -> dict:
