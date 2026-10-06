@@ -1,4 +1,4 @@
-export const ROUTES = { review: "문서 검토", documents: "문서 목록", data: "데이터", compare: "실험 비교" };
+export const ROUTES = { review: "문서 검토", documents: "문서 목록", question: "MSDS 질의", data: "데이터", compare: "실험 비교" };
 export const current = state => state.documents.find(doc => doc.id === state.selectedId) || state.documents[0];
 export const count = doc => doc.confirmed_fields.length;
 export const status = doc => doc.pending_extraction ? "추출 대기" : count(doc) === 5 ? "확정" : count(doc) > 1 ? "검토 필요" : "미확정";
@@ -110,4 +110,3 @@ export function validateList(key, value, sourceStatus) {
     if (item.category != null && !/^구분 \d[A-C]?$/.test(item.category) && !['액화가스', '압축가스', '냉동액화가스', '용해가스'].includes(item.category)) throw new Error('구분은 구분 3, 구분 1A 또는 가스 상태명으로 입력해 주세요.');
   }
 }
-

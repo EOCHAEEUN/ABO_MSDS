@@ -1,6 +1,6 @@
 # ABO_MSDS
 
-실제 MSDS 1~3항의 핵심 5개 항목을 고정 JSON으로 추출하는 Qwen3-4B QLoRA 모델, 원문 근거와 검토 상태를 붙이는 Rule Engine, SQLite 적재, 검토 화면을 만드는 4인 팀 과업입니다. 과업 정의는 기획서 v8(MSDS-PL-2609-08)을 따릅니다. 기획서 원본은 팀 드라이브에만 둡니다.
+실제 MSDS 1~3항의 핵심 5개 항목을 고정 JSON으로 추출하는 Qwen3-4B QLoRA 모델, 원문 근거와 검토 상태를 붙이는 Rule Engine, SQLite 적재, 검토 화면을 만드는 4인 팀 과업입니다. 작업공간에는 별도 RAG 인덱스로 1~16항 근거를 검색하는 `MSDS 질의` 화면도 제공합니다. 과업 정의는 기획서 v8(MSDS-PL-2609-08)을 따릅니다. 기획서 원본은 팀 드라이브에만 둡니다.
 
 작업 기준은 `docs/plan.md`(재시작판)이고, 작업 규칙은 `CLAUDE.md`입니다. 두 파일은 `docs/restart` PR로 main에 들어옵니다.
 
@@ -56,6 +56,8 @@ python3 scripts/check_splits.py
 
 # 검토 화면 (예시 모드)
 npm --prefix web ci && npm --prefix web run dev
+
+# MSDS 질의 기능은 docs/rag_question.md의 Ollama·인덱스 준비 후 사용
 ```
 
 - 한 폴더에서는 한 세션(사람 · AI)만 씁니다. 각자 따로 clone합니다.

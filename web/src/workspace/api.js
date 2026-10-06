@@ -22,6 +22,7 @@ async function request(path, options = {}, timeoutMs = 120000) {
     response = await fetch(path, { ...options, signal: AbortSignal.timeout(timeoutMs) });
   } catch (issue) {
     if (path === '/extract') throw new Error(issue.name === 'TimeoutError' ? '추출 시간이 초과되었습니다. 서버 상태를 확인해 주세요.' : '추출 서버에 연결할 수 없습니다. 서버 실행 상태를 확인해 주세요.');
+    if (path === '/ask') throw new Error(issue.name === 'TimeoutError' ? '답변 생성 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.' : '질의응답 서버에 연결할 수 없습니다. FastAPI 서버 상태를 확인해 주세요.');
     throw issue;
   }
   if (!response.ok) {
@@ -140,6 +141,16 @@ export const api = {
       body: JSON.stringify({ document_id: documentId, split, subset }),
     });
     source.note = result?.note || '';
+    return result;
+  },
+  async ask(question) {
+    const result = await request('/ask', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question }),
+    }, 180000);
+    if (typeof result?.answer !== 'string' || !Array.isArray(result.path) || !Array.isArray(result.evidence)) {
+      throw new Error('질의응답 결과 형식이 올바르지 않습니다.');
+    }
     return result;
   },
 };

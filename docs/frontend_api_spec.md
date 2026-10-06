@@ -19,6 +19,7 @@
 | PDF 업로드·추출 | `POST /extract` (`multipart/form-data`) | `200` 또는 `201 {"document": Document}` | 백엔드 구현 필요 |
 | 5필드 검토 저장 | `POST /confirm` (`application/json`) | `200` JSON 또는 `204` | 백엔드 구현 필요 |
 | val 실험 결과 조회 | `POST /compare` (`application/json`) | `200 CompareResult` | 백엔드 구현 필요 |
+| MSDS 근거 질의 | `POST /ask` (`application/json`) | `200 AskResult` | 백엔드 구현 완료 |
 | 원본 PDF 보기 | `GET {Document.pdf_url}` | 브라우저에서 열 수 있는 `application/pdf` | 백엔드 구현 필요 |
 
 ### 1. `GET /documents`
