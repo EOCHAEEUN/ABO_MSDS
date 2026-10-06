@@ -1,6 +1,6 @@
 # MSDS Lab 프런트엔드
 
-랜딩페이지와 **문서 검토·문서 목록·실험 비교 화면을 모두 React JSX + CSS**로 구현합니다. 랜딩 화면은 `src/LandingPage.jsx`, 작업공간은 `src/workspace/`의 화면별 JSX에서 수정합니다. 각 화면은 CSS를 직접 import하며, 검토 상태·모달·검색·그래프를 React 상태와 이벤트로 처리합니다. `index.html`과 `workspace.html`에는 React를 연결하는 루트와 메타데이터만 둡니다.
+랜딩페이지와 **문서 검토·문서 목록·MSDS 질의·데이터·실험 비교 화면을 모두 React JSX + CSS**로 구현합니다. 랜딩 화면은 `src/LandingPage.jsx`, 작업공간은 `src/workspace/`의 화면별 JSX에서 수정합니다. 각 화면은 CSS를 직접 import하며, 검토 상태·모달·검색·그래프를 React 상태와 이벤트로 처리합니다. `index.html`과 `workspace.html`에는 React를 연결하는 루트와 메타데이터만 둡니다.
 
 ## 실행
 
@@ -35,6 +35,7 @@ FastAPI는 `web/dist/`만 공개합니다. 다른 정적 서버를 사용한다�
 - `/`: 작업공간과 같은 파스텔 배경·로고·카피바라, 반투명 내비게이션과 카드, 문서·추출 결과 비주얼, 프로젝트 소개, 실험 결과를 담은 랜딩페이지
 - `/workspace.html#review`: 원문 미리보기, 추출 텍스트, 필드별 검토, 원문 근거, JSON
 - `/workspace.html#documents`: 검색·필터, 선택 문서 미리보기, 검토 진행, CSV 다운로드, PDF 업로드
+- `/workspace.html#question`: MSDS 1~16항 근거 기반 질의응답, 실행 경로, 검색 근거
 - `/workspace.html#compare`: 실험 비교표, 지표 카드, 막대그래프·추이, 실험 선택
 
 ## 예시 모드와 저장
@@ -69,6 +70,7 @@ FastAPI는 `web/dist/`만 공개합니다. 다른 정적 서버를 사용한다�
 | `POST /confirm` | `{ "document_id": id, "reviews": {...}, "confirmed_fields": [...] }` | 성공 시 JSON 또는 204 |
 | `POST /owner` | `{ "document_id": id, "owner": "어채은" }` (팀원 4명 또는 `"미지정"`) | `{ "document_id": id, "owner": "..." }` |
 | `POST /compare` | `{ "document_id": id, "split": "val", "subset": "all" }` | 아래 비교 응답 |
+| `POST /ask` | `{ "question": "..." }` | `{ "answer": "...", "path": [...], "evidence": [...] }` |
 
 모든 경로는 같은 origin의 루트입니다. 백엔드 라우터는 `app/main.py`의 정적 파일 mount **앞에** 등록하세요. 기존 서버의 응답 구조가 다르면 `src/workspace/api.js`에서 변환합니다. 백엔드는 `src/schema.py`로 검증하며 프런트 입력 검사는 사용 편의용입니다.
 
@@ -126,6 +128,7 @@ FastAPI는 `web/dist/`만 공개합니다. 다른 정적 서버를 사용한다�
 - `src/workspace/Workspace.jsx`: 작업공간 화면 분기·공통 레이아웃
 - `src/workspace/ReviewPage.jsx`: 필드 검토, 원문 근거, JSON, 확정·저장
 - `src/workspace/DocumentsPage.jsx`: 문서 목록·검색·필터·미리보기·요약
+- `src/workspace/QuestionPage.jsx` · `question-page.css`: 근거 기반 질의응답·실행 경로·검색 근거
 - `src/workspace/ComparePage.jsx`: 실험 표·카드·막대그래프·추이
 - `src/workspace/PreviewPanel.jsx`: 원문 재현·PDF·추출 텍스트
 - `src/workspace/WorkspaceDialogs.jsx`: 필드 편집·근거 지정·업로드·비교 설정 모달
@@ -141,4 +144,4 @@ FastAPI는 `web/dist/`만 공개합니다. 다른 정적 서버를 사용한다�
 - `package.json` · `package-lock.json`: 실행 명령과 고정 의존성
 - `dist/`: 배포용 빌드 결과, Git 제외
 
-랜딩페이지 상단 메뉴는 소개·검토 예시·실험 결과 섹션으로 이동합니다. 검토 버튼과 미리보기는 검토 작업공간에, 실험 비교 링크는 비교 작업공간에 연결됩니다. 작업공간에는 문서 검토·문서 목록·실험 비교를 오가는 좌측 사이드바가 있으며, 로고를 누르면 랜딩페이지로 돌아갑니다. 문서 검토 화면은 카드형 필드 검토와 위험문구별 원문 대조를 제공하고, 일치 항목 일괄 확정은 Rule Engine이 `OK`로 판정한 미확정 필드에만 적용됩니다. 키보드 포커스, 표 헤더, 입력 레이블, 모달, 상태 알림, 모바일 레이아웃을 제공합니다. CSV는 UTF-8 BOM을 포함해 Excel에서 열 수 있으며 수식으로 해석될 수 있는 셀은 이스케이프합니다.
+랜딩페이지 상단 메뉴는 소개·검토 예시·실험 결과 섹션으로 이동합니다. 검토 버튼과 미리보기는 검토 작업공간에, 실험 비교 링크는 비교 작업공간에 연결됩니다. 작업공간에는 문서 검토·문서 목록·MSDS 질의·데이터·실험 비교를 오가는 좌측 사이드바가 있으며, 로고를 누르면 랜딩페이지로 돌아갑니다. 문서 검토 화면은 카드형 필드 검토와 위험문구별 원문 대조를 제공하고, 일치 항목 일괄 확정은 Rule Engine이 `OK`로 판정한 미확정 필드에만 적용됩니다. 키보드 포커스, 표 헤더, 입력 레이블, 모달, 상태 알림, 모바일 레이아웃을 제공합니다. CSV는 UTF-8 BOM을 포함해 Excel에서 열 수 있으며 수식으로 해석될 수 있는 셀은 이스케이프합니다.

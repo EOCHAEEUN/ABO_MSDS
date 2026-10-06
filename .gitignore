@@ -35,6 +35,7 @@ wandb/
 
 # PDF → SQLite 적재 결과물 (app/pipeline_run.py)
 data/db/
+data/rag/
 outputs/exports/
 
 # 배포 경량화 트랙

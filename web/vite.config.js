@@ -43,7 +43,7 @@ function localPdfs() {
 // 화면 경로와 겹치지 않게 API 경로만 정확히 고른다. 서버 주소는 MSDS_API로 바꿀 수 있다.
 const API = process.env.MSDS_API || "http://127.0.0.1:8000";
 const apiProxy = {
-  "^/(documents|extract|confirm|compare)$": { target: API, changeOrigin: true },
+  "^/(documents|extract|confirm|compare|ask)$": { target: API, changeOrigin: true },
   "^/data(?:\\?|$)": { target: API, changeOrigin: true },
   "^/files/\\d+\\.pdf$": { target: API, changeOrigin: true },
 };

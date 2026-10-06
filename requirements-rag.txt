@@ -1,0 +1,9 @@
+-r requirements.txt
+
+# MSDS 1~16항 근거 검색·LangGraph 질의응답 (app/rag/)
+chromadb==1.5.9
+langchain-core==1.6.6
+langchain-text-splitters==1.1.3
+langchain-ollama==1.1.0
+langchain-chroma==1.1.0
+langgraph==1.2.13

@@ -12,6 +12,7 @@
   POST /confirm         담당자 확정값 → msds_reviews
   POST /owner           문서 담당자 지정(팀원 목록 TEAM 또는 미지정) → meta/{document_id}.json의 owner
   POST /compare         val 실험 비교표(app/web_results.build_compare — test 수치 아님)
+  POST /ask             MSDS 1~16항 RAG 질의응답(근거 · LangGraph 실행 경로 포함)
   GET  /files/{id}.pdf  업로드한 PDF(원문 보기)
 
 저장 위치는 data/db/(git 제외): msds.sqlite, uploads/(업로드 PDF), meta/{document_id}.json(1~3항 텍스트 · 근거 ·
@@ -336,6 +337,23 @@ def compare(body: dict = Body(default={})):
     if (body or {}).get("subset", "all") != "all":
         result["note"] += " 문서 유형별 비교는 아직 없어 전체 기준으로 보여 줍니다."
     return result
+
+
+@app.post("/ask")
+def ask_msds(body: dict = Body(...)):
+    """RAG 인덱스에 등록된 MSDS만 근거로 답한다. 봉인된 test는 인덱싱하지 않는다."""
+    question = body.get("question") if isinstance(body, dict) else None
+    if not isinstance(question, str) or not question.strip():
+        raise HTTPException(422, "질문을 입력해 주세요.")
+    question = question.strip()
+    if len(question) > 1000:
+        raise HTTPException(422, "질문은 1,000자 이하로 입력해 주세요.")
+    from app.rag.service import RagUnavailable, get_service
+
+    try:
+        return get_service().ask(question)
+    except RagUnavailable as issue:
+        raise HTTPException(503, str(issue)) from None
 
 
 @app.get("/files/{document_id}.pdf")

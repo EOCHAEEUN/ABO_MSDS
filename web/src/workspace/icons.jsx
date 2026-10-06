@@ -23,4 +23,5 @@ export const iconPaths = {
   upload: <><path d="M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5"/></>,
   info: <><circle cx="12" cy="12" r="10"/><path d="M12 11v6m0-11v1"/></>,
   flame: <><path d="M13 2s2 6-2 8c0-3-2-4-2-4s1 4-2 7c-4 5 0 9 5 9s9-4 6-9c0 4-3 4-3 4s3-8-2-15z"/></>,
+  message: <><path d="M4 5h16v11H9l-5 4V5z"/><path d="M8 9h8M8 12h5"/></>,
 };
